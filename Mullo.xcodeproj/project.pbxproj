@@ -1,0 +1,768 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0801F97FA0D783EDD5A122F2 /* Pods_MulloTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FEEBDF3FD49B33B1813F56A /* Pods_MulloTests.framework */; };
+		734572A73A27FF43471E4A7D /* Pods_Mullo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 185BC457B77DBB280109E6D1 /* Pods_Mullo.framework */; };
+		83CFFABE4278FEABEE3B8665 /* Pods_Mullo_MulloUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C82A73C08D4086F559D4E92 /* Pods_Mullo_MulloUITests.framework */; };
+		E95B3DE02BCD233A00642907 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3DDF2BCD233A00642907 /* AppDelegate.swift */; };
+		E95B3DE22BCD233A00642907 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3DE12BCD233A00642907 /* SceneDelegate.swift */; };
+		E95B3DE42BCD233A00642907 /* Main_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3DE32BCD233A00642907 /* Main_ViewController.swift */; };
+		E95B3DE92BCD233B00642907 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E95B3DE82BCD233B00642907 /* Assets.xcassets */; };
+		E95B3DEC2BCD233B00642907 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = E95B3DEB2BCD233B00642907 /* Base */; };
+		E95B3DF72BCD233C00642907 /* MulloTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3DF62BCD233C00642907 /* MulloTests.swift */; };
+		E95B3E012BCD233C00642907 /* MulloUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3E002BCD233C00642907 /* MulloUITests.swift */; };
+		E95B3E032BCD233C00642907 /* MulloUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3E022BCD233C00642907 /* MulloUITestsLaunchTests.swift */; };
+		E95B3E102BCD2FD100642907 /* Main_view.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3E0F2BCD2FD100642907 /* Main_view.swift */; };
+		E95B3E122BCEC31200642907 /* util.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95B3E112BCEC31200642907 /* util.swift */; };
+		E9B046382BCF8FEC008D366A /* Post_collection_view_cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B046372BCF8FEC008D366A /* Post_collection_view_cell.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E95B3DF32BCD233C00642907 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E95B3DD42BCD233A00642907 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E95B3DDB2BCD233A00642907;
+			remoteInfo = Mullo;
+		};
+		E95B3DFD2BCD233C00642907 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E95B3DD42BCD233A00642907 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E95B3DDB2BCD233A00642907;
+			remoteInfo = Mullo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0C82A73C08D4086F559D4E92 /* Pods_Mullo_MulloUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mullo_MulloUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		185BC457B77DBB280109E6D1 /* Pods_Mullo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mullo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D6CED98069D2896A2523D5A /* Pods-MulloTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MulloTests.debug.xcconfig"; path = "Target Support Files/Pods-MulloTests/Pods-MulloTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7ED58A3444273C3936A539BA /* Pods-Mullo-MulloUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mullo-MulloUITests.release.xcconfig"; path = "Target Support Files/Pods-Mullo-MulloUITests/Pods-Mullo-MulloUITests.release.xcconfig"; sourceTree = "<group>"; };
+		9FEEBDF3FD49B33B1813F56A /* Pods_MulloTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MulloTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E95B3DDC2BCD233A00642907 /* Mullo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mullo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E95B3DDF2BCD233A00642907 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E95B3DE12BCD233A00642907 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		E95B3DE32BCD233A00642907 /* Main_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_ViewController.swift; sourceTree = "<group>"; };
+		E95B3DE82BCD233B00642907 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E95B3DEB2BCD233B00642907 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E95B3DED2BCD233B00642907 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E95B3DF22BCD233C00642907 /* MulloTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MulloTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E95B3DF62BCD233C00642907 /* MulloTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulloTests.swift; sourceTree = "<group>"; };
+		E95B3DFC2BCD233C00642907 /* MulloUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MulloUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E95B3E002BCD233C00642907 /* MulloUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulloUITests.swift; sourceTree = "<group>"; };
+		E95B3E022BCD233C00642907 /* MulloUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulloUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E95B3E0F2BCD2FD100642907 /* Main_view.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_view.swift; sourceTree = "<group>"; };
+		E95B3E112BCEC31200642907 /* util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = util.swift; sourceTree = "<group>"; };
+		E9B046372BCF8FEC008D366A /* Post_collection_view_cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post_collection_view_cell.swift; sourceTree = "<group>"; };
+		E9B37748AC57463D0AEB1467 /* Pods-Mullo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mullo.debug.xcconfig"; path = "Target Support Files/Pods-Mullo/Pods-Mullo.debug.xcconfig"; sourceTree = "<group>"; };
+		EB391558BAB5F1F7FA20D49E /* Pods-Mullo-MulloUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mullo-MulloUITests.debug.xcconfig"; path = "Target Support Files/Pods-Mullo-MulloUITests/Pods-Mullo-MulloUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		F54033CFA45974C9AFD60075 /* Pods-MulloTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MulloTests.release.xcconfig"; path = "Target Support Files/Pods-MulloTests/Pods-MulloTests.release.xcconfig"; sourceTree = "<group>"; };
+		F7C5B5EAEE05303725018A94 /* Pods-Mullo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mullo.release.xcconfig"; path = "Target Support Files/Pods-Mullo/Pods-Mullo.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E95B3DD92BCD233A00642907 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				734572A73A27FF43471E4A7D /* Pods_Mullo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E95B3DEF2BCD233C00642907 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0801F97FA0D783EDD5A122F2 /* Pods_MulloTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E95B3DF92BCD233C00642907 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83CFFABE4278FEABEE3B8665 /* Pods_Mullo_MulloUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		67AFE722B9EDD6D2300677C9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E9B37748AC57463D0AEB1467 /* Pods-Mullo.debug.xcconfig */,
+				F7C5B5EAEE05303725018A94 /* Pods-Mullo.release.xcconfig */,
+				EB391558BAB5F1F7FA20D49E /* Pods-Mullo-MulloUITests.debug.xcconfig */,
+				7ED58A3444273C3936A539BA /* Pods-Mullo-MulloUITests.release.xcconfig */,
+				4D6CED98069D2896A2523D5A /* Pods-MulloTests.debug.xcconfig */,
+				F54033CFA45974C9AFD60075 /* Pods-MulloTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		989B4854D1C38D8A4CB0DB73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				185BC457B77DBB280109E6D1 /* Pods_Mullo.framework */,
+				0C82A73C08D4086F559D4E92 /* Pods_Mullo_MulloUITests.framework */,
+				9FEEBDF3FD49B33B1813F56A /* Pods_MulloTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E95B3DD32BCD233A00642907 = {
+			isa = PBXGroup;
+			children = (
+				E95B3DDE2BCD233A00642907 /* Mullo */,
+				E95B3DF52BCD233C00642907 /* MulloTests */,
+				E95B3DFF2BCD233C00642907 /* MulloUITests */,
+				E95B3DDD2BCD233A00642907 /* Products */,
+				67AFE722B9EDD6D2300677C9 /* Pods */,
+				989B4854D1C38D8A4CB0DB73 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E95B3DDD2BCD233A00642907 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E95B3DDC2BCD233A00642907 /* Mullo.app */,
+				E95B3DF22BCD233C00642907 /* MulloTests.xctest */,
+				E95B3DFC2BCD233C00642907 /* MulloUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E95B3DDE2BCD233A00642907 /* Mullo */ = {
+			isa = PBXGroup;
+			children = (
+				E95B3DDF2BCD233A00642907 /* AppDelegate.swift */,
+				E95B3DE12BCD233A00642907 /* SceneDelegate.swift */,
+				E95B3DE32BCD233A00642907 /* Main_ViewController.swift */,
+				E9B046372BCF8FEC008D366A /* Post_collection_view_cell.swift */,
+				E95B3DE82BCD233B00642907 /* Assets.xcassets */,
+				E95B3E0F2BCD2FD100642907 /* Main_view.swift */,
+				E95B3DEA2BCD233B00642907 /* LaunchScreen.storyboard */,
+				E95B3DED2BCD233B00642907 /* Info.plist */,
+				E95B3E112BCEC31200642907 /* util.swift */,
+			);
+			path = Mullo;
+			sourceTree = "<group>";
+		};
+		E95B3DF52BCD233C00642907 /* MulloTests */ = {
+			isa = PBXGroup;
+			children = (
+				E95B3DF62BCD233C00642907 /* MulloTests.swift */,
+			);
+			path = MulloTests;
+			sourceTree = "<group>";
+		};
+		E95B3DFF2BCD233C00642907 /* MulloUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E95B3E002BCD233C00642907 /* MulloUITests.swift */,
+				E95B3E022BCD233C00642907 /* MulloUITestsLaunchTests.swift */,
+			);
+			path = MulloUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E95B3DDB2BCD233A00642907 /* Mullo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E95B3E062BCD233C00642907 /* Build configuration list for PBXNativeTarget "Mullo" */;
+			buildPhases = (
+				3FEA375B7196BCBAA8429B3C /* [CP] Check Pods Manifest.lock */,
+				E95B3DD82BCD233A00642907 /* Sources */,
+				E95B3DD92BCD233A00642907 /* Frameworks */,
+				E95B3DDA2BCD233A00642907 /* Resources */,
+				6B8AA636B29FD9B95F3BDF50 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mullo;
+			productName = Mullo;
+			productReference = E95B3DDC2BCD233A00642907 /* Mullo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E95B3DF12BCD233C00642907 /* MulloTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E95B3E092BCD233C00642907 /* Build configuration list for PBXNativeTarget "MulloTests" */;
+			buildPhases = (
+				95AD88640966F328DA6C4D46 /* [CP] Check Pods Manifest.lock */,
+				E95B3DEE2BCD233C00642907 /* Sources */,
+				E95B3DEF2BCD233C00642907 /* Frameworks */,
+				E95B3DF02BCD233C00642907 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E95B3DF42BCD233C00642907 /* PBXTargetDependency */,
+			);
+			name = MulloTests;
+			productName = MulloTests;
+			productReference = E95B3DF22BCD233C00642907 /* MulloTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E95B3DFB2BCD233C00642907 /* MulloUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E95B3E0C2BCD233C00642907 /* Build configuration list for PBXNativeTarget "MulloUITests" */;
+			buildPhases = (
+				CE65B5A698622EF54A629F74 /* [CP] Check Pods Manifest.lock */,
+				E95B3DF82BCD233C00642907 /* Sources */,
+				E95B3DF92BCD233C00642907 /* Frameworks */,
+				E95B3DFA2BCD233C00642907 /* Resources */,
+				1EDE00C846A6A6D18AC55DA0 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E95B3DFE2BCD233C00642907 /* PBXTargetDependency */,
+			);
+			name = MulloUITests;
+			productName = MulloUITests;
+			productReference = E95B3DFC2BCD233C00642907 /* MulloUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E95B3DD42BCD233A00642907 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					E95B3DDB2BCD233A00642907 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					E95B3DF12BCD233C00642907 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = E95B3DDB2BCD233A00642907;
+					};
+					E95B3DFB2BCD233C00642907 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = E95B3DDB2BCD233A00642907;
+					};
+				};
+			};
+			buildConfigurationList = E95B3DD72BCD233A00642907 /* Build configuration list for PBXProject "Mullo" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E95B3DD32BCD233A00642907;
+			productRefGroup = E95B3DDD2BCD233A00642907 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E95B3DDB2BCD233A00642907 /* Mullo */,
+				E95B3DF12BCD233C00642907 /* MulloTests */,
+				E95B3DFB2BCD233C00642907 /* MulloUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E95B3DDA2BCD233A00642907 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E95B3DE92BCD233B00642907 /* Assets.xcassets in Resources */,
+				E95B3DEC2BCD233B00642907 /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E95B3DF02BCD233C00642907 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E95B3DFA2BCD233C00642907 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1EDE00C846A6A6D18AC55DA0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mullo-MulloUITests/Pods-Mullo-MulloUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mullo-MulloUITests/Pods-Mullo-MulloUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mullo-MulloUITests/Pods-Mullo-MulloUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3FEA375B7196BCBAA8429B3C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Mullo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6B8AA636B29FD9B95F3BDF50 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mullo/Pods-Mullo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Mullo/Pods-Mullo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mullo/Pods-Mullo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		95AD88640966F328DA6C4D46 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MulloTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CE65B5A698622EF54A629F74 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Mullo-MulloUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E95B3DD82BCD233A00642907 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E95B3DE42BCD233A00642907 /* Main_ViewController.swift in Sources */,
+				E95B3E102BCD2FD100642907 /* Main_view.swift in Sources */,
+				E95B3DE02BCD233A00642907 /* AppDelegate.swift in Sources */,
+				E95B3E122BCEC31200642907 /* util.swift in Sources */,
+				E95B3DE22BCD233A00642907 /* SceneDelegate.swift in Sources */,
+				E9B046382BCF8FEC008D366A /* Post_collection_view_cell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E95B3DEE2BCD233C00642907 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E95B3DF72BCD233C00642907 /* MulloTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E95B3DF82BCD233C00642907 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E95B3E032BCD233C00642907 /* MulloUITestsLaunchTests.swift in Sources */,
+				E95B3E012BCD233C00642907 /* MulloUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E95B3DF42BCD233C00642907 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E95B3DDB2BCD233A00642907 /* Mullo */;
+			targetProxy = E95B3DF32BCD233C00642907 /* PBXContainerItemProxy */;
+		};
+		E95B3DFE2BCD233C00642907 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E95B3DDB2BCD233A00642907 /* Mullo */;
+			targetProxy = E95B3DFD2BCD233C00642907 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E95B3DEA2BCD233B00642907 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E95B3DEB2BCD233B00642907 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E95B3E042BCD233C00642907 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E95B3E052BCD233C00642907 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E95B3E072BCD233C00642907 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9B37748AC57463D0AEB1467 /* Pods-Mullo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 95366L65VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mullo/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sj-dev.Mullo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E95B3E082BCD233C00642907 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7C5B5EAEE05303725018A94 /* Pods-Mullo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 95366L65VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mullo/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sj-dev.Mullo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E95B3E0A2BCD233C00642907 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4D6CED98069D2896A2523D5A /* Pods-MulloTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 95366L65VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sj-dev.MulloTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mullo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Mullo";
+			};
+			name = Debug;
+		};
+		E95B3E0B2BCD233C00642907 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F54033CFA45974C9AFD60075 /* Pods-MulloTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 95366L65VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sj-dev.MulloTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mullo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Mullo";
+			};
+			name = Release;
+		};
+		E95B3E0D2BCD233C00642907 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB391558BAB5F1F7FA20D49E /* Pods-Mullo-MulloUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 95366L65VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sj-dev.MulloUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mullo;
+			};
+			name = Debug;
+		};
+		E95B3E0E2BCD233C00642907 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7ED58A3444273C3936A539BA /* Pods-Mullo-MulloUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 95366L65VG;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "sj-dev.MulloUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mullo;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E95B3DD72BCD233A00642907 /* Build configuration list for PBXProject "Mullo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E95B3E042BCD233C00642907 /* Debug */,
+				E95B3E052BCD233C00642907 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E95B3E062BCD233C00642907 /* Build configuration list for PBXNativeTarget "Mullo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E95B3E072BCD233C00642907 /* Debug */,
+				E95B3E082BCD233C00642907 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E95B3E092BCD233C00642907 /* Build configuration list for PBXNativeTarget "MulloTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E95B3E0A2BCD233C00642907 /* Debug */,
+				E95B3E0B2BCD233C00642907 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E95B3E0C2BCD233C00642907 /* Build configuration list for PBXNativeTarget "MulloUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E95B3E0D2BCD233C00642907 /* Debug */,
+				E95B3E0E2BCD233C00642907 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E95B3DD42BCD233A00642907 /* Project object */;
+}
