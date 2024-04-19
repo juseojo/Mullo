@@ -1,5 +1,5 @@
 //
-//  Post_collection_view_cell.swift
+//  Post_collectionView_cell.swift
 //  Mullo
 //
 //  Created by seongjun cho on 4/17/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Post_collection_view_cell : UICollectionViewCell {
+class Post_collectionView_cell : UICollectionViewCell {
 	static let identifier = "main"
 
 	private var name_label: UILabel = {
@@ -20,9 +20,9 @@ class Post_collection_view_cell : UICollectionViewCell {
 		return time_label
 	}()
 
-	private var post_text_view: UITextView = {
-		let post_text_view = UITextView()
-		return post_text_view
+	private var post_textView: UITextView = {
+		let post_textView = UITextView()
+		return post_textView
 	}()
 
 	private var choice_view: UIView = {
@@ -45,7 +45,7 @@ class Post_collection_view_cell : UICollectionViewCell {
 
 		self.addSubview(name_label)
 		self.addSubview(time_label)
-		self.addSubview(post_text_view)
+		self.addSubview(post_textView)
 		self.addSubview(choice_view)
 		self.addSubview(comments_button)
 
@@ -60,7 +60,7 @@ class Post_collection_view_cell : UICollectionViewCell {
 			make.height.equalTo(name_label)
 		}
 
-		post_text_view.snp.makeConstraints { make in
+		post_textView.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(10)
 			make.left.right.equalTo(self).inset(10)
 			make.bottom.equalTo(comments_button.snp.top).inset(5)

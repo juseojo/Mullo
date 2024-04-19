@@ -14,8 +14,8 @@ class Main_ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		main_view.post_collection_view.dataSource = self
-		main_view.post_collection_view.delegate = self
+		main_view.post_collectionView.dataSource = self
+		main_view.post_collectionView.delegate = self
 
 		view.backgroundColor = UIColor(named: "NATURAL")
 

@@ -47,19 +47,19 @@ class Main_View: UIView {
 		return inform_button
 	}()
 
-	var post_collection_view: UICollectionView = {
+	var post_collectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.minimumLineSpacing = 0
 		layout.scrollDirection = .vertical
 		layout.sectionInset = .zero
 
-		let post_collection_view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+		let post_collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 
-		post_collection_view.backgroundColor = UIColor(named: "NATURAL")
-		post_collection_view.register(
-			Post_collection_view_cell.self, forCellWithReuseIdentifier: Post_collection_view_cell.identifier)
+		post_collectionView.backgroundColor = UIColor(named: "NATURAL")
+		post_collectionView.register(
+			Post_collectionView_cell.self, forCellWithReuseIdentifier: Post_collectionView_cell.identifier)
 
-		return post_collection_view
+		return post_collectionView
 	}()
 
 	override init(frame: CGRect) {
@@ -70,7 +70,7 @@ class Main_View: UIView {
 		header_view.addSubview(header_label)
 		header_view.addSubview(write_button)
 		header_view.addSubview(inform_button)
-		addSubview(post_collection_view)
+		addSubview(post_collectionView)
 
 		header_view.snp.makeConstraints { make in
 			make.top.equalTo(self).inset(top_inset)
@@ -95,7 +95,7 @@ class Main_View: UIView {
 			make.width.equalTo(head_height)
 		}
 
-		post_collection_view.snp.makeConstraints { make in
+		post_collectionView.snp.makeConstraints { make in
 			make.top.equalTo(header_view.snp.bottom)
 			make.left.right.bottom.equalTo(self)
 		}
