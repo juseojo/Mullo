@@ -24,15 +24,17 @@ class Main_View: UIView {
 		
 		header_label.text = "멀로"
 		header_label.tintColor = UIColor(named: "REVERSE_SYS")
-		header_label.font = UIFont(name: "San Francisco", size: 30)
+		header_label.font = UIFont(name: "GillSans-SemiBold", size: 30)
 
 		return header_label
 	}()
 
 	private var write_button: UIButton = {
 		let write_button = UIButton()
-
-		write_button.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
+		let button_image = UIImage(
+			systemName: "square.and.pencil",
+			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.5, weight: .bold, scale: .large))
+		write_button.setImage(button_image, for: .normal)
 		write_button.tintColor = UIColor.black
 
 		return write_button
@@ -40,8 +42,11 @@ class Main_View: UIView {
 
 	private var inform_button: UIButton = {
 		let inform_button = UIButton()
+		let button_image = UIImage(
+			systemName: "person",
+			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.5, weight: .bold, scale: .large))
 
-		inform_button.setImage(UIImage(systemName: "person"), for: .normal)
+		inform_button.setImage(button_image, for: .normal)
 		inform_button.tintColor = UIColor.black
 
 		return inform_button
@@ -49,6 +54,7 @@ class Main_View: UIView {
 
 	var post_collectionView: UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
+		layout.itemSize = CGSize(width: screen_width, height: screen_height / 2)
 		layout.minimumLineSpacing = 0
 		layout.scrollDirection = .vertical
 		layout.sectionInset = .zero
@@ -86,13 +92,11 @@ class Main_View: UIView {
 		inform_button.snp.makeConstraints { make in
 			make.top.bottom.equalTo(header_view)
 			make.right.equalTo(header_view).inset(10)
-			make.width.equalTo(head_height)
 		}
 
 		write_button.snp.makeConstraints { make in
 			make.top.bottom.equalTo(header_view)
-			make.right.equalTo(inform_button.snp.left).inset(10)
-			make.width.equalTo(head_height)
+			make.right.equalTo(inform_button.snp.left).inset(-10)
 		}
 
 		post_collectionView.snp.makeConstraints { make in

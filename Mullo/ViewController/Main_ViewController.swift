@@ -7,15 +7,17 @@
 
 import UIKit
 
+import RxSwift
+import RxCocoa
+
 class Main_ViewController: UIViewController {
 
 	let main_view = Main_View()
+	let main_viewModel = Main_viewModel()
+	private let disposeBag = DisposeBag()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
-		main_view.post_collectionView.dataSource = self
-		main_view.post_collectionView.delegate = self
 
 		view.backgroundColor = UIColor(named: "NATURAL")
 
@@ -23,22 +25,31 @@ class Main_ViewController: UIViewController {
 		main_view.snp.makeConstraints { make in
 			make.top.bottom.left.right.equalTo(self.view)
 		}
+
+		bind_collectionView()
+		main_viewModel.get_cell_data()
+	}
+
+	func bind_collectionView()
+	{
+		main_viewModel.items
+			.observe(on: MainScheduler.instance)
+			.bind(to: main_view.post_collectionView.rx.items(cellIdentifier: "post", cellType: Post_collectionView_cell.self)) { row, item, cell in
+				cell.name_label.text = item.name_text
+				cell.time_label.text = item.time_text
+				cell.post_textView.text = item.post_text
+		  }
+		  .disposed(by: self.disposeBag)
 	}
 }
 
-extension Main_ViewController : UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		//temporary setting
-		return 7
-	}
+extension Main_ViewController : UICollectionViewDelegateFlowLayout {
 
-	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Post_collection_view_cell.identifier, for: indexPath) as? Post_collection_view_cell else {
-			return UICollectionViewCell()
-		}
-
-		//Have to cell setting
-
-		return cell
+	func collectionView(
+			  _ collectionView: UICollectionView,
+			  layout collectionViewLayout: UICollectionViewLayout,
+			  sizeForItemAt indexPath: IndexPath
+		 ) -> CGSize {
+		return CGSize(width: screen_width, height: screen_height / 2)
 	}
 }
