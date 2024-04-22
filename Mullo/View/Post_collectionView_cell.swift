@@ -13,11 +13,16 @@ class Post_collectionView_cell : UICollectionViewCell {
 	var name_label: UILabel = {
 		let name_label = UILabel()
 
+		name_label.font = UIFont(name: "GillSans-SemiBold", size: 15)
+
 		return name_label
 	}()
 
 	var time_label: UILabel = {
 		let time_label = UILabel()
+
+		time_label.font = UIFont(name: "GillSans-SemiBold", size: 10)
+		time_label.textColor = UIColor.gray
 
 		return time_label
 	}()
@@ -31,10 +36,42 @@ class Post_collectionView_cell : UICollectionViewCell {
 		return post_textView
 	}()
 
-	private var choice_view: UIView = {
+	var choice_view: UIView = {
 		let choice_view = UIView()
 
 		return choice_view
+	}()
+
+	var first_button: UIButton = {
+		let first_button = UIButton()
+
+		first_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
+		first_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+		first_button.layer.borderWidth = 1
+
+		return first_button
+	}()
+
+	var second_button: UIButton = {
+		let second_button = UIButton()
+
+		second_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
+		second_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+		second_button.layer.borderWidth = 1
+
+		return second_button
+	}()
+
+	var third_button: UIButton = {
+		let third_button = UIButton()
+
+		return third_button
+	}()
+
+	var fourth_button: UIButton = {
+		let fourth_button = UIButton()
+
+		return fourth_button
 	}()
 
 	var comments_button: UIButton = {
@@ -65,17 +102,20 @@ class Post_collectionView_cell : UICollectionViewCell {
 		self.addSubview(time_label)
 		self.addSubview(post_textView)
 		self.addSubview(choice_view)
+		choice_view.addSubview(first_button)
+		choice_view.addSubview(second_button)
+		choice_view.addSubview(fourth_button)
 		self.addSubview(comments_button)
 		self.addSubview(border_view)
 
 		name_label.snp.makeConstraints { make in
-			make.top.equalTo(self)
-			make.left.equalTo(self).inset(10)
+			make.top.equalTo(self).inset(10)
+			make.left.equalTo(self).inset(12)
 			make.height.equalTo(20)
 		}
 
 		time_label.snp.makeConstraints { make in
-			make.top.equalTo(self)
+			make.top.equalTo(self).inset(10)
 			make.left.equalTo(name_label.snp.right).inset(-20)
 			make.height.equalTo(name_label)
 		}
@@ -83,13 +123,33 @@ class Post_collectionView_cell : UICollectionViewCell {
 		post_textView.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
-			make.bottom.equalTo(comments_button.snp.top).inset(5)
+			make.bottom.equalTo(choice_view.snp.top)
+			make.height.equalTo(40)
+		}
+
+		choice_view.snp.makeConstraints { make in
+			make.top.equalTo(post_textView.snp.bottom)
+			make.left.right.equalTo(self).inset(10)
+			make.height.equalTo(50)
+		}
+
+		first_button.snp.makeConstraints { make in
+			make.top.left.right.equalTo(choice_view)
+			make.height.equalTo(20)
+		}
+
+		second_button.snp.makeConstraints { make in
+			make.top.equalTo(first_button.snp.bottom).inset(-10)
+			make.left.right.equalTo(choice_view)
+			make.height.equalTo(20)
 		}
 
 		comments_button.snp.makeConstraints { make in
+			make.top.equalTo(choice_view.snp.bottom).inset(-10)
 			make.right.equalTo(self).inset(10)
 			make.bottom.equalTo(border_view.snp.top).inset(-10)
 		}
+
 		border_view.snp.makeConstraints { make in
 			make.left.right.bottom.equalTo(self)
 			make.height.equalTo(1)
@@ -98,5 +158,27 @@ class Post_collectionView_cell : UICollectionViewCell {
 
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	func add_third_button(button_text: String)
+	{
+		choice_view.addSubview(third_button)
+		third_button.snp.makeConstraints { make in
+			make.top.equalTo(second_button.snp.bottom)
+			make.left.right.equalTo(choice_view)
+			make.height.equalTo(20)
+		}
+		third_button.titleLabel?.text = button_text
+	}
+
+	func add_fourth_button(button_text: String)
+	{
+		choice_view.addSubview(fourth_button)
+		fourth_button.snp.makeConstraints { make in
+			make.top.equalTo(third_button.snp.bottom)
+			make.left.right.equalTo(choice_view)
+			make.height.equalTo(20)
+		}
+		fourth_button.titleLabel?.text = button_text
 	}
 }
