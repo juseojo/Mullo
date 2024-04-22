@@ -53,13 +53,7 @@ class Main_View: UIView {
 	}()
 
 	var post_collectionView: UICollectionView = {
-		let layout = UICollectionViewFlowLayout()
-		layout.itemSize = CGSize(width: screen_width, height: screen_height / 2)
-		layout.minimumLineSpacing = 0
-		layout.scrollDirection = .vertical
-		layout.sectionInset = .zero
-
-		let post_collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+		let post_collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
 		post_collectionView.backgroundColor = UIColor(named: "NATURAL")
 		post_collectionView.register(
