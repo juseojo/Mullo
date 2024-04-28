@@ -31,7 +31,9 @@ class Post_collectionView_cell : UICollectionViewCell {
 		let post_textView = UITextView()
 
 		post_textView.textColor = UIColor(named: "REVERSE_SYS")
+		post_textView.font = UIFont(name: "GillSans-SemiBold", size: 15)
 		post_textView.isEditable = false
+		post_textView.isScrollEnabled = false
 
 		return post_textView
 	}()
@@ -65,11 +67,19 @@ class Post_collectionView_cell : UICollectionViewCell {
 	var third_button: UIButton = {
 		let third_button = UIButton()
 
+		third_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
+		third_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+		third_button.layer.borderWidth = 1
+
 		return third_button
 	}()
 
 	var fourth_button: UIButton = {
 		let fourth_button = UIButton()
+
+		fourth_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
+		fourth_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+		fourth_button.layer.borderWidth = 1
 
 		return fourth_button
 	}()
@@ -104,7 +114,7 @@ class Post_collectionView_cell : UICollectionViewCell {
 		self.addSubview(choice_view)
 		choice_view.addSubview(first_button)
 		choice_view.addSubview(second_button)
-		choice_view.addSubview(fourth_button)
+
 		self.addSubview(comments_button)
 		self.addSubview(border_view)
 
@@ -124,13 +134,12 @@ class Post_collectionView_cell : UICollectionViewCell {
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
 			make.bottom.equalTo(choice_view.snp.top)
-			make.height.equalTo(40)
 		}
 
 		choice_view.snp.makeConstraints { make in
 			make.top.equalTo(post_textView.snp.bottom)
 			make.left.right.equalTo(self).inset(10)
-			make.height.equalTo(50)
+			make.bottom.equalTo(comments_button.snp.top).inset(-10)
 		}
 
 		first_button.snp.makeConstraints { make in
@@ -148,6 +157,7 @@ class Post_collectionView_cell : UICollectionViewCell {
 			make.top.equalTo(choice_view.snp.bottom).inset(-10)
 			make.right.equalTo(self).inset(10)
 			make.bottom.equalTo(border_view.snp.top).inset(-10)
+			make.height.equalTo(50)
 		}
 
 		border_view.snp.makeConstraints { make in
@@ -160,25 +170,39 @@ class Post_collectionView_cell : UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 
+	override func prepareForReuse() {
+
+		first_button.setTitle(nil, for: .normal)
+		second_button.setTitle(nil, for: .normal)
+		third_button.setTitle(nil, for: .normal)
+		fourth_button.setTitle(nil, for: .normal)
+		time_label.text = nil
+		name_label.text = nil
+		third_button.snp.removeConstraints()
+		fourth_button.snp.removeConstraints()
+		third_button.removeFromSuperview()
+		fourth_button.removeFromSuperview()
+	}
+
 	func add_third_button(button_text: String)
 	{
 		choice_view.addSubview(third_button)
 		third_button.snp.makeConstraints { make in
-			make.top.equalTo(second_button.snp.bottom)
+			make.top.equalTo(second_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(choice_view)
 			make.height.equalTo(20)
 		}
-		third_button.titleLabel?.text = button_text
+		third_button.setTitle(button_text, for: .normal)
 	}
 
 	func add_fourth_button(button_text: String)
 	{
 		choice_view.addSubview(fourth_button)
 		fourth_button.snp.makeConstraints { make in
-			make.top.equalTo(third_button.snp.bottom)
+			make.top.equalTo(third_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(choice_view)
 			make.height.equalTo(20)
 		}
-		fourth_button.titleLabel?.text = button_text
+		fourth_button.setTitle(button_text, for: .normal)
 	}
 }
