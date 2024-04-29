@@ -29,7 +29,7 @@ class Main_View: UIView {
 		return header_label
 	}()
 
-	private var write_button: UIButton = {
+	var write_button: UIButton = {
 		let write_button = UIButton()
 		let button_image = UIImage(
 			systemName: "square.and.pencil",
@@ -40,7 +40,7 @@ class Main_View: UIView {
 		return write_button
 	}()
 
-	private var inform_button: UIButton = {
+	var inform_button: UIButton = {
 		let inform_button = UIButton()
 		let button_image = UIImage(
 			systemName: "person",

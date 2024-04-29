@@ -9,10 +9,11 @@ import UIKit
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 class Main_ViewController: UIViewController {
 
-	let main_view = Main_View()
+	var main_view = Main_View()
 	let main_viewModel = Main_viewModel()
 	private let disposeBag = DisposeBag()
 	var cell_height_array = [CGFloat]()
@@ -21,23 +22,37 @@ class Main_ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		//basic setting
 		view.backgroundColor = UIColor(named: "NATURAL")
+		self.navigationController?.isNavigationBarHidden = true
 
+		//delegate
 		main_view.post_collectionView.rx.setDelegate(self)
 			.disposed(by: disposeBag)
 
+		//layout
 		self.view.addSubview(main_view)
 		main_view.snp.makeConstraints { make in
 			make.top.bottom.left.right.equalTo(self.view)
 		}
 
+		//button event set
+		main_view.write_button.rx.tap
+			.bind{
+				print("write_button_touch")
+				self.write_button_touch()
+			}.disposed(by: disposeBag)
+
+		//for refresh
 		let refresh_controll : UIRefreshControl = UIRefreshControl()
 		refresh_controll.addTarget(self, action: #selector(self.refresh_posts), for: .valueChanged)
 		main_view.post_collectionView.refreshControl = refresh_controll
 
+		//binding and get data
 		bind_collectionView()
 		main_viewModel.get_data(index: 0)
 
+		//dynamic cell height
 		main_viewModel.items
 			.subscribe(onNext: { cell_dataSet in
 				if (cell_dataSet.isEmpty == false) {
@@ -48,6 +63,13 @@ class Main_ViewController: UIViewController {
 					self.main_view.post_collectionView.reloadData()
 				}
 			}).disposed(by: self.disposeBag)
+	}
+
+	func write_button_touch()
+	{
+		let vc = Write_post_viewController()
+
+		self.navigationController?.pushViewController(vc, animated: true)
 	}
 
 	@objc func refresh_posts(){
