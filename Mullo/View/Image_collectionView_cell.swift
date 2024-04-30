@@ -6,16 +6,24 @@
 //
 
 import UIKit
+
 import SnapKit
 
 class Image_collectionView_cell: UICollectionViewCell {
 	static let identifier = "images"
 
-	private var image_view: UIImageView {
+	var image_view: UIImageView = {
 		let image_view = UIImageView()
 
+		image_view.backgroundColor = UIColor.lightGray
+		image_view.tintColor = UIColor.black
+		image_view.contentMode = .scaleAspectFit
+		image_view.clipsToBounds = true
+		image_view.layer.cornerRadius = 5
+
 		return image_view
-	}
+	}()
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		
