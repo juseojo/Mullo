@@ -13,7 +13,6 @@ import SnapKit
 
 class Main_viewModel
 {
-	private var post_dataSet = [Post_cell_data]()
 	private let disposeBag = DisposeBag()
 	private let subject = BehaviorSubject<[Post_cell_data]>(value: [])
 	var items: Observable<[Post_cell_data]> {
@@ -29,7 +28,7 @@ class Main_viewModel
 			case .success:				//get resource and convert to [[String]]
 				if let data = try! response.result.get() as? [[String]] {
 					//data classify
-					self.post_dataSet.append(contentsOf: data.map { source -> Post_cell_data in
+					let new_data = (data.map { source -> Post_cell_data in
 						return Post_cell_data(
 							name_text: source[0],
 							time_text: source[1],
@@ -37,7 +36,13 @@ class Main_viewModel
 							choice_text: source[3]
 						)
 					})
-					self.subject.onNext(self.post_dataSet)
+					do {
+						var post_dataSet = try self.subject.value()
+						post_dataSet.append(contentsOf: new_data)
+						self.subject.onNext(post_dataSet)
+					} catch {
+						print("Error getting current images: \(error)")
+					}
 				}
 			case .failure(let error):
 				print("Error: \(error)")
@@ -48,6 +53,6 @@ class Main_viewModel
 
 	func remove_all()
 	{
-		post_dataSet.removeAll()
+		self.subject.onNext([])
 	}
 }
