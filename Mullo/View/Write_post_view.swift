@@ -45,24 +45,28 @@ class Write_post_view: UIView {
 		post_text_view.backgroundColor = UIColor.white
 		post_text_view.layer.cornerRadius = 5
 		post_text_view.clipsToBounds = true
+		post_text_view.font = UIFont(name: "SeoulHangangM", size: 10)
 
 		return post_text_view
 	}()
 
 	private var image_label: UILabel = {
 		let image_label = UILabel()
-		
+
 		image_label.text = "사진"
 		image_label.font = UIFont(name: "SeoulHangangM", size: 20)
 
 		return image_label
 	}()
 
-	private var image_collectionView: UICollectionView = {
+	var image_collectionView: UICollectionView = {
 		let flowLayout = UICollectionViewFlowLayout()
 
 		flowLayout.scrollDirection = .horizontal
 		flowLayout.minimumLineSpacing = 50
+		flowLayout.itemSize = CGSize(width: 130, height: screen_height * 0.25 - 20)
+		flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+		flowLayout.minimumLineSpacing = 10
 
 		let image_collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
 		image_collectionView.register(
@@ -91,7 +95,7 @@ class Write_post_view: UIView {
 		return choice_contain_view
 	}()
 
-	private var first_choice_textField: UITextField = {
+	var first_choice_textField: UITextField = {
 		let first_choice_textField = UITextField()
 
 		first_choice_textField.layer.borderColor = UIColor.lightGray.cgColor
@@ -99,11 +103,12 @@ class Write_post_view: UIView {
 		first_choice_textField.backgroundColor = UIColor.white
 		first_choice_textField.layer.cornerRadius = 5.0
 		first_choice_textField.clipsToBounds = true
+		first_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
 
 		return first_choice_textField
 	}()
 
-	private var second_choice_textField: UITextField = {
+	var second_choice_textField: UITextField = {
 		let second_choice_textField = UITextField()
 
 		second_choice_textField.layer.borderColor = UIColor.lightGray.cgColor
@@ -111,11 +116,12 @@ class Write_post_view: UIView {
 		second_choice_textField.backgroundColor = UIColor.white
 		second_choice_textField.layer.cornerRadius = 5.0
 		second_choice_textField.clipsToBounds = true
+		second_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
 
 		return second_choice_textField
 	}()
 
-	private var third_choice_textField: UITextField = {
+	var third_choice_textField: UITextField = {
 		let third_choice_textField = UITextField()
 
 		third_choice_textField.layer.borderColor = UIColor.lightGray.cgColor
@@ -123,11 +129,12 @@ class Write_post_view: UIView {
 		third_choice_textField.backgroundColor = UIColor.white
 		third_choice_textField.layer.cornerRadius = 5.0
 		third_choice_textField.clipsToBounds = true
+		third_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
 
 		return third_choice_textField
 	}()
 
-	private var fourth_choice_textField: UITextField = {
+	var fourth_choice_textField: UITextField = {
 		let fourth_choice_textField = UITextField()
 
 		fourth_choice_textField.layer.borderColor = UIColor.lightGray.cgColor
@@ -135,11 +142,12 @@ class Write_post_view: UIView {
 		fourth_choice_textField.backgroundColor = UIColor.white
 		fourth_choice_textField.layer.cornerRadius = 5.0
 		fourth_choice_textField.clipsToBounds = true
+		fourth_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
 
 		return fourth_choice_textField
 	}()
 
-	private var choice_plus_button: UIButton = {
+	var choice_plus_button: UIButton = {
 		let choice_plus_button = UIButton()
 
 		choice_plus_button.setImage(UIImage(systemName: "plus"), for: .normal)
@@ -148,7 +156,7 @@ class Write_post_view: UIView {
 		return choice_plus_button
 	}()
 
-	private var choice_minus_button: UIButton = {
+	var choice_minus_button: UIButton = {
 		let choice_minus_button = UIButton()
 
 		choice_minus_button.setImage(UIImage(systemName: "minus"), for: .normal)
@@ -171,7 +179,7 @@ class Write_post_view: UIView {
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		
+
 		self.backgroundColor = UIColor(named: "NATURAL")
 
 		addSubview(scroll_view)
@@ -227,6 +235,8 @@ class Write_post_view: UIView {
 		choice_contain_view.snp.makeConstraints { make in
 			make.top.equalTo(choice_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(scroll_view).inset(30)
+			make.height.equalTo(80)
+			make.bottom.equalTo(choice_plus_button.snp.top)
 		}
 
 		first_choice_textField.snp.makeConstraints { make in
@@ -236,7 +246,7 @@ class Write_post_view: UIView {
 
 		second_choice_textField.snp.makeConstraints { make in
 			make.top.equalTo(first_choice_textField.snp.bottom).inset(-10)
-			make.left.right.bottom.equalTo(choice_contain_view)
+			make.left.right.equalTo(choice_contain_view)
 			make.height.equalTo(30)
 		}
 
@@ -261,5 +271,40 @@ class Write_post_view: UIView {
 
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	func add_third_choice_textField()
+	{
+		choice_contain_view.addSubview(third_choice_textField)
+		third_choice_textField.snp.makeConstraints { make in
+			make.top.equalTo(second_choice_textField.snp.bottom).inset(-10)
+			make.left.right.equalTo(choice_contain_view)
+			make.height.equalTo(30)
+		}
+		choice_contain_view.snp.updateConstraints { make in
+			make.height.equalTo(120)
+		}
+	}
+
+	func add_fourth_choice_textField()
+	{
+		choice_contain_view.addSubview(fourth_choice_textField)
+		fourth_choice_textField.snp.makeConstraints { make in
+			make.top.equalTo(third_choice_textField.snp.bottom).inset(-10)
+			make.left.right.equalTo(choice_contain_view)
+			make.height.equalTo(30)
+		}
+		choice_contain_view.snp.updateConstraints { make in
+			make.height.equalTo(160)
+		}
+	}
+
+	func delete_textField(target: UITextField)
+	{
+		target.snp.removeConstraints()
+		target.removeFromSuperview()
+		choice_contain_view.snp.updateConstraints { make in
+			make.height.equalTo(choice_contain_view.bounds.height - 40)
+		}
 	}
 }
