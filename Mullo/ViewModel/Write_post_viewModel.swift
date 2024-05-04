@@ -11,7 +11,7 @@ import Alamofire
 import RxSwift
 import SnapKit
 
-class Write_post_viewModel
+final class Write_post_viewModel
 {
 	private let disposeBag = DisposeBag()
 	let subject = BehaviorSubject<[UIImage]>(value: [])
