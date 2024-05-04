@@ -12,6 +12,20 @@ let screen_height = UIScreen.main.bounds.size.height
 let head_height: CGFloat = screen_height * 0.05
 let top_inset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
 
+func show_alert(
+	viewController: UIViewController?,
+	title: String,
+	message: String,
+	button_title: String,
+	handler: ((UIAlertAction) -> Void)?)
+{
+	let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+	let action = UIAlertAction(title: button_title, style: .default, handler: handler)
+	alert.addAction(action)
+	viewController?.present(alert, animated: true)
+}
+
+
 extension String {
 	func substr(seperater: Character) -> [String] {
 		var result = [String]()
