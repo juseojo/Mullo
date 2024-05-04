@@ -19,12 +19,14 @@ final class Main_viewModel
 		return subject.compactMap { $0 }
 	}
 
-	func get_data(index: Int) {
+	func get_data(index: Int, complete_handler: @escaping (Bool) -> Void) {
 		AF.request(
 			"http://\(host)/get_post?offset=\(index)",
 			method: .get,
-			encoding: URLEncoding.httpBody).validate()
-			.responseDecodable(of: [[String]].self) { response in
+			encoding: URLEncoding.queryString)
+				.validate(statusCode: 200..<300)
+				.validate(contentType: ["application/json"])
+				.responseDecodable(of: [[String]].self) { response in
 			switch response.result {
 			case .success:	
 				do {
@@ -40,13 +42,20 @@ final class Main_viewModel
 							picture_text: source[5]
 						)
 					})
+					if classified_data.isEmpty
+					{
+						complete_handler(false)
+						return
+					}
 					var post_dataSet = try self.subject.value()
 					post_dataSet.append(contentsOf: classified_data)
 					self.subject.onNext(post_dataSet)
+					complete_handler(true)
 				} catch {
 					print("Error getting current images: \(error)")
 				}
 			case .failure(let error):
+				complete_handler(false)
 				print("Error: \(error)")
 				self.subject.onError(error)
 			}

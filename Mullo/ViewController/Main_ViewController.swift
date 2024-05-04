@@ -50,7 +50,9 @@ class Main_ViewController: UIViewController {
 
 		//binding and get data
 		bind_collectionView()
-		main_viewModel.get_data(index: 0)
+		main_viewModel.get_data(index: 0) { isSuccess in
+			print("get_post_success")
+		}
 
 		//dynamic cell height
 		main_viewModel.items
@@ -75,7 +77,9 @@ class Main_ViewController: UIViewController {
 	@objc func refresh_posts(){
 
 		main_viewModel.remove_all()
-		main_viewModel.get_data(index: 0)
+		main_viewModel.get_data(index: 0) { isSuccess in
+			print("get_post_success")
+		}
 		isLoadingData = true
 		main_view.post_collectionView.refreshControl!.endRefreshing()
 		main_view.post_collectionView.reloadData()
@@ -149,11 +153,22 @@ extension Main_ViewController: UICollectionViewDelegateFlowLayout {
 
 		let post_num = collectionView.numberOfItems(inSection: 0)
 
-		if indexPath.row == post_num - 1 && !isLoadingData && post_num % 7 == 0{
+		if indexPath.row == post_num - 1 && !isLoadingData && post_num % 7 == 0
+		{
 			isLoadingData = true
-			main_viewModel.get_data(index: (post_num) / 7)
+			main_viewModel.get_data(index: (post_num) / 7) { isSuccess in
+				if isSuccess == false
+				{
+					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+						self.isLoadingData = false
+					}
+				}
+				else
+				{
+					self.isLoadingData = false
+				}
+			}
 		}
-		isLoadingData = false
 	}
 }
 
