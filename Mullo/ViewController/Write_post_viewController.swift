@@ -8,6 +8,7 @@
 import UIKit
 import PhotosUI
 
+import AWSS3
 import SnapKit
 import RxSwift
 import RxCocoa
@@ -27,12 +28,90 @@ class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 		rx_setting()
 		write_post_viewModel.add_image(image: UIImage(systemName: "plus.square")!)
 
-
 		//layout
 		self.view.addSubview(write_post_view)
 		write_post_view.snp.makeConstraints { make in
 			make.top.bottom.left.right.equalTo(self.view)
 		}
+	}
+
+	func upload(image: UIImage) {
+
+		let credentialsProvider = AWSStaticCredentialsProvider(accessKey: accessKey, secretKey: secretKey)
+
+		let configuration = AWSServiceConfiguration(region:.APNortheast2, credentialsProvider:credentialsProvider)
+		AWSServiceManager.default().defaultServiceConfiguration = configuration
+
+		let tuConf = AWSS3TransferUtilityConfiguration()
+		tuConf.isAccelerateModeEnabled = false
+
+		AWSS3TransferUtility.register(
+			with: configuration!,
+			transferUtilityConfiguration: tuConf,
+			forKey: utilityKey
+		)
+
+		let dateFormat = DateFormatter()
+		dateFormat.dateFormat = "yyyyMMdd/"
+		fileKey += dateFormat.string(from: Date())
+		fileKey += String(Int64(Date().timeIntervalSince1970)) + "_"
+		fileKey += UUID().uuidString + ".png"
+
+		guard let transferUtility = AWSS3TransferUtility.s3TransferUtility(forKey: utilityKey)
+		else
+		{
+			return
+		}
+
+		let expression = AWSS3TransferUtilityUploadExpression()
+		expression.setValue("public-read", forRequestHeader: "x-amz-acl")
+		expression.progressBlock = { (task, progress) in
+			print("progress \(progress.fractionCompleted)")
+		}
+
+		var completionHandler: AWSS3TransferUtilityUploadCompletionHandlerBlock?
+		completionHandler = { (task, error) -> Void in
+
+			print("task finished")
+			let url = AWSS3.default().configuration.endpoint.url
+			let publicURL = url?.appendingPathComponent(bucketName).appendingPathComponent(fileKey)
+			if let absoluteString = publicURL?.absoluteString {
+				print("image url : \(absoluteString)")
+			}
+		}
+		guard let data = image.pngData() else { return }
+
+		transferUtility.uploadData(
+			data as Data,
+			bucket: bucketName,
+			key: fileKey,
+			contentType: "image/png",
+			expression: expression,
+			completionHandler: completionHandler).continueWith { (task) -> AnyObject? in
+			if let error = task.error {
+				print("Error: \(error.localizedDescription)")
+			}
+
+			if let _ = task.result {
+				print ("upload successful.")
+			}
+
+			return nil
+		}
+	}
+
+	private func posting_button_touch()
+	{
+		//1. image sent to image server
+		do {
+			for image in try write_post_viewModel.subject.value()
+			{
+				upload(image: image)
+			}
+		} catch {
+			print("Error getting current images: \(error)")
+		}
+		//2. post inform sent to server
 	}
 
 	private func back_button_touch()
@@ -101,6 +180,10 @@ class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 			.bind{
 				self.choice_minus_button_touch()
 			}.disposed(by: disposeBag)
+		write_post_view.posting_button.rx.tap
+			.bind{
+				self.posting_button_touch()
+			}.disposed(by: disposeBag)
 
 		//binding
 		write_post_viewModel.items
@@ -156,7 +239,7 @@ class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 extension Write_post_viewController : PHPickerViewControllerDelegate {
 
 	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-
+		//choose image in album
 		picker.dismiss(animated: true, completion: nil)
 
 		guard let provider = results.first?.itemProvider else { return }
