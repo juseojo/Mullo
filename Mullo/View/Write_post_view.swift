@@ -37,7 +37,7 @@ class Write_post_view: UIView {
 		return post_label
 	}()
 
-	private var post_text_view: UITextView = {
+	var post_text_view: UITextView = {
 		let post_text_view = UITextView()
 
 		post_text_view.layer.borderColor = UIColor.lightGray.cgColor
@@ -165,7 +165,7 @@ class Write_post_view: UIView {
 		return choice_minus_button
 	}()
 
-	private var posting_button: UIButton = {
+	var posting_button: UIButton = {
 		let posting_button = UIButton()
 
 		posting_button.setTitle("게시하기", for: .normal)
@@ -303,6 +303,7 @@ class Write_post_view: UIView {
 	{
 		target.snp.removeConstraints()
 		target.removeFromSuperview()
+		target.text = ""
 		choice_contain_view.snp.updateConstraints { make in
 			make.height.equalTo(choice_contain_view.bounds.height - 40)
 		}

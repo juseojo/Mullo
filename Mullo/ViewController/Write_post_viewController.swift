@@ -9,6 +9,7 @@ import UIKit
 import PhotosUI
 
 import AWSS3
+import Alamofire
 import SnapKit
 import RxSwift
 import RxCocoa
@@ -35,81 +36,84 @@ class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 		}
 	}
 
-	func upload(image: UIImage) {
-
-		let credentialsProvider = AWSStaticCredentialsProvider(accessKey: accessKey, secretKey: secretKey)
-
-		let configuration = AWSServiceConfiguration(region:.APNortheast2, credentialsProvider:credentialsProvider)
-		AWSServiceManager.default().defaultServiceConfiguration = configuration
-
-		let tuConf = AWSS3TransferUtilityConfiguration()
-		tuConf.isAccelerateModeEnabled = false
-
-		AWSS3TransferUtility.register(
-			with: configuration!,
-			transferUtilityConfiguration: tuConf,
-			forKey: utilityKey
-		)
-
-		let dateFormat = DateFormatter()
-		dateFormat.dateFormat = "yyyyMMdd/"
-		fileKey += dateFormat.string(from: Date())
-		fileKey += String(Int64(Date().timeIntervalSince1970)) + "_"
-		fileKey += UUID().uuidString + ".png"
-
-		guard let transferUtility = AWSS3TransferUtility.s3TransferUtility(forKey: utilityKey)
-		else
+	private func posting_button_touch()
+	{
+		//0.exception
+		if self.write_post_view.post_text_view.text.isEmpty
 		{
+			show_alert(viewController: self, title: "알림", message: "내용이 비어있습니다.", button_title: "확인", handler: nil)
+			return
+		}
+		else if self.write_post_view.first_choice_textField.hasText == false
+		{
+			show_alert(viewController: self, title: "알림", message: "첫번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
+			return
+		}
+		else if self.write_post_view.second_choice_textField.hasText == false
+		{
+			show_alert(viewController: self, title: "알림", message: "두번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
+			return
+		}
+		else if (self.write_post_view.third_choice_textField.superview != nil) &&
+					(self.write_post_view.third_choice_textField.hasText == false)
+		{
+			show_alert(viewController: self, title: "알림", message: "세번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
+			return
+		}
+		else if (self.write_post_view.fourth_choice_textField.superview != nil) &&
+					(self.write_post_view.fourth_choice_textField.hasText == false)
+		{
+			show_alert(viewController: self, title: "알림", message: "네번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
 			return
 		}
 
-		let expression = AWSS3TransferUtilityUploadExpression()
-		expression.setValue("public-read", forRequestHeader: "x-amz-acl")
-		expression.progressBlock = { (task, progress) in
-			print("progress \(progress.fractionCompleted)")
-		}
-
-		var completionHandler: AWSS3TransferUtilityUploadCompletionHandlerBlock?
-		completionHandler = { (task, error) -> Void in
-
-			print("task finished")
-			let url = AWSS3.default().configuration.endpoint.url
-			let publicURL = url?.appendingPathComponent(bucketName).appendingPathComponent(fileKey)
-			if let absoluteString = publicURL?.absoluteString {
-				print("image url : \(absoluteString)")
-			}
-		}
-		guard let data = image.pngData() else { return }
-
-		transferUtility.uploadData(
-			data as Data,
-			bucket: bucketName,
-			key: fileKey,
-			contentType: "image/png",
-			expression: expression,
-			completionHandler: completionHandler).continueWith { (task) -> AnyObject? in
-			if let error = task.error {
-				print("Error: \(error.localizedDescription)")
-			}
-
-			if let _ = task.result {
-				print ("upload successful.")
-			}
-
-			return nil
-		}
-	}
-
-	private func posting_button_touch()
-	{
-		//1. image sent to image server
-		do {
-			for image in try write_post_viewModel.subject.value()
+		Task {
+			//1. image sent to image server
+			var images_url = ""
+			var images = try write_post_viewModel.subject.value()
+			images.removeLast()
+			for image in images
 			{
-				upload(image: image)
+				images_url += try await self.write_post_viewModel.upload_image(image: image) + "|"
 			}
-		} catch {
-			print("Error getting current images: \(error)")
+			if images_url.isEmpty == false
+			{
+				images_url.removeLast()
+			}
+			print("parameter setting")
+			var choice_text = ""
+			choice_text += (self.write_post_view.first_choice_textField.text ?? "") + "|"
+			choice_text += (self.write_post_view.second_choice_textField.text ?? "")
+			if self.write_post_view.third_choice_textField.hasText
+			{
+				choice_text += "|" + self.write_post_view.third_choice_textField.text!
+			}
+
+			if self.write_post_view.fourth_choice_textField.hasText
+			{
+				choice_text += "|" + self.write_post_view.fourth_choice_textField.text!
+			}
+
+			let formatter = DateFormatter()
+			formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+			let time_text = formatter.string(from: Date())
+
+			let parameters: [String: String] = [
+				"name": "name",
+				"time": time_text,
+				"post": self.write_post_view.post_text_view.text,
+				"choice": choice_text,
+				"choice_count": "0|0|0",
+				"pictures": images_url
+			]
+
+			print(parameters)
+			self.write_post_viewModel.sent_post(parameters: parameters) { isSuccess in
+				if isSuccess
+				{
+					self.navigationController?.popViewController(animated:true)
+				}
+			}
 		}
 		//2. post inform sent to server
 	}
