@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class Image_collectionView_cell: UICollectionViewCell {
+final class Image_collectionView_cell: UICollectionViewCell {
 	static let identifier = "images"
 
 	var image_view: UIImageView = {
@@ -35,7 +35,7 @@ class Image_collectionView_cell: UICollectionViewCell {
 			make.top.bottom.left.right.equalTo(self)
 		}
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

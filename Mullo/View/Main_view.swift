@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class Main_View: UIView {
+final class Main_View: UIView {
 
 	private var header_view: UIView = {
 		let header_view = UIView()

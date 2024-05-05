@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import SnapKit
+import Kingfisher
 
 class Main_ViewController: UIViewController {
 
@@ -106,6 +107,13 @@ class Main_ViewController: UIViewController {
 					cell.add_fourth_button(button_text: buttons_text[3])
 				}
 
+				let images_url = item.picture_text.substr(seperater: "|" as Character)
+
+				for url_text in images_url
+				{
+					cell.image_collectionView.
+				}
+
 				cell.first_button.setTitle(buttons_text[0], for: .normal)
 				cell.second_button.setTitle(buttons_text[1], for: .normal)
 			}
@@ -119,6 +127,7 @@ class Main_ViewController: UIViewController {
 		let height =
 		(self.calculateHeight(for: item.name_text, width: screen_width - 20)) +
 		(self.calculateHeight(for: item.post_text, width: screen_width - 20)) +
+		screen_height * 0.2 +
 		CGFloat(choice_view_height) + 100
 
 		cell_height_array.append(height)
@@ -146,6 +155,7 @@ extension Main_ViewController: UICollectionViewDelegateFlowLayout {
 			return CGSize(width: screen_width, height: 400)
 		}
 
+		if collectionView.cellForItem(at: 0).
 		return CGSize(width: screen_width, height: cell_height_array[indexPath.row])
 	}
 

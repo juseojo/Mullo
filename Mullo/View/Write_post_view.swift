@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class Write_post_view: UIView {
+final class Write_post_view: UIView {
 
 	private var scroll_view: UIScrollView = {
 		let scroll_view = UIScrollView()
