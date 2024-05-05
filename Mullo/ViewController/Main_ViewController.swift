@@ -12,7 +12,7 @@ import RxCocoa
 import SnapKit
 import Kingfisher
 
-class Main_ViewController: UIViewController {
+final class Main_ViewController: UIViewController {
 
 	var main_view = Main_View()
 	let main_viewModel = Main_viewModel()
@@ -90,45 +90,51 @@ class Main_ViewController: UIViewController {
 	{
 		main_viewModel.items
 			.observe(on: MainScheduler.instance)
-			.bind(to: main_view.post_collectionView.rx.items(cellIdentifier: "post", cellType: Post_collectionView_cell.self)) { row, item, cell in
-				cell.name_label.text = item.name_text
-				cell.time_label.text = item.time_text
-				cell.post_textView.text = item.post_text
-				
-				let buttons_text = item.choice_text.substr(seperater: "|" as Character)
+			.bind(to: main_view.post_collectionView.rx.items(
+				cellIdentifier: Post_collectionView_cell.identifier, cellType: Post_collectionView_cell.self)) { row, item, cell in
 
-				if buttons_text.count == 3
-				{
-					cell.add_third_button(button_text: buttons_text[2])
+					cell.name_label.text = item.name_text
+					cell.time_label.text = item.time_text
+					cell.post_textView.text = item.post_text
+
+					let buttons_text = item.choice_text.substr(seperater: "|" as Character)
+
+					if buttons_text.count == 3
+					{
+						cell.add_third_button(button_text: buttons_text[2])
+					}
+					else if buttons_text.count == 4
+					{
+						cell.add_third_button(button_text: buttons_text[2])
+						cell.add_fourth_button(button_text: buttons_text[3])
+					}
+
+					let images_url = item.picture_text.substr(seperater: "|" as Character)
+
+					if (images_url[0] != "")
+					{
+						cell.subject.onNext(images_url)
+					}
+					cell.first_button.setTitle(buttons_text[0], for: .normal)
+					cell.second_button.setTitle(buttons_text[1], for: .normal)
 				}
-				else if buttons_text.count == 4
-				{
-					cell.add_third_button(button_text: buttons_text[2])
-					cell.add_fourth_button(button_text: buttons_text[3])
-				}
-
-				let images_url = item.picture_text.substr(seperater: "|" as Character)
-
-				for url_text in images_url
-				{
-					cell.image_collectionView.
-				}
-
-				cell.first_button.setTitle(buttons_text[0], for: .normal)
-				cell.second_button.setTitle(buttons_text[1], for: .normal)
-			}
-			.disposed(by: self.disposeBag)
+				.disposed(by: self.disposeBag)
 	}
 
 	private func save_cell_height(item: Post_cell_data)
 	{
-		let choice_view_height = item.choice_text.filter { $0 == "|" as Character }.count * 40
+		let choice_view_height = item.choice_text.filter { $0 == "|" as Character }.count * 30
 
-		let height =
+		var height =
 		(self.calculateHeight(for: item.name_text, width: screen_width - 20)) +
 		(self.calculateHeight(for: item.post_text, width: screen_width - 20)) +
-		screen_height * 0.2 +
+		screen_height * 0.2 + 20 +
 		CGFloat(choice_view_height) + 100
+
+		if item.picture_text == ""
+		{
+			height = height - screen_height * 0.2
+		}
 
 		cell_height_array.append(height)
 	}
@@ -155,7 +161,6 @@ extension Main_ViewController: UICollectionViewDelegateFlowLayout {
 			return CGSize(width: screen_width, height: 400)
 		}
 
-		if collectionView.cellForItem(at: 0).
 		return CGSize(width: screen_width, height: cell_height_array[indexPath.row])
 	}
 

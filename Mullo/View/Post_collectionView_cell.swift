@@ -6,10 +6,15 @@
 //
 
 import UIKit
+import RxSwift
 
-class Post_collectionView_cell : UICollectionViewCell {
+final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 	static let identifier = "post"
-
+	private let disposeBag = DisposeBag()
+	let subject = BehaviorSubject<[String]>(value: [])
+	var items: Observable<[String]> {
+		return subject.compactMap { $0 }
+	}
 	var name_label: UILabel = {
 		let name_label = UILabel()
 
@@ -36,6 +41,22 @@ class Post_collectionView_cell : UICollectionViewCell {
 		post_textView.isScrollEnabled = false
 
 		return post_textView
+	}()
+
+	var image_collectionView: UICollectionView = {
+		let flowLayout = UICollectionViewFlowLayout()
+
+		flowLayout.scrollDirection = .horizontal
+		flowLayout.minimumLineSpacing = 50
+		flowLayout.itemSize = CGSize(width: 130, height: screen_height * 0.2 - 20)
+		flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+		flowLayout.minimumLineSpacing = 10
+
+		let image_collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+		image_collectionView.register(
+			Image_collectionView_cell.self, forCellWithReuseIdentifier: Image_collectionView_cell.identifier)
+
+		return image_collectionView
 	}()
 
 	var choice_view: UIView = {
@@ -106,11 +127,21 @@ class Post_collectionView_cell : UICollectionViewCell {
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
+
+		image_collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+		items.observe(on: MainScheduler.instance)
+			.bind(to:image_collectionView.rx.items(
+				cellIdentifier: Image_collectionView_cell.identifier,
+				cellType: Image_collectionView_cell.self)) { row, item, cell in
+					cell.image_view.kf.setImage(with: URL(string: item))
+		   }.disposed(by: self.disposeBag)
+
 		self.backgroundColor = UIColor(named: "NATURAL")
 
 		self.addSubview(name_label)
 		self.addSubview(time_label)
 		self.addSubview(post_textView)
+		self.addSubview(image_collectionView)
 		self.addSubview(choice_view)
 		choice_view.addSubview(first_button)
 		choice_view.addSubview(second_button)
@@ -133,13 +164,16 @@ class Post_collectionView_cell : UICollectionViewCell {
 		post_textView.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
-			make.bottom.equalTo(choice_view.snp.top)
+		}
+
+		image_collectionView.snp.makeConstraints { make in
+			make.top.equalTo(post_textView.snp.bottom)
+			make.left.right.equalTo(self).inset(10)
 		}
 
 		choice_view.snp.makeConstraints { make in
-			make.top.equalTo(post_textView.snp.bottom)
+			make.top.equalTo(image_collectionView.snp.bottom)
 			make.left.right.equalTo(self).inset(10)
-			make.bottom.equalTo(comments_button.snp.top).inset(-10)
 		}
 
 		first_button.snp.makeConstraints { make in
@@ -149,14 +183,14 @@ class Post_collectionView_cell : UICollectionViewCell {
 
 		second_button.snp.makeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
-			make.left.right.equalTo(choice_view)
+			make.left.right.bottom.equalTo(choice_view)
 			make.height.equalTo(20)
 		}
 
 		comments_button.snp.makeConstraints { make in
-			make.top.equalTo(choice_view.snp.bottom).inset(-10)
+			make.top.equalTo(choice_view.snp.bottom)
 			make.right.equalTo(self).inset(10)
-			make.bottom.equalTo(border_view.snp.top).inset(-10)
+			make.bottom.equalTo(border_view.snp.top)
 			make.height.equalTo(50)
 		}
 
@@ -182,27 +216,53 @@ class Post_collectionView_cell : UICollectionViewCell {
 		fourth_button.snp.removeConstraints()
 		third_button.removeFromSuperview()
 		fourth_button.removeFromSuperview()
+		second_button.snp.remakeConstraints { make in
+			make.top.equalTo(first_button.snp.bottom).inset(-10)
+			make.left.right.bottom.equalTo(choice_view)
+			make.height.equalTo(20)
+		}
+		self.subject.onNext([])
 	}
 
 	func add_third_button(button_text: String)
 	{
 		choice_view.addSubview(third_button)
-		third_button.snp.makeConstraints { make in
-			make.top.equalTo(second_button.snp.bottom).inset(-10)
+
+		//remove bottom layout
+		second_button.snp.remakeConstraints { make in
+			make.top.equalTo(first_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(choice_view)
 			make.height.equalTo(20)
 		}
+
+		//new button layout
+		third_button.snp.makeConstraints { make in
+			make.top.equalTo(second_button.snp.bottom).inset(-10)
+			make.left.right.bottom.equalTo(choice_view)
+			make.height.equalTo(20)
+		}
+
 		third_button.setTitle(button_text, for: .normal)
 	}
 
 	func add_fourth_button(button_text: String)
 	{
 		choice_view.addSubview(fourth_button)
-		fourth_button.snp.makeConstraints { make in
-			make.top.equalTo(third_button.snp.bottom).inset(-10)
+
+		//remove bottom layout
+		third_button.snp.remakeConstraints { make in
+			make.top.equalTo(second_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(choice_view)
 			make.height.equalTo(20)
 		}
+
+		//new button layout
+		fourth_button.snp.makeConstraints { make in
+			make.top.equalTo(third_button.snp.bottom).inset(-10)
+			make.left.right.bottom.equalTo(choice_view)
+			make.height.equalTo(20)
+		}
+
 		fourth_button.setTitle(button_text, for: .normal)
 	}
 }
