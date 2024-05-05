@@ -14,7 +14,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class Write_post_viewController: UIViewController, UIScrollViewDelegate {
+final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 
 	var write_post_view = Write_post_view()
 	var write_post_viewModel = Write_post_viewModel()
@@ -68,7 +68,7 @@ class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 		}
 
 		Task {
-			//1. image sent to image server
+			//1. image send to image server
 			var images_url = ""
 			var images = try write_post_viewModel.subject.value()
 			images.removeLast()
@@ -94,6 +94,7 @@ class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 				choice_text += "|" + self.write_post_view.fourth_choice_textField.text!
 			}
 
+			//2. post inform sent to server
 			let formatter = DateFormatter()
 			formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 			let time_text = formatter.string(from: Date())
@@ -108,14 +109,13 @@ class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 			]
 
 			print(parameters)
-			self.write_post_viewModel.sent_post(parameters: parameters) { isSuccess in
+			self.write_post_viewModel.send_post(parameters: parameters) { isSuccess in
 				if isSuccess
 				{
 					self.navigationController?.popViewController(animated:true)
 				}
 			}
 		}
-		//2. post inform sent to server
 	}
 
 	private func back_button_touch()

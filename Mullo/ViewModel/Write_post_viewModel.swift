@@ -31,7 +31,7 @@ final class Write_post_viewModel
 		}
 	}
 
-	func sent_post(parameters: [String: String], complete_handler: @escaping (Bool) -> Void)
+	func send_post(parameters: [String: String], complete_handler: @escaping (Bool) -> Void)
 	{
 		AF.request(
 			"http://\(host)/new_post",
