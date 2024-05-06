@@ -99,16 +99,21 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 			formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 			let time_text = formatter.string(from: Date())
 
+			var choice_count = "0"
+			for _ in 1...choice_text.filter({$0 == "|" as Character}).count
+			{
+				choice_count += "|0"
+			}
 			let parameters: [String: String] = [
 				"name": "name",
 				"time": time_text,
 				"post": self.write_post_view.post_text_view.text,
 				"choice": choice_text,
-				"choice_count": "0|0|0",
+				"choice_count": choice_count,
 				"pictures": images_url
 			]
 
-			print(parameters)
+			print("parameters : \(parameters)")
 			self.write_post_viewModel.send_post(parameters: parameters) { isSuccess in
 				if isSuccess
 				{
