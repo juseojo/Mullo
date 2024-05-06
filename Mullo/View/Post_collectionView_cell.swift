@@ -15,6 +15,9 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 	var items: Observable<[String]> {
 		return subject.compactMap { $0 }
 	}
+	var choice_button_vote_count = [String]()
+	var buttons = [UIButton]()
+
 	var name_label: UILabel = {
 		let name_label = UILabel()
 
@@ -125,8 +128,94 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		return border_view
 	}()
 
+	private var touched_button_background_view: UIView = {
+		let touched_button_background_view = UIView()
+
+		touched_button_background_view.backgroundColor = UIColor.lightGray
+
+		return touched_button_background_view
+	}()
+
+	func choice_button_touch(touched_button: UIButton) {
+		
+		var total_count = 0
+		for vote_count in choice_button_vote_count
+		{
+			total_count += Int(vote_count) ?? 0
+		}
+		var num = 0
+
+		for button in buttons
+		{
+			if button.superview == nil
+			{
+				return
+			}
+			button.isEnabled = false
+
+			if button == touched_button
+			{
+				let touched_button_count = (Int(choice_button_vote_count[num]) ?? 0) + 1
+
+				choice_view.addSubview(touched_button_background_view)
+				touched_button_background_view.snp.makeConstraints { make in
+					make.top.left.bottom.equalTo(button)
+					make.width.equalTo((Double(touched_button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
+				}
+				choice_view.bringSubviewToFront(button)
+
+				touched_button_background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+				touched_button_background_view.layer.borderWidth = 1.0
+				touched_button_background_view.clipsToBounds = true
+
+				let percent_label = UILabel()
+
+				choice_view.addSubview(percent_label)
+				percent_label.text = String(round((Double(touched_button_count) / Double(total_count + 1)) * 100)) + " %"
+				percent_label.snp.makeConstraints { make in
+					make.top.bottom.right.equalTo(touched_button)
+				}
+			}
+			else
+			{
+				let background_view = UIView()
+				let button_count = (Int(choice_button_vote_count[num]) ?? 0)
+
+				background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+				background_view.layer.borderWidth = 1.0
+				background_view.clipsToBounds = true
+
+				choice_view.addSubview(background_view)
+				choice_view.bringSubviewToFront(button)
+				background_view.snp.makeConstraints { make in
+					make.top.left.bottom.equalTo(button)
+					make.width.equalTo((Double(button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
+				}
+
+				let percent_label = UILabel()
+
+				choice_view.addSubview(percent_label)
+				percent_label.text = String(round((Double(button_count) / Double(total_count + 1)) * 100)) + " %"
+				percent_label.snp.makeConstraints { make in
+					make.top.bottom.right.equalTo(button)
+				}
+			}
+			num += 1
+		}
+	}
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
+
+		self.buttons = [first_button, second_button, third_button, fourth_button]
+
+		for button in buttons
+		{
+			button.rx.tap
+				.bind {
+					self.choice_button_touch(touched_button: button)
+				}.disposed(by: disposeBag)
+		}
 
 		image_collectionView.rx.setDelegate(self).disposed(by: disposeBag)
 		items.observe(on: MainScheduler.instance)
