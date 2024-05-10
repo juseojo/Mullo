@@ -26,33 +26,22 @@ final class Main_viewModel
 			encoding: URLEncoding.queryString)
 				.validate(statusCode: 200..<300)
 				.validate(contentType: ["application/json"])
-				.responseDecodable(of: [[String]].self) { response in
+				.responseDecodable(of: [Post_cell_data].self) { response in
 			switch response.result {
 			case .success:	
 				do {
 					let data = try response.result.get()
-					//data classify
-					let classified_data = (data.map { source -> Post_cell_data in
-						return Post_cell_data(
-							name_text: source[0],
-							time_text: source[1],
-							post_text: source[2],
-							choice_text: source[3],
-							choice_count: source[4],
-							picture_text: source[5]
-						)
-					})
-					if classified_data.isEmpty
+					if data.isEmpty
 					{
 						complete_handler(false)
 						return
 					}
 					var post_dataSet = try self.subject.value()
-					post_dataSet.append(contentsOf: classified_data)
+					post_dataSet.append(contentsOf: data)
 					self.subject.onNext(post_dataSet)
 					complete_handler(true)
 				} catch {
-					print("Error getting current images: \(error)")
+					print("-- Error at getting current images --\n \(error)")
 				}
 			case .failure(let error):
 				complete_handler(false)
