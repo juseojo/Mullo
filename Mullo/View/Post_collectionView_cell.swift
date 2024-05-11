@@ -6,7 +6,10 @@
 //
 
 import UIKit
+
+import Kingfisher
 import RxSwift
+import RealmSwift
 
 final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 	static let identifier = "post"
@@ -17,6 +20,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 	}
 	var choice_button_vote_count = [String]()
 	var buttons = [UIButton]()
+	var post_num = 0
 
 	var name_label: UILabel = {
 		let name_label = UILabel()
@@ -136,13 +140,8 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		return touched_button_background_view
 	}()
 
-	func choice_button_touch(touched_button: UIButton) {
-		
-		var total_count = 0
-		for vote_count in choice_button_vote_count
-		{
-			total_count += Int(vote_count) ?? 0
-		}
+	private func choice_button_touch(touched_button: UIButton) {
+
 		var num = 0
 
 		for button in buttons
@@ -155,50 +154,11 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 			if button == touched_button
 			{
-				let touched_button_count = (Int(choice_button_vote_count[num]) ?? 0) + 1
-
-				choice_view.addSubview(touched_button_background_view)
-				touched_button_background_view.snp.makeConstraints { make in
-					make.top.left.bottom.equalTo(button)
-					make.width.equalTo((Double(touched_button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
-				}
-				choice_view.bringSubviewToFront(button)
-
-				touched_button_background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-				touched_button_background_view.layer.borderWidth = 1.0
-				touched_button_background_view.clipsToBounds = true
-
-				let percent_label = UILabel()
-
-				choice_view.addSubview(percent_label)
-				percent_label.text = String(round((Double(touched_button_count) / Double(total_count + 1)) * 100)) + " %"
-				percent_label.snp.makeConstraints { make in
-					make.top.bottom.right.equalTo(touched_button)
-				}
+				selecting_buttons(isSelected: true, index: num)
 			}
 			else
 			{
-				let background_view = UIView()
-				let button_count = (Int(choice_button_vote_count[num]) ?? 0)
-
-				background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-				background_view.layer.borderWidth = 1.0
-				background_view.clipsToBounds = true
-
-				choice_view.addSubview(background_view)
-				choice_view.bringSubviewToFront(button)
-				background_view.snp.makeConstraints { make in
-					make.top.left.bottom.equalTo(button)
-					make.width.equalTo((Double(button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
-				}
-
-				let percent_label = UILabel()
-
-				choice_view.addSubview(percent_label)
-				percent_label.text = String(round((Double(button_count) / Double(total_count + 1)) * 100)) + " %"
-				percent_label.snp.makeConstraints { make in
-					make.top.bottom.right.equalTo(button)
-				}
+				selecting_buttons(isSelected: false, index: num)
 			}
 			num += 1
 		}
@@ -295,22 +255,109 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 	override func prepareForReuse() {
 
-		first_button.setTitle(nil, for: .normal)
-		second_button.setTitle(nil, for: .normal)
-		third_button.setTitle(nil, for: .normal)
-		fourth_button.setTitle(nil, for: .normal)
 		time_label.text = nil
 		name_label.text = nil
-		third_button.snp.removeConstraints()
-		fourth_button.snp.removeConstraints()
+		for button in buttons
+		{
+			button.isEnabled = true
+			button.setTitle(nil, for: .normal)
+		}
+
 		third_button.removeFromSuperview()
 		fourth_button.removeFromSuperview()
+		touched_button_background_view.snp.removeConstraints()
+		touched_button_background_view.removeFromSuperview()
+
 		second_button.snp.remakeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
 			make.left.right.bottom.equalTo(choice_view)
 			make.height.equalTo(20)
 		}
 		self.subject.onNext([])
+
+		for subview in choice_view.subviews
+		{
+			if (!subview.isKind(of: UIButton.self))
+			{
+				subview.removeFromSuperview()
+			}
+		}
+	}
+
+	func selecting_buttons(isSelected: Bool, index: Int)
+	{
+		var total_count = 0
+
+		for vote_count in choice_button_vote_count
+		{
+			total_count += Int(vote_count) ?? 0
+		}
+
+		if isSelected
+		{
+			//save selected inform
+			let realm = try! Realm()
+			let mullo_DB = realm.objects(Mullo_DB.self).first
+			if (mullo_DB == nil)
+			{
+				try! realm.write{
+					let new_mullo_DB = Mullo_DB()
+					realm.add(new_mullo_DB)
+				}
+				print("mullo db create")
+			}
+			let selected_post = Selected_post()
+			try! realm.write{
+				selected_post.post_num = self.post_num
+				selected_post.selected_choice = index
+				mullo_DB!.selected_posts.append(selected_post)
+			}
+
+			let touched_button_count = (Int(choice_button_vote_count[index]) ?? 0) + 1
+
+			choice_view.addSubview(touched_button_background_view)
+			touched_button_background_view.snp.makeConstraints { make in
+				make.top.left.bottom.equalTo(buttons[index])
+				make.width.equalTo((Double(touched_button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
+			}
+			choice_view.bringSubviewToFront(buttons[index])
+
+			touched_button_background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+			touched_button_background_view.layer.borderWidth = 1.0
+			touched_button_background_view.clipsToBounds = true
+
+			let percent_label = UILabel()
+
+			choice_view.addSubview(percent_label)
+			percent_label.text = String(round((Double(touched_button_count) / Double(total_count + 1)) * 100)) + " %"
+			percent_label.snp.makeConstraints { make in
+				make.top.bottom.right.equalTo(buttons[index])
+			}
+		}
+		else
+		{
+			let background_view = UIView()
+			let button_count = (Int(choice_button_vote_count[index]) ?? 0)
+
+			background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+			background_view.layer.borderWidth = 1.0
+			background_view.clipsToBounds = true
+
+			choice_view.addSubview(background_view)
+			choice_view.bringSubviewToFront(buttons[index])
+			background_view.snp.makeConstraints { make in
+				make.top.left.bottom.equalTo(buttons[index])
+				make.width.equalTo((Double(button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
+			}
+
+			let percent_label = UILabel()
+
+			choice_view.addSubview(percent_label)
+			percent_label.text = String(round((Double(button_count) / Double(total_count + 1)) * 100)) + " %"
+			percent_label.snp.makeConstraints { make in
+				make.top.bottom.right.equalTo(buttons[index])
+			}
+		}
 	}
 
 	func add_third_button(button_text: String)
