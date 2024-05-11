@@ -74,7 +74,15 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 			images.removeLast()
 			for image in images
 			{
-				images_url += try await self.write_post_viewModel.upload_image(image: image) + "|"
+				if image.pngData()?.count ?? 0 > 1000000
+				{
+					let new_image = image.resize(ratio: 1000000.0 / Float(image.pngData()!.count))
+					images_url += try await self.write_post_viewModel.upload_image(image: new_image) + "|"
+				}
+				else
+				{
+					images_url += try await self.write_post_viewModel.upload_image(image: image) + "|"
+				}
 			}
 			if images_url.isEmpty == false
 			{
@@ -238,6 +246,7 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 		configuration.selectionLimit = 1
 		configuration.filter = .images
 
+		//when first work this, error
 		let picker_vc = PHPickerViewController(configuration: configuration)
 
 		picker_vc.delegate = self

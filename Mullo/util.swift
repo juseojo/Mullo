@@ -25,6 +25,21 @@ func show_alert(
 	viewController?.present(alert, animated: true)
 }
 
+extension UIImage {
+	func resize(ratio: Float) -> UIImage
+	{
+		let new_width = Double(Float(self.size.width) * ratio)
+		let new_height = Double(Float(self.size.height) * ratio)
+		let new_size = CGSize(width: new_width, height: new_height)
+
+		UIGraphicsBeginImageContextWithOptions(new_size, true, 0.0)
+		self.draw(in: CGRect(x: 0, y: 0, width: new_width, height: new_height))
+		let new_image: UIImage? = UIGraphicsGetImageFromCurrentImageContext()
+		UIGraphicsEndImageContext()
+
+		return new_image ?? UIImage()
+	}
+}
 
 extension String {
 	func substr(seperater: Character) -> [String] {
