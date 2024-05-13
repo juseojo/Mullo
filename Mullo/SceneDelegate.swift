@@ -11,15 +11,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	var window: UIWindow?
 
+	func changeRootVC(_ vc:UIViewController, animated: Bool) {
+
+		guard let window = self.window else { return }
+
+		window.rootViewController = vc
+		UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+	}
 
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		window = UIWindow(windowScene: windowScene)
-		let main_vc = Main_ViewController()
-		let navigation = UINavigationController(rootViewController: main_vc)
-		window?.rootViewController = navigation
-		window?.makeKeyAndVisible()
+		if UserDefaults.standard.bool(forKey: "wasLoggedIn")
+		{
+			let main_vc = Main_ViewController()
+			let navigation = UINavigationController(rootViewController: main_vc)
+			window?.rootViewController = navigation
+			window?.makeKeyAndVisible()
+		}
+		else
+		{
+			let welcome_vc = Welcome_viewController()
+			let navigation = UINavigationController(rootViewController: welcome_vc)
+			window?.rootViewController = navigation
+			window?.makeKeyAndVisible()
+		}
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {
