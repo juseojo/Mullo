@@ -172,8 +172,8 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		for button in buttons
 		{
 			button.rx.tap
-				.bind {
-					self.choice_button_touch(touched_button: button)
+				.bind { [weak self] in
+					self?.choice_button_touch(touched_button: button)
 				}.disposed(by: disposeBag)
 		}
 

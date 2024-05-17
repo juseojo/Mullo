@@ -23,12 +23,20 @@ final class Welcome_viewController: UIViewController {
 		self.navigationController?.isNavigationBarHidden = true
 		self.view.backgroundColor = UIColor(named: "NATURAL")
 
-		welcome_view.login_button.rx.tap.bind{
-			self.login_button_tap()
+		welcome_view.login_button.rx.tap.bind{ [weak self] in
+			self?.login_button_tap()
 		}.disposed(by: disposeBag)
 
-		welcome_view.register_button.rx.tap.bind{
-			self.register_button_tap()
+		welcome_view.register_button.rx.tap.bind{ [weak self] in
+			self?.register_button_tap()
+		}.disposed(by: disposeBag)
+
+		welcome_view.login_view.google_login_button.rx.tap.bind{ [weak self] in
+			self?.welcome_viewModel.google_login(vc: self)
+		}.disposed(by: disposeBag)
+
+		welcome_view.register_view.google_login_button.rx.tap.bind{ [weak self] in
+			self?.welcome_viewModel.google_login(vc: self)
 		}.disposed(by: disposeBag)
 
 		view.addSubview(welcome_view)
