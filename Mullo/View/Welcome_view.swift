@@ -66,6 +66,22 @@ class Welcome_view: UIView {
 		return register_button
 	}()
 
+	var login_view: Login_view = {
+		let login_view = Login_view()
+
+		login_view.alpha = 0.0
+
+		return login_view
+	}()
+
+	var register_view: Register_view = {
+		let register_view = Register_view()
+
+		register_view.alpha = 0.0
+
+		return register_view
+	}()
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		//layout
@@ -74,6 +90,8 @@ class Welcome_view: UIView {
 		addSubview(welcome_label)
 		addSubview(login_button)
 		addSubview(register_button)
+		addSubview(login_view)
+		addSubview(register_view)
 
 		header_view.snp.makeConstraints { make in
 			make.top.equalTo(self).inset(top_inset)
@@ -89,6 +107,18 @@ class Welcome_view: UIView {
 		welcome_label.snp.makeConstraints { make in
 			make.top.equalTo(header_view.snp.bottom).offset(screen_height / 4)
 			make.left.right.equalTo(self).inset(40)
+		}
+
+		login_view.snp.makeConstraints { make in
+			make.top.equalTo(welcome_label.snp.bottom).offset(50)
+			make.left.right.equalTo(self)
+			make.bottom.equalTo(login_button.snp.top)
+		}
+
+		register_view.snp.makeConstraints { make in
+			make.top.equalTo(welcome_label.snp.bottom).offset(50)
+			make.left.right.equalTo(self)
+			make.bottom.equalTo(register_button.snp.top)
 		}
 
 		login_button.snp.makeConstraints { make in
@@ -145,6 +175,8 @@ class Login_view: UIView {
 		password_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
 		password_textField.layer.cornerRadius = 8
 		password_textField.clipsToBounds = true
+		password_textField.isSecureTextEntry = true
+		password_textField.textContentType = .password
 
 		return password_textField
 	}()
@@ -294,8 +326,222 @@ class Login_view: UIView {
 }
 
 class Register_view: UIView {
+
+	var nick_name_textField: UITextField = {
+		let nick_name_textField = UITextField()
+
+		nick_name_textField.placeholder = "닉네임을 입력해주세요."
+		nick_name_textField.setPlaceholderColor(UIColor.darkGray)
+		nick_name_textField.addLeftPadding()
+		nick_name_textField.backgroundColor = UIColor(cgColor:
+													CGColor(red: 247 / 255,
+															green: 248 / 255,
+															blue: 249 / 255,
+															alpha: 1.0))
+		nick_name_textField.layer.borderWidth = 1.0
+		nick_name_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		nick_name_textField.layer.cornerRadius = 8
+		nick_name_textField.clipsToBounds = true
+
+		return nick_name_textField
+	}()
+
+	var email_textField: UITextField = {
+		let email_textField = UITextField()
+
+		email_textField.placeholder = "이메일을 입력해주세요."
+		email_textField.setPlaceholderColor(UIColor.darkGray)
+		email_textField.addLeftPadding()
+		email_textField.backgroundColor = UIColor(cgColor:
+													CGColor(red: 247 / 255,
+															green: 248 / 255,
+															blue: 249 / 255,
+															alpha: 1.0))
+		email_textField.layer.borderWidth = 1.0
+		email_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		email_textField.layer.cornerRadius = 8
+		email_textField.clipsToBounds = true
+
+		return email_textField
+	}()
+
+	var password_textField: UITextField = {
+		let password_textField = UITextField()
+
+		password_textField.placeholder = "비밀 번호를 입력해주세요."
+		password_textField.setPlaceholderColor(UIColor.darkGray)
+		password_textField.addLeftPadding()
+		password_textField.backgroundColor = UIColor(cgColor:
+														CGColor(red: 247 / 255,
+																green: 248 / 255,
+																blue: 249 / 255,
+																alpha: 1.0))
+		password_textField.layer.borderWidth = 1.0
+		password_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		password_textField.layer.cornerRadius = 8
+		password_textField.clipsToBounds = true
+		password_textField.isSecureTextEntry = true
+		password_textField.textContentType = .password
+
+		return password_textField
+	}()
+
+	var password_confirm_textField: UITextField = {
+		let password_confirm_textField = UITextField()
+
+		password_confirm_textField.placeholder = "비밀 번호를 다시 한번 입력해주세요."
+		password_confirm_textField.setPlaceholderColor(UIColor.darkGray)
+		password_confirm_textField.addLeftPadding()
+		password_confirm_textField.backgroundColor = UIColor(cgColor:
+														CGColor(red: 247 / 255,
+																green: 248 / 255,
+																blue: 249 / 255,
+																alpha: 1.0))
+		password_confirm_textField.layer.borderWidth = 1.0
+		password_confirm_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		password_confirm_textField.layer.cornerRadius = 8
+		password_confirm_textField.clipsToBounds = true
+		password_confirm_textField.isSecureTextEntry = true
+		password_confirm_textField.textContentType = .password
+
+		return password_confirm_textField
+	}()
+
+	var social_login_label: UILabel = {
+		let social_login_label = UILabel()
+
+		social_login_label.text = "소셜 로그인"
+		social_login_label.backgroundColor = UIColor(named: "NATURAL")
+		social_login_label.textAlignment = .center
+
+		return social_login_label
+	}()
+
+	var line_view: UIView = {
+		let line_view = UIView()
+
+		line_view.backgroundColor = UIColor(named: "STROKE")
+
+		return line_view
+	}()
+
+	var kakao_login_button: UIButton = {
+		let kakao_login_button = UIButton()
+
+		kakao_login_button.setImage(UIImage(named: "Kakao"), for: .normal)
+		kakao_login_button.imageView?.contentMode = .scaleAspectFit
+		kakao_login_button.layer.borderWidth = 1.0
+		kakao_login_button.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		kakao_login_button.imageEdgeInsets = .init(top: 7.0, left: 0, bottom: 7.0, right: 0)
+		kakao_login_button.layer.cornerRadius = 8.0
+		kakao_login_button.clipsToBounds = true
+
+		return kakao_login_button
+	}()
+
+	var google_login_button: UIButton = {
+		let google_login_button = UIButton()
+
+		google_login_button.setImage(UIImage(named: "Google"), for: .normal)
+		google_login_button.imageView?.contentMode = .scaleAspectFit
+		google_login_button.layer.borderWidth = 1.0
+		google_login_button.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		google_login_button.imageEdgeInsets = .init(top: 12.0, left: 0, bottom: 12.0, right: 0)
+		google_login_button.layer.cornerRadius = 8.0
+		google_login_button.clipsToBounds = true
+
+		return google_login_button
+	}()
+
+	var apple_login_button: UIButton = {
+		let apple_login_button = UIButton()
+
+		let largeConfig = UIImage.SymbolConfiguration(pointSize: 100, weight: .bold, scale: .large)
+
+		apple_login_button.setImage(UIImage(systemName: "apple.logo", withConfiguration: largeConfig), for: .normal)
+		apple_login_button.tintColor = UIColor(named: "REVERSE_SYS")
+		apple_login_button.imageView?.contentMode = .scaleAspectFit
+		apple_login_button.layer.borderWidth = 1.0
+		apple_login_button.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		apple_login_button.imageEdgeInsets = .init(top: 9.0, left: 0, bottom: 9.0, right: 0)
+		apple_login_button.layer.cornerRadius = 8.0
+		apple_login_button.clipsToBounds = true
+
+		return apple_login_button
+	}()
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
+
+		addSubview(nick_name_textField)
+		addSubview(email_textField)
+		addSubview(password_textField)
+		addSubview(password_confirm_textField)
+		addSubview(line_view)
+		addSubview(social_login_label)
+		addSubview(kakao_login_button)
+		addSubview(google_login_button)
+		addSubview(apple_login_button)
+
+		self.bringSubviewToFront(social_login_label)
+
+		nick_name_textField.snp.makeConstraints { make in
+			make.top.equalTo(self)
+			make.left.right.equalTo(self).inset(30)
+			make.height.equalTo(50)
+		}
+
+		email_textField.snp.makeConstraints { make in
+			make.top.equalTo(nick_name_textField.snp.bottom).offset(15)
+			make.left.right.equalTo(self).inset(30)
+			make.height.equalTo(50)
+		}
+
+		password_textField.snp.makeConstraints { make in
+			make.top.equalTo(email_textField.snp.bottom).offset(15)
+			make.left.right.equalTo(self).inset(30)
+			make.height.equalTo(50)
+		}
+
+		password_confirm_textField.snp.makeConstraints { make in
+			make.top.equalTo(password_textField.snp.bottom).offset(15)
+			make.left.right.equalTo(self).inset(30)
+			make.height.equalTo(50)
+		}
+
+		social_login_label.snp.makeConstraints { make in
+			make.top.equalTo(password_confirm_textField.snp.bottom).offset(15)
+			make.width.equalTo(100)
+			make.centerX.equalTo(self.snp.centerX)
+			make.height.equalTo(15)
+		}
+
+		line_view.snp.makeConstraints { make in
+			make.centerY.equalTo(social_login_label)
+			make.left.right.equalTo(password_textField)
+			make.height.equalTo(1)
+		}
+
+		kakao_login_button.snp.makeConstraints { make in
+			make.top.equalTo(social_login_label.snp.bottom).offset(15)
+			make.left.equalTo(password_textField.snp.left)
+			make.width.equalTo(100)
+			make.height.equalTo(50)
+		}
+
+		google_login_button.snp.makeConstraints { make in
+			make.top.equalTo(social_login_label.snp.bottom).offset(15)
+			make.centerX.equalTo(self.snp.centerX)
+			make.width.equalTo(100)
+			make.height.equalTo(50)
+		}
+
+		apple_login_button.snp.makeConstraints { make in
+			make.top.equalTo(social_login_label.snp.bottom).offset(15)
+			make.right.equalTo(password_textField.snp.right)
+			make.width.equalTo(100)
+			make.height.equalTo(50)
+		}
 	}
 
 	required init?(coder: NSCoder) {
