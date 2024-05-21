@@ -82,6 +82,12 @@ class Welcome_view: UIView {
 		return register_view
 	}()
 
+	var name_view: Name_view = {
+		let name_view = Name_view()
+
+		return name_view
+	}()
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		//layout
@@ -92,6 +98,7 @@ class Welcome_view: UIView {
 		addSubview(register_button)
 		addSubview(login_view)
 		addSubview(register_view)
+		addSubview(name_view)
 
 		header_view.snp.makeConstraints { make in
 			make.top.equalTo(self).inset(top_inset)
@@ -112,13 +119,13 @@ class Welcome_view: UIView {
 		login_view.snp.makeConstraints { make in
 			make.top.equalTo(welcome_label.snp.bottom).offset(50)
 			make.left.right.equalTo(self)
-			make.bottom.equalTo(login_button.snp.top)
+			make.height.equalTo(260)
 		}
 
 		register_view.snp.makeConstraints { make in
 			make.top.equalTo(welcome_label.snp.bottom).offset(50)
 			make.left.right.equalTo(self)
-			make.bottom.equalTo(register_button.snp.top)
+			make.height.equalTo(325)
 		}
 
 		login_button.snp.makeConstraints { make in
@@ -136,6 +143,26 @@ class Welcome_view: UIView {
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	final func get_email() -> String
+	{
+		if login_view.superview == self
+		{
+			return login_view.email_textField.text ?? ""
+		}
+
+		return register_view.email_textField.text ?? ""
+	}
+
+	final func get_password() -> String
+	{
+		if login_view.superview == self
+		{
+			return login_view.password_textField.text ?? ""
+		}
+
+		return register_view.password_textField.text ?? ""
 	}
 }
 
@@ -327,25 +354,6 @@ class Login_view: UIView {
 
 class Register_view: UIView {
 
-	var nick_name_textField: UITextField = {
-		let nick_name_textField = UITextField()
-
-		nick_name_textField.placeholder = "닉네임을 입력해주세요."
-		nick_name_textField.setPlaceholderColor(UIColor.darkGray)
-		nick_name_textField.addLeftPadding()
-		nick_name_textField.backgroundColor = UIColor(cgColor:
-													CGColor(red: 247 / 255,
-															green: 248 / 255,
-															blue: 249 / 255,
-															alpha: 1.0))
-		nick_name_textField.layer.borderWidth = 1.0
-		nick_name_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
-		nick_name_textField.layer.cornerRadius = 8
-		nick_name_textField.clipsToBounds = true
-
-		return nick_name_textField
-	}()
-
 	var email_textField: UITextField = {
 		let email_textField = UITextField()
 
@@ -473,7 +481,6 @@ class Register_view: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 
-		addSubview(nick_name_textField)
 		addSubview(email_textField)
 		addSubview(password_textField)
 		addSubview(password_confirm_textField)
@@ -485,14 +492,8 @@ class Register_view: UIView {
 
 		self.bringSubviewToFront(social_login_label)
 
-		nick_name_textField.snp.makeConstraints { make in
-			make.top.equalTo(self)
-			make.left.right.equalTo(self).inset(30)
-			make.height.equalTo(50)
-		}
-
 		email_textField.snp.makeConstraints { make in
-			make.top.equalTo(nick_name_textField.snp.bottom).offset(15)
+			make.top.equalTo(self).offset(15)
 			make.left.right.equalTo(self).inset(30)
 			make.height.equalTo(50)
 		}
@@ -541,6 +542,60 @@ class Register_view: UIView {
 			make.right.equalTo(password_textField.snp.right)
 			make.width.equalTo(100)
 			make.height.equalTo(50)
+		}
+	}
+
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+}
+
+class Name_view: UIView {
+	
+	var name_textField: UITextField = {
+		let name_textField = UITextField()
+
+		name_textField.placeholder = "닉네임을 입력해주세요."
+		name_textField.setPlaceholderColor(UIColor.darkGray)
+		name_textField.addLeftPadding()
+		name_textField.backgroundColor = UIColor(cgColor:
+													CGColor(red: 247 / 255,
+															green: 248 / 255,
+															blue: 249 / 255,
+															alpha: 1.0))
+		name_textField.layer.borderWidth = 1.0
+		name_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
+		name_textField.layer.cornerRadius = 8
+		name_textField.clipsToBounds = true
+
+		return name_textField
+	}()
+
+	var name_inform_label: UILabel = {
+		let name_inform_label = UILabel()
+
+		name_inform_label.text = "10자 이내, 특수문자 금지"
+		name_inform_label.textColor = UIColor.darkGray
+		name_inform_label.font = UIFont(name: "Urbanist-Bold", size: 15)
+
+		return name_inform_label
+	}()
+
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+
+		addSubview(name_textField)
+		addSubview(name_inform_label)
+
+		name_textField.snp.makeConstraints { make in
+			make.top.equalTo(self)
+			make.left.right.equalTo(self).inset(30)
+			make.height.equalTo(50)
+		}
+
+		name_inform_label.snp.makeConstraints { make in
+			make.top.equalTo(name_textField.snp.bottom).offset(15)
+			make.right.equalTo(name_textField)
 		}
 	}
 
