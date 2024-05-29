@@ -81,4 +81,10 @@ extension String {
 		result.append(text)
 		return result
 	}
+
+	func hasSpecial_characters() -> Bool {
+		let special_characterSet = CharacterSet(charactersIn: "$&*(),?'\"\\-=/:{}|[]<>")
+
+		return self.rangeOfCharacter(from: special_characterSet) != nil
+	}
 }
