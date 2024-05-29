@@ -85,6 +85,8 @@ class Welcome_view: UIView {
 	var name_view: Name_view = {
 		let name_view = Name_view()
 
+		name_view.alpha = 0.0
+
 		return name_view
 	}()
 
@@ -98,7 +100,6 @@ class Welcome_view: UIView {
 		addSubview(register_button)
 		addSubview(login_view)
 		addSubview(register_view)
-		addSubview(name_view)
 
 		header_view.snp.makeConstraints { make in
 			make.top.equalTo(self).inset(top_inset)
@@ -596,6 +597,7 @@ class Name_view: UIView {
 		name_inform_label.snp.makeConstraints { make in
 			make.top.equalTo(name_textField.snp.bottom).offset(15)
 			make.right.equalTo(name_textField)
+			make.height.equalTo(15)
 		}
 	}
 

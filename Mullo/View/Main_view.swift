@@ -24,7 +24,7 @@ final class Main_View: UIView {
 		
 		header_label.text = "멀로"
 		header_label.tintColor = UIColor(named: "REVERSE_SYS")
-		header_label.font = UIFont(name: "GillSans-SemiBold", size: 30)
+		header_label.font = UIFont(name: "Urbanist-Bold", size: 30)
 
 		return header_label
 	}()
@@ -80,7 +80,7 @@ final class Main_View: UIView {
 
 		header_label.snp.makeConstraints { make in
 			make.top.bottom.equalTo(header_view)
-			make.left.equalTo(header_view).inset(10)
+			make.left.equalTo(header_view).inset(15)
 		}
 
 		inform_button.snp.makeConstraints { make in
