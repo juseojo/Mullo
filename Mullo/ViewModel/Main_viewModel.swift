@@ -21,7 +21,7 @@ final class Main_viewModel
 
 	func get_data(index: Int, complete_handler: @escaping (Bool) -> Void) {
 		AF.request(
-			"http://\(host)/get_post?offset=\(index)",
+			"https://\(host)/get_post?offset=\(index)",
 			method: .get,
 			encoding: URLEncoding.queryString)
 				.validate(statusCode: 200..<300)
