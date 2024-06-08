@@ -16,7 +16,11 @@ final class Welcome_viewController: UIViewController {
 	let welcome_viewModel = Welcome_viewModel()
 	var disposeBag = DisposeBag()
 	var button_touch_count = 0
-	var email_address = ""
+	var email_address = "" {
+		didSet {
+			print("email_address changed to: \(email_address)")
+		}
+	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -25,42 +29,45 @@ final class Welcome_viewController: UIViewController {
 		self.view.backgroundColor = UIColor(named: "NATURAL")
 
 		// login button binding
-		welcome_view.login_button.rx.tap.bind{ [weak self] in
-			self!.login_button_tap()
-		}.disposed(by: disposeBag)
+		welcome_view.login_button.rx.tap
+			.bind{ [weak self] in self?.login_button_tap() }
+			.disposed(by: disposeBag)
 
 		// register button binding
-		welcome_view.register_button.rx.tap.bind{ [weak self] in
-			self!.register_button_tap()
-		}.disposed(by: disposeBag)
+		welcome_view.register_button.rx.tap
+			.bind{ [weak self] in self?.register_button_tap() }
+			.disposed(by: disposeBag)
 
-		// google login button binding - login view's button
-		welcome_view.login_view.google_login_button.rx.tap.bind { [weak self] in
-			self!.button_touch_count = 2
-			self!.welcome_viewModel.google_login(vc: self!).subscribe(onNext: { isSuccess in
-				if isSuccess
-				{
+		//google login button binding - login view's button
+		welcome_view.login_view.google_login_button.rx.tap
+			.bind { [weak self] in
+			self?.button_touch_count = 2
+			self?.welcome_viewModel.google_login(vc: self!).subscribe(onNext: { [weak self] mail in
+				if mail != "" {
 					// Check to server, user have name
 					// If server don't have name, show name view
 					// If server have name, move to main view
-					self!.name_check()
+					self?.email_address = mail
+					self?.name_check()
 				}
 			}).disposed(by: self!.disposeBag)
 		}.disposed(by: disposeBag)
 
 		// google login button binding - register view's button
-		welcome_view.register_view.google_login_button.rx.tap.bind { [weak self] in
-			self!.button_touch_count = 2
-			self!.welcome_viewModel.google_login(vc: self!).subscribe(onNext: { isSuccess in
-				if isSuccess
-				{
+		welcome_view.register_view.google_login_button.rx.tap
+			.bind { [weak self] in
+			self?.button_touch_count = 2
+			self?.welcome_viewModel.google_login(vc: self!).subscribe(onNext: { [weak self] mail in
+				if mail != "" {
 					// Check to server, user have name
 					// If server don't have name, show name view
 					// If server have name, move to main view
-					self!.name_check()
+					self?.email_address = mail
+					self?.name_check()
 				}
 			}).disposed(by: self!.disposeBag)
 		}.disposed(by: disposeBag)
+
 
 		view.addSubview(welcome_view)
 		welcome_view.snp.makeConstraints { make in
@@ -160,7 +167,7 @@ final class Welcome_viewController: UIViewController {
 				}
 				else if result == "overlap_email"
 				{
-					show_alert(viewController: self, title: "알림", message: "이미 가입한 계정입니다.", button_title: "확인", handler: {action in self.change_to_mainView()})
+					show_alert(viewController: self, title: "알림", message: "이미 가입한 계정입니다.", button_title: "확인", handler: { action in self.change_to_mainView()})
 					self.welcome_viewModel.get_name(email: self.email_address).subscribe(onNext: { name in
 
 						UserDefaults.standard.setValue(name, forKey: "name")
@@ -232,6 +239,7 @@ final class Welcome_viewController: UIViewController {
 				return
 			}
 
+			print("button event \(self.email_address).")
 			// Register name to mullo server
 			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "",email: email_address)
 				.subscribe(onNext: { result in
@@ -259,7 +267,7 @@ final class Welcome_viewController: UIViewController {
 					print("error")
 					print(result)
 				}
-			})
+				}).disposed(by: disposeBag)
 		}
 	} 
 
@@ -416,13 +424,25 @@ final class Welcome_viewController: UIViewController {
 
 	final func name_check()
 	{
+		// Exception
+		if email_address == ""
+		{
+			show_alert(
+				viewController: self,
+				title: "오류",
+				message: "로그인에 실패하였습니다.\n다시 시도해주세요.",
+				button_title: "확인",
+				handler: nil)
+
+			return
+		}
+
 		// Checking user have name
 		welcome_viewModel.get_name(email: email_address).subscribe(onNext: { [weak self] name in
 
 			if name == "|none" // Case : User did register but didn't set name
 			{
 				self!.button_touch_count = 2
-				self!.email_address = self!.welcome_view.get_email()
 				// Change view ( current view -> name view )
 				self!.change_to_nameView()
 			}

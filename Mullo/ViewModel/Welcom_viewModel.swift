@@ -127,7 +127,7 @@ final class Welcome_viewModel {
 		}
 	}
 
-	final func google_login(vc: Welcome_viewController) -> Observable<Bool>
+	final func google_login(vc: Welcome_viewController) -> Observable<String>
 	{
 		return Observable.create { observer in
 
@@ -135,7 +135,7 @@ final class Welcome_viewModel {
 			else
 			{
 				print("Firebase clientID not found.")
-				observer.onNext(false)
+				observer.onNext("")
 
 				return Disposables.create()
 			}
@@ -149,14 +149,14 @@ final class Welcome_viewModel {
 
 				guard error == nil, let result = result else {
 					print("---Google Sign-In fail---\n\(error?.localizedDescription ?? "Unknown error")")
-					observer.onNext(false)
+					observer.onNext("")
 
 					return
 				}
 
 				guard let idToken = result.user.idToken?.tokenString else {
 					print("---Google Sign-In token retrieval fail---")
-					observer.onNext(false)
+					observer.onNext("")
 
 					return
 				}
@@ -170,15 +170,12 @@ final class Welcome_viewModel {
 					// At this point, our user is signed in
 					if let error = error {
 						print("---Google Sign-In authentication fail---\n\(error.localizedDescription)")
-						observer.onNext(false)
+						observer.onNext("")
 
 						return
 					}
-
 					print("google signin success")
-					vc.email_address = result?.user.email ?? ""
-					print("user email : \(vc.email_address)")
-					observer.onNext(true)
+					observer.onNext(result?.user.email ?? "")
 				}
 			}
 
