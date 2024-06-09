@@ -24,10 +24,15 @@ final class Welcome_viewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+
 		self.navigationController?.isNavigationBarHidden = true
 		self.view.backgroundColor = UIColor(named: "NATURAL")
 
+		rx_binding()
+	}
+
+	final func rx_binding()
+	{
 		// login button binding
 		welcome_view.login_button.rx.tap
 			.bind{ [weak self] in self?.login_button_tap() }
@@ -68,6 +73,39 @@ final class Welcome_viewController: UIViewController {
 			}).disposed(by: self!.disposeBag)
 		}.disposed(by: disposeBag)
 
+		//kakao login button binding - login view's button
+		welcome_view.login_view.kakao_login_button.rx.tap
+			.bind { [weak self] in
+			self?.button_touch_count = 2
+			print("tab")
+			self?.welcome_viewModel.kakao_login().subscribe(onNext: { [weak self] mail in
+				if mail != "" {
+					// Check to server, user have name
+					// If server don't have name, show name view
+					// If server have name, move to main view
+					self?.email_address = mail
+					print(self?.email_address)
+					self?.name_check()
+				}
+			}).disposed(by: self!.disposeBag)
+		}.disposed(by: disposeBag)
+
+		//kakao login button binding - register view's button
+		welcome_view.register_view.kakao_login_button.rx.tap
+			.bind { [weak self] in
+			self?.button_touch_count = 2
+			print("tab")
+			self?.welcome_viewModel.kakao_login().subscribe(onNext: { [weak self] mail in
+				if mail != "" {
+					// Check to server, user have name
+					// If server don't have name, show name view
+					// If server have name, move to main view
+					self?.email_address = mail
+					print(self?.email_address)
+					self?.name_check()
+				}
+			}).disposed(by: self!.disposeBag)
+		}.disposed(by: disposeBag)
 
 		view.addSubview(welcome_view)
 		welcome_view.snp.makeConstraints { make in

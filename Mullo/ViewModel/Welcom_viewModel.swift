@@ -12,8 +12,9 @@ import Alamofire
 import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
-import KakaoSDKCommon
-import KakaoSDKAuth
+import RxKakaoSDKCommon
+import RxKakaoSDKAuth
+import RxKakaoSDKUser
 import KakaoSDKUser
 
 final class Welcome_viewModel {
@@ -183,20 +184,36 @@ final class Welcome_viewModel {
 		}
 	}
 
-	final func kakao_login()
+	final func kakao_login() -> Observable<String>
 	{
-		if (UserApi.isKakaoTalkLoginAvailable()) {
-			UserApi.shared.loginWithKakaoTalk { (oauthToken, error) in
-				if let error = error {
-					print(error)
-				}
-				else {
-					print("loginWithKakaoTalk() success.")
+		return Observable.create { observer in
 
-					//do something
-					_ = oauthToken
-				}
+			if (UserApi.isKakaoTalkLoginAvailable()) {
+				UserApi.shared.rx.loginWithKakaoTalk()
+					.subscribe(onNext:{ (oauthToken) in
+						print("loginWithKakaoTalk() success.")
+
+						UserApi.shared.rx.me()
+							.subscribe (onSuccess:{ user in
+								observer.onNext(user.kakaoAccount?.email ?? "")
+								observer.onCompleted()
+								_ = user
+							}, onFailure: {error in
+								print(error)
+							})
+							.disposed(by: self.disposeBag)
+
+						_ = oauthToken
+					}, onError: {error in
+						print(error)
+						observer.onError(error)
+					}).disposed(by: self.disposeBag)
 			}
+			else
+			{
+				print("loginWithKakaoTalk() fail.")
+			}
+			return Disposables.create()
 		}
 	}
 }
