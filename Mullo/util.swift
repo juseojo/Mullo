@@ -83,7 +83,7 @@ extension String {
 	}
 
 	func hasSpecial_characters() -> Bool {
-		let special_characterSet = CharacterSet(charactersIn: "$&*(),?'\"\\-=/:{}|[]<>")
+		let special_characterSet = CharacterSet(charactersIn: "$#&*(),?'\"\\-=/:{}|[]<>")
 
 		return self.rangeOfCharacter(from: special_characterSet) != nil
 	}
