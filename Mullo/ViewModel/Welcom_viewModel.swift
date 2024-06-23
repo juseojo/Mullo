@@ -16,6 +16,7 @@ import RxKakaoSDKCommon
 import RxKakaoSDKAuth
 import RxKakaoSDKUser
 import KakaoSDKUser
+import AuthenticationServices
 
 final class Welcome_viewModel {
 
@@ -66,13 +67,13 @@ final class Welcome_viewModel {
 		}
 	}
 
-	final func register_name(name: String, email: String) -> Observable<String>
+	final func register_name(name: String, email: String, identifier: String) -> Observable<String>
 	{
 		return Observable.create { observer in
 
 			AF.request(
 				"https://\(host)/register",
-				method: .post, parameters: ["name" : name, "email" : email],
+				method: .post, parameters: ["name" : name, "email" : email, "identifier" : identifier],
 				encoding: URLEncoding.httpBody)
 			.validate(statusCode: 200..<300)
 			.validate(contentType: ["application/json"])
@@ -90,6 +91,77 @@ final class Welcome_viewModel {
 				case .failure(let error):
 					print("Error: \(error)")
 					observer.onNext("|error")
+				}
+			}
+
+			return Disposables.create()
+		}
+	}
+
+	
+	final func change_name(name: String, identifier: String)
+	{
+		AF.request(
+			"https://\(host)/change_name",
+			method: .post, parameters: ["name" : name, "identifier": identifier],
+			encoding: URLEncoding.httpBody)
+		.validate(statusCode: 200..<300)
+		.validate(contentType: ["application/json"])
+		.responseDecodable(of: [String:String].self) { response in
+			switch response.result {
+			case .success:
+				do {
+					let data = try response.result.get()
+
+					if data["result"] == "success"
+					{
+						print("name change success")
+					}
+				} catch {
+					print("-- Error at change_name --\n \(error)")
+				}
+			case .failure(let error):
+				print("Error: \(error)")
+			}
+		}
+	}
+
+	final func hasName(identifier: String) -> Observable<String>
+	{
+		return Observable.create { observer in
+
+			AF.request(
+				"https://\(host)/hasName",
+				method: .post, parameters: ["identifier" : identifier],
+				encoding: URLEncoding.httpBody)
+			.validate(statusCode: 200..<300)
+			.validate(contentType: ["application/json"])
+			.responseDecodable(of: [String:String].self) { response in
+				switch response.result {
+				case .success:
+					do {
+						let data = try response.result.get()
+
+						if data["result"]! == "true"
+						{
+							observer.onNext("true")
+						}
+						else if data["result"] == "false"
+						{
+							observer.onNext("false")
+						}
+						else if data["result"] == "null"
+						{
+							observer.onNext("null")
+						}
+
+					} catch {
+						print("-- Error at get_name --\n \(error)")
+						observer.onNext("null")
+					}
+				case .failure(let error):
+					print("Error: \(error)")
+					observer.onNext("null")
 				}
 			}
 
@@ -215,5 +287,16 @@ final class Welcome_viewModel {
 			}
 			return Disposables.create()
 		}
+	}
+
+	final func apple_login(vc: Welcome_viewController)
+	{
+		let request = ASAuthorizationAppleIDProvider().createRequest()
+		request.requestedScopes = [.email]
+
+		let controller = ASAuthorizationController(authorizationRequests: [request])
+		controller.delegate = vc as? ASAuthorizationControllerDelegate
+		controller.presentationContextProvider = vc as? ASAuthorizationControllerPresentationContextProviding
+		controller.performRequests()
 	}
 }

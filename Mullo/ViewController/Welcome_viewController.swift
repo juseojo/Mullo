@@ -9,6 +9,7 @@ import UIKit
 
 import RxSwift
 import SnapKit 
+import AuthenticationServices
 
 final class Welcome_viewController: UIViewController {
 	
@@ -16,6 +17,7 @@ final class Welcome_viewController: UIViewController {
 	let welcome_viewModel = Welcome_viewModel()
 	var disposeBag = DisposeBag()
 	var button_touch_count = 0
+	var apple_login_identifier : String?
 	var email_address = "" {
 		didSet {
 			print("email_address changed to: \(email_address)")
@@ -29,6 +31,11 @@ final class Welcome_viewController: UIViewController {
 		self.view.backgroundColor = UIColor(named: "NATURAL")
 
 		rx_binding()
+
+		view.addSubview(welcome_view)
+		welcome_view.snp.makeConstraints { make in
+			make.top.bottom.left.right.equalTo(view)
+		}
 	}
 
 	final func rx_binding()
@@ -77,7 +84,6 @@ final class Welcome_viewController: UIViewController {
 		welcome_view.login_view.kakao_login_button.rx.tap
 			.bind { [weak self] in
 			self?.button_touch_count = 2
-			print("tab")
 			self?.welcome_viewModel.kakao_login().subscribe(onNext: { [weak self] mail in
 				if mail != "" {
 					// Check to server, user have name
@@ -94,7 +100,6 @@ final class Welcome_viewController: UIViewController {
 		welcome_view.register_view.kakao_login_button.rx.tap
 			.bind { [weak self] in
 			self?.button_touch_count = 2
-			print("tab")
 			self?.welcome_viewModel.kakao_login().subscribe(onNext: { [weak self] mail in
 				if mail != "" {
 					// Check to server, user have name
@@ -107,10 +112,19 @@ final class Welcome_viewController: UIViewController {
 			}).disposed(by: self!.disposeBag)
 		}.disposed(by: disposeBag)
 
-		view.addSubview(welcome_view)
-		welcome_view.snp.makeConstraints { make in
-			make.top.bottom.left.right.equalTo(view)
-		}
+		//apple login button binding - register view's button
+		welcome_view.register_view.apple_login_button.rx.tap
+			.bind { [weak self] in
+			self?.button_touch_count = 2
+				self?.welcome_viewModel.apple_login(vc: self!)
+		}.disposed(by: disposeBag)
+
+		//apple login button binding - login view's button
+		welcome_view.login_view.apple_login_button.rx.tap
+			.bind { [weak self] in
+			self?.button_touch_count = 2
+				self?.welcome_viewModel.apple_login(vc: self!)
+		}.disposed(by: disposeBag)
 	}
 
 	final func login_button_tap()
@@ -165,7 +179,7 @@ final class Welcome_viewController: UIViewController {
 				}
 			}).disposed(by: disposeBag)
 		}
-		else if button_touch_count == 2 // At name view, button touch
+		else if button_touch_count == 2 // At name view, button touch ( Case : user try social login, but didn't regist )
 		{
 			// Exception
 			if welcome_view.name_view.name_textField.text?.count ?? 0 > 10
@@ -189,8 +203,20 @@ final class Welcome_viewController: UIViewController {
 				return
 			}
 
+			// Case : Apple login
+			if apple_login_identifier != nil
+			{
+				welcome_viewModel.change_name(
+					name: welcome_view.name_view.name_textField.text ?? "", identifier: apple_login_identifier!)
+				UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
+				// Change VC ( current VC -> Main VC )
+				self.change_to_mainView()
+
+				return
+			}
+
 			// Register name to mullo server
-			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address)
+			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "")
 				.subscribe(onNext: { result in
 				if result == "success"
 				{
@@ -277,9 +303,19 @@ final class Welcome_viewController: UIViewController {
 				return
 			}
 
-			print("button event \(self.email_address).")
+			if apple_login_identifier != nil
+			{
+				welcome_viewModel.change_name(
+					name: welcome_view.name_view.name_textField.text ?? "", identifier: apple_login_identifier!)
+				UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
+				// Change VC ( current VC -> Main VC )
+				self.change_to_mainView()
+
+				return
+			}
+
 			// Register name to mullo server
-			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "",email: email_address)
+			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "")
 				.subscribe(onNext: { result in
 
 				if result == "success"
@@ -502,5 +538,68 @@ final class Welcome_viewController: UIViewController {
 				self!.change_to_mainView()
 			}
 		}).disposed(by: disposeBag)
+	}
+}
+
+extension Welcome_viewController: ASAuthorizationControllerDelegate {
+	func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+		if let credential = authorization.credential as? ASAuthorizationAppleIDCredential {
+			print("apple login success")
+
+			// Case : Not first apple login
+			if credential.email == nil
+			{
+				apple_login_identifier = credential.user
+
+				welcome_viewModel.hasName(identifier: credential.user)
+					.subscribe(onNext: { [weak self] hasName in
+						if hasName == "true"
+						{
+							self!.button_touch_count = 2
+							// Change VC ( current VC -> main VC )
+							self!.change_to_mainView()
+						}
+						else if hasName == "false"
+						{
+							self!.button_touch_count = 2
+							// Change VC ( current VC -> name VC )
+							self!.change_to_nameView()
+						}
+						else if hasName == "null"
+						{
+							show_alert(
+								viewController: self,
+								title: "오류",
+								message: "로그인에 실패하였습니다. 다시 시도해주세요.\n계속 실패시 mullo.help@gmail.com 으로 문의주세요.",
+								button_title: "확인",
+								handler: nil)
+						}
+					}).disposed(by: disposeBag)
+			}
+			else // Case : First apple login
+			{
+				self.email_address = credential.email ?? ""
+				self.apple_login_identifier = credential.user
+				welcome_viewModel.register_name(name: "none+", email: email_address, identifier: credential.user)
+					.subscribe(onNext: { [weak self] result in
+						if result == "success"
+						{
+							self!.button_touch_count = 2
+							// Change VC ( current VC -> name VC )
+							self!.change_to_nameView()
+						}
+						else
+						{
+							print("error")
+							print(result)
+						}
+					}).disposed(by: disposeBag)
+			}
+		}
+
+		// 실패 후 동작
+		func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+			print("error")
+		}
 	}
 }
