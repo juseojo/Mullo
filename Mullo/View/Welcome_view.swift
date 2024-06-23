@@ -568,6 +568,9 @@ class Name_view: UIView {
 		name_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
 		name_textField.layer.cornerRadius = 8
 		name_textField.clipsToBounds = true
+		name_textField.textColor = UIColor.black
+		name_textField.autocorrectionType = .no
+		name_textField.spellCheckingType = .no
 
 		return name_textField
 	}()

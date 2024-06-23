@@ -35,7 +35,7 @@ final class Main_View: UIView {
 			systemName: "square.and.pencil",
 			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.5, weight: .bold, scale: .large))
 		write_button.setImage(button_image, for: .normal)
-		write_button.tintColor = UIColor.black
+		write_button.tintColor = UIColor(named: "REVERSE_SYS")
 
 		return write_button
 	}()
@@ -47,7 +47,7 @@ final class Main_View: UIView {
 			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.5, weight: .bold, scale: .large))
 
 		inform_button.setImage(button_image, for: .normal)
-		inform_button.tintColor = UIColor.black
+		inform_button.tintColor = UIColor(named: "REVERSE_SYS")
 
 		return inform_button
 	}()

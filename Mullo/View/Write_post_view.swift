@@ -46,6 +46,7 @@ final class Write_post_view: UIView {
 		post_text_view.layer.cornerRadius = 5
 		post_text_view.clipsToBounds = true
 		post_text_view.font = UIFont(name: "SeoulHangangM", size: 10)
+		post_text_view.textColor = UIColor.black
 
 		return post_text_view
 	}()
