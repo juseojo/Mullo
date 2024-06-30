@@ -45,7 +45,7 @@ final class Write_post_view: UIView {
 		post_text_view.backgroundColor = UIColor.white
 		post_text_view.layer.cornerRadius = 5
 		post_text_view.clipsToBounds = true
-		post_text_view.font = UIFont(name: "SeoulHangangM", size: 10)
+		post_text_view.font = UIFont(name: "SeoulHangangM", size: 20)
 		post_text_view.textColor = UIColor.black
 
 		return post_text_view
@@ -90,7 +90,7 @@ final class Write_post_view: UIView {
 		return choice_label
 	}()
 
-	private var choice_contain_view: UIView = {
+	var choice_contain_view: UIView = {
 		let choice_contain_view = UIView()
 
 		return choice_contain_view
@@ -104,7 +104,8 @@ final class Write_post_view: UIView {
 		first_choice_textField.backgroundColor = UIColor.white
 		first_choice_textField.layer.cornerRadius = 5.0
 		first_choice_textField.clipsToBounds = true
-		first_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
+		first_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
+		first_choice_textField.textColor = UIColor.black
 
 		return first_choice_textField
 	}()
@@ -117,7 +118,8 @@ final class Write_post_view: UIView {
 		second_choice_textField.backgroundColor = UIColor.white
 		second_choice_textField.layer.cornerRadius = 5.0
 		second_choice_textField.clipsToBounds = true
-		second_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
+		second_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
+		second_choice_textField.textColor = UIColor.black
 
 		return second_choice_textField
 	}()
@@ -130,7 +132,8 @@ final class Write_post_view: UIView {
 		third_choice_textField.backgroundColor = UIColor.white
 		third_choice_textField.layer.cornerRadius = 5.0
 		third_choice_textField.clipsToBounds = true
-		third_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
+		third_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
+		third_choice_textField.textColor = UIColor.black
 
 		return third_choice_textField
 	}()
@@ -143,7 +146,8 @@ final class Write_post_view: UIView {
 		fourth_choice_textField.backgroundColor = UIColor.white
 		fourth_choice_textField.layer.cornerRadius = 5.0
 		fourth_choice_textField.clipsToBounds = true
-		fourth_choice_textField.font = UIFont(name: "SeoulHangangM", size: 10)
+		fourth_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
+		fourth_choice_textField.textColor = UIColor.black
 
 		return fourth_choice_textField
 	}()
@@ -308,5 +312,10 @@ final class Write_post_view: UIView {
 		choice_contain_view.snp.updateConstraints { make in
 			make.height.equalTo(choice_contain_view.bounds.height - 40)
 		}
+	}
+
+	func scroll_to_bottom()
+	{
+		scroll_view.setContentOffset(CGPoint(x: 0, y: scroll_view.contentSize.height - scroll_view.bounds.height), animated: true)
 	}
 }
