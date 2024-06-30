@@ -6,11 +6,36 @@
 //
 
 import UIKit
+import RxSwift
+import Alamofire
 
 let screen_width = UIScreen.main.bounds.size.width
 let screen_height = UIScreen.main.bounds.size.height
 let head_height: CGFloat = screen_height * 0.05
 let top_inset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
+
+func isServer_ok(vc: UIViewController)
+{
+	AF.request(
+		"https://\(host)/server_check",
+		method: .post,
+		encoding: URLEncoding.httpBody)
+	.validate(statusCode: 200..<300)
+	.validate(contentType: ["application/json"])
+	.responseDecodable(of: [String:String].self) { response in
+		switch response.result {
+		case .success:
+			return
+		case .failure(let error):
+			print("Error: \(error)")
+			show_alert(viewController: vc,
+					   title: "알림",
+					   message: "서버 점검중입니다.",
+					   button_title: "확인",
+					   handler: { _ in isServer_ok(vc: vc) })
+		}
+	}
+}
 
 func show_alert(
 	viewController: UIViewController?,

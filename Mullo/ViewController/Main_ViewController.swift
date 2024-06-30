@@ -23,6 +23,7 @@ final class Main_ViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		isServer_ok(vc: self)
 
 		//basic setting
 		view.backgroundColor = UIColor(named: "NATURAL")

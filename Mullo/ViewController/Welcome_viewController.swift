@@ -30,6 +30,7 @@ final class Welcome_viewController: UIViewController {
 		self.navigationController?.isNavigationBarHidden = true
 		self.view.backgroundColor = UIColor(named: "NATURAL")
 
+		isServer_ok(vc: self)
 		rx_binding()
 
 		view.addSubview(welcome_view)
