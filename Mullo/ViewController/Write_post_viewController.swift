@@ -19,21 +19,66 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 	var write_post_view = Write_post_view()
 	var write_post_viewModel = Write_post_viewModel()
 	var disposeBag = DisposeBag()
+	var keyboard_height = 0
+	var active_textField: UITextField?
 
+	override func viewWillAppear(_ animated: Bool) {
+		// For get keyboard height
+		NotificationCenter.default.addObserver(
+			self, selector: #selector(keyboard_up), name: UIResponder.keyboardWillShowNotification, object: nil)
+		// it will removed at keyboard_up
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		// Up the keyboard for get keyboard height
+		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+			self.write_post_view.post_text_view.becomeFirstResponder()
+		}
+
+		// keyboard down setting
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismiss_keyboard))
+		tapGesture.cancelsTouchesInView = false
+		view.addGestureRecognizer(tapGesture)
+
+		// UITextFieldDelegate 및 UITextViewDelegate 설정
+		self.write_post_view.first_choice_textField.delegate = self
+		self.write_post_view.second_choice_textField.delegate = self
+		self.write_post_view.third_choice_textField.delegate = self
+		self.write_post_view.fourth_choice_textField.delegate = self
+
+		// basic setting
 		self.navigationController?.isNavigationBarHidden = true
 		self.view.backgroundColor = UIColor(named: "NATURAL")
 
+		// rx setting
 		rx_setting()
+
+		// first image set
 		write_post_viewModel.add_image(image: UIImage(systemName: "plus.square")!)
 
-		//layout
+		// layout
 		self.view.addSubview(write_post_view)
 		write_post_view.snp.makeConstraints { make in
 			make.top.bottom.left.right.equalTo(self.view)
 		}
+	}
+
+	// When up the keyboard, save height and close that
+	@objc func keyboard_up(notification:NSNotification) {
+		if let keyboardFrame:NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+			// save keyboard height
+			keyboard_height = Int(keyboardFrame.cgRectValue.height)
+			// keyboard down
+			self.write_post_view.post_text_view.resignFirstResponder()
+			// For don't work anymore
+			NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+		}
+	}
+
+	@objc func dismiss_keyboard() {
+		view.endEditing(true)
 	}
 
 	private func posting_button_touch()
@@ -113,7 +158,7 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 				choice_count += "|0"
 			}
 			let parameters: [String: String] = [
-				"name": "name",
+				"name": UserDefaults.standard.string(forKey: "name") ?? "None",
 				"time": time_text,
 				"post": self.write_post_view.post_text_view.text,
 				"choice": choice_text,
@@ -222,13 +267,15 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 						self.open_album()
 					case .denied:
 						print("User album: denied")
-						UIApplication.shared.open(
+						UIApplication.shared.open(	
 							URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
 					case .notDetermined:
 						print("User album: notDetermined")
-						PHPhotoLibrary.requestAuthorization { state in
+						PHPhotoLibrary.requestAuthorization(for: .readWrite) { state in
 							if state == .authorized {
-								self.open_album()
+								DispatchQueue.main.async {
+									self.open_album()
+								}
 							} else {
 								self.dismiss(animated: true, completion: nil)
 							}
@@ -246,7 +293,6 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 		configuration.selectionLimit = 1
 		configuration.filter = .images
 
-		//when first work this, error
 		let picker_vc = PHPickerViewController(configuration: configuration)
 
 		picker_vc.delegate = self
@@ -269,5 +315,51 @@ extension Write_post_viewController : PHPickerViewControllerDelegate {
 				}
 			}
 		}
+	}
+}
+
+extension Write_post_viewController: UITextFieldDelegate {
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+			self.view.endEditing(true)
+		}
+
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+
+		return true
+	}
+
+	func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+
+		active_textField = textField
+
+		self.write_post_view.posting_button.snp.updateConstraints{ (make) in
+			make.top.equalTo(self.write_post_view.choice_plus_button.snp.bottom).inset(-50 - keyboard_height)
+		}
+
+		UIView.animate(
+			withDuration: 0.2,
+			animations: self.write_post_view.layoutIfNeeded)
+
+		self.write_post_view.scroll_to_bottom()
+
+		return true
+	}
+
+	func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+
+		if textField != active_textField {
+			return true
+		}
+
+		self.write_post_view.posting_button.snp.updateConstraints{ (make) in
+			make.top.equalTo(self.write_post_view.choice_plus_button.snp.bottom).inset(-50)
+		}
+
+		UIView.animate(
+			withDuration: 0.2,
+			animations: self.write_post_view.layoutIfNeeded)
+
+		return true
 	}
 }
