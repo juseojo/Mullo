@@ -222,7 +222,7 @@ final class Write_post_view: UIView {
 		}
 
 		image_label.snp.makeConstraints { make in
-			make.top.equalTo(post_text_view.snp.bottom).inset(-10)
+			make.top.equalTo(post_text_view.snp.bottom).inset(-20)
 			make.left.equalTo(scroll_view).inset(20)
 		}
 
@@ -233,7 +233,7 @@ final class Write_post_view: UIView {
 		}
 
 		choice_label.snp.makeConstraints { make in
-			make.top.equalTo(image_collectionView.snp.bottom).inset(-10)
+			make.top.equalTo(image_collectionView.snp.bottom).inset(-20)
 			make.left.equalTo(scroll_view).inset(20)
 		}
 
@@ -258,13 +258,13 @@ final class Write_post_view: UIView {
 		choice_minus_button.snp.makeConstraints { make in
 			make.top.equalTo(choice_contain_view.snp.bottom)
 			make.right.equalTo(choice_contain_view)
-			make.height.width.equalTo(50)
+			make.height.width.equalTo(30)
 		}
 
 		choice_plus_button.snp.makeConstraints { make in
 			make.top.equalTo(choice_contain_view.snp.bottom)
-			make.right.equalTo(choice_minus_button.snp.left).inset(10)
-			make.height.width.equalTo(50)
+			make.right.equalTo(choice_minus_button.snp.left)
+			make.height.width.equalTo(30)
 		}
 
 		posting_button.snp.makeConstraints { make in
