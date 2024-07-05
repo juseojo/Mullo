@@ -119,7 +119,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.5, weight: .bold, scale: .large))
 
 		comments_button.setImage(button_image, for: .normal)
-		comments_button.tintColor = UIColor.black
+		comments_button.tintColor = UIColor(named: "REVERSE_SYS")
 
 		return comments_button
 	}()
