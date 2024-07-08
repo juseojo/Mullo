@@ -88,12 +88,6 @@ final class Main_viewModel
 			cell.subject.onNext(images_url)
 		}
 
-		// comments button rx binding
-		cell.comments_button.rx.tap
-			.bind{
-				
-			}.disposed(by: disposeBag)
-
 		// realm for selected post
 		let realm = try! Realm()
 		var mullo_DB = realm.objects(Mullo_DB.self).first

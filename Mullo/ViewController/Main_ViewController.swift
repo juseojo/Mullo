@@ -93,7 +93,24 @@ final class Main_ViewController: UIViewController {
 			.observe(on: MainScheduler.instance)
 			.bind(to: main_view.post_collectionView.rx.items(
 				cellIdentifier: Post_collectionView_cell.identifier, cellType: Post_collectionView_cell.self)) { row, item, cell in
+					// cell setting
 					self.main_viewModel.cell_setting(cell: cell, item: item)
+					// comments button rx binding
+					cell.comments_button.rx.tap
+						.bind{
+
+							let comments_vc = Comments_viewController()
+							comments_vc.modalPresentationStyle = .overCurrentContext
+							self.present(comments_vc, animated: true, completion: nil)
+							UIView.animate(withDuration: 0.3) {
+								self.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+							}
+							comments_vc.completion_handler = {
+								UIView.animate(withDuration: 0.3) {
+									self.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0)
+								}
+							}
+						}.disposed(by: self.disposeBag)
 				}
 				.disposed(by: self.disposeBag)
 	}
