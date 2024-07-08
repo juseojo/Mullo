@@ -62,6 +62,14 @@ final class Main_View: UIView {
 		return post_collectionView
 	}()
 
+	var color_view: UIView = {
+		let color_view = UIView()
+
+		color_view.isUserInteractionEnabled = false
+
+		return color_view
+	}()
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 
@@ -71,6 +79,7 @@ final class Main_View: UIView {
 		header_view.addSubview(write_button)
 		header_view.addSubview(inform_button)
 		addSubview(post_collectionView)
+		addSubview(color_view)
 
 		header_view.snp.makeConstraints { make in
 			make.top.equalTo(self).inset(top_inset)
@@ -96,6 +105,10 @@ final class Main_View: UIView {
 		post_collectionView.snp.makeConstraints { make in
 			make.top.equalTo(header_view.snp.bottom)
 			make.left.right.bottom.equalTo(self)
+		}
+
+		color_view.snp.makeConstraints { make in
+			make.top.left.right.bottom.equalTo(self)
 		}
 	}
 
