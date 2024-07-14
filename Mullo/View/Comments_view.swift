@@ -125,8 +125,12 @@ final class Comments_view: UIView
 		return commentAdd_divier_view
 	}()
 
-	private var comments_collectionView: UICollectionView = {
+	var comments_collectionView: UICollectionView = {
 		let comments_collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+
+		comments_collectionView.backgroundColor = UIColor(named: "NATURAL")
+		comments_collectionView.register(
+			Comments_collectionView_cell.self, forCellWithReuseIdentifier: Comments_collectionView_cell.identifier)
 
 		return comments_collectionView
 	}()

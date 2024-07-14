@@ -12,6 +12,7 @@ import RxSwift
 final class Comments_viewController: UIViewController
 {
 	let comments_view = Comments_view()
+	let comments_viewModel = Comments_viewModel()
 	var disposeBag = DisposeBag()
 	var completion_handler: (() -> Void)?
 
@@ -26,6 +27,7 @@ final class Comments_viewController: UIViewController
 				self.dismiss(animated: true)
 			}.disposed(by: disposeBag)
 
+		bind_collectionView()
 
 		view.addSubview(comments_view)
 		comments_view.snp.makeConstraints { make in
@@ -35,6 +37,17 @@ final class Comments_viewController: UIViewController
 
 	override func viewWillDisappear(_ animated: Bool) {
 		completion_handler!()
+	}
+
+	func bind_collectionView()
+	{
+		comments_viewModel.items
+			.observe(on: MainScheduler.instance)
+			.bind(to: comments_view.comments_collectionView.rx.items(
+				cellIdentifier: Comments_collectionView_cell.identifier, cellType: Comments_collectionView_cell.self)) { row, item, cell in
+					// cell setting
+					self.comments_viewModel.cell_setting(cell: cell, item: item)
+				}.disposed(by: self.disposeBag)
 	}
 }
 
