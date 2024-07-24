@@ -148,10 +148,6 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 			}
 
 			//2. post inform sent to server
-			let formatter = DateFormatter()
-			formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-			let time_text = formatter.string(from: Date())
-
 			var choice_count = "0"
 			for _ in 1...choice_text.filter({$0 == "|" as Character}).count
 			{
@@ -159,7 +155,7 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 			}
 			let parameters: [String: String] = [
 				"name": UserDefaults.standard.string(forKey: "name") ?? "None",
-				"time": time_text,
+				"time": get_time_now(),
 				"post": self.write_post_view.post_text_view.text,
 				"choice": choice_text,
 				"choice_count": choice_count,

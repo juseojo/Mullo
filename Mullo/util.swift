@@ -14,6 +14,16 @@ let screen_height = UIScreen.main.bounds.size.height
 let head_height: CGFloat = screen_height * 0.05
 let top_inset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
 
+func get_time_now() -> String
+{
+	let date = Date()
+	let dateFormatter = DateFormatter()
+	dateFormatter.locale = Locale(identifier: "ko_KR")
+	dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+	return dateFormatter.string(from: date)
+}
+
 func isServer_ok(vc: UIViewController)
 {
 	AF.request(
