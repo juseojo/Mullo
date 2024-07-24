@@ -15,12 +15,13 @@ final class Comments_viewController: UIViewController
 	let comments_viewModel = Comments_viewModel()
 	var disposeBag = DisposeBag()
 	var completion_handler: (() -> Void)?
+	var post_num = -1
 
 	override func viewDidLoad() {
 
 		self.navigationController?.isNavigationBarHidden = true
 
-		comments_view.comment_textview.delegate = self
+		comments_view.comment_textView.delegate = self
 
 		comments_view.close_button.rx.tap
 			.bind {
@@ -28,6 +29,24 @@ final class Comments_viewController: UIViewController
 			}.disposed(by: disposeBag)
 
 		bind_collectionView()
+
+		comments_view.comment_add_button.rx.tap
+			.bind {
+				let parameters: [String:String] = [
+					"post_num" : String(self.post_num),
+					"name" : UserDefaults.standard.string(forKey: "name") ?? "none",
+					"time" : get_time_now(),
+					"comment" : self.comments_view.comment_textView.text
+				]
+				self.comments_viewModel.add_comment(parameters: parameters)
+			}.disposed(by: disposeBag)
+
+		// get first comment data
+		self.comments_viewModel.get_comments(index: 0, post_num: post_num, isSortByPopular: true) { isSuccess in
+			if isSuccess == false {
+				// Have to add error control
+			}
+		}
 
 		view.addSubview(comments_view)
 		comments_view.snp.makeConstraints { make in

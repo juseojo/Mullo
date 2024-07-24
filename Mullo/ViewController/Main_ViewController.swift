@@ -101,6 +101,7 @@ final class Main_ViewController: UIViewController {
 
 							let comments_vc = Comments_viewController()
 							comments_vc.modalPresentationStyle = .overCurrentContext
+							comments_vc.post_num = item.post_num
 							self.present(comments_vc, animated: true, completion: nil)
 							UIView.animate(withDuration: 0.3) {
 								self.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
