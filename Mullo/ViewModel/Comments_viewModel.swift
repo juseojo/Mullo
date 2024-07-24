@@ -16,15 +16,34 @@ final class Comments_viewModel {
 		return subject.compactMap { $0 }
 	}
 
-	final func get_comments(index: Int, isSortByPopular: Bool, complete_handler: @escaping (Bool) -> Void)
+	final func add_comment(parameters: Parameters)
+	{
+		AF.request(
+			"https://\(host)/add_comment",
+			method: .post,
+			parameters: parameters,
+			encoding: URLEncoding.httpBody)
+		.validate(statusCode: 200..<300)
+		.validate(contentType: ["application/json"])
+		.responseDecodable(of: [String: String].self) { response in
+			switch response.result {
+			case .success:
+				print("posting success")
+			case .failure(let error):
+				print("Error: \(error)")
+			}
+		}
+	}
+
+	final func get_comments(index: Int, post_num: Int, isSortByPopular: Bool, complete_handler: @escaping (Bool) -> Void)
 	{
 		var url_text: String
 
 		if isSortByPopular {
-			url_text = "https://\(host)/get_comments_byPopularity?offset=\(index)"
+			url_text = "https://\(host)/get_comments_byPopularity?offset=\(index)&post_num=\(post_num)"
 		}
 		else {
-			url_text = "https://\(host)/get_comments_byRecently?offset=\(index)"
+			url_text = "https://\(host)/get_comments_byRecently?offset=\(index)&post_num=\(post_num)"
 		}
 		AF.request(
 			url_text,
@@ -52,17 +71,17 @@ final class Comments_viewModel {
 			case .failure(let error):
 				complete_handler(false)
 				print("Error: \(error)")
-				self.subject.onError(error)
+				//self.subject.onError(error)
 			}
 		}
 	}
 
-	func cell_setting(cell: Comments_collectionView_cell, item: Comments_cell_data)
+	final func cell_setting(cell: Comments_collectionView_cell, item: Comments_cell_data)
 	{
 		cell.comment_label.text = item.comment
 		cell.name_label.text = item.name
 		cell.time_label.text = item.time
-		cell.up_button.setTitle(item.up_count, for: .normal)
+		cell.up_button.setTitle(String(item.up_count), for: .normal)
 
 		let commentLabel_newSize = cell.comment_label.sizeThatFits(
 			CGSize(width: screen_width, height: screen_height))
