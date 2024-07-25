@@ -81,14 +81,16 @@ final class Comments_viewModel {
 		cell.comment_label.text = item.comment
 		cell.name_label.text = item.name
 		cell.time_label.text = item.time
-		cell.up_button.setTitle(String(item.up_count), for: .normal)
+		cell.up_button.setTitle(" " + String(item.up_count), for: .normal)
 
-		let commentLabel_newSize = cell.comment_label.sizeThatFits(
-			CGSize(width: screen_width, height: screen_height))
 		let nameLabel_newSize = cell.name_label.sizeThatFits(
 			CGSize(width: screen_width, height: screen_height))
 
-		cell.commentLabel_height_setting(height: Int(commentLabel_newSize.height))
 		cell.nameLabel_width_setting(width: Int(nameLabel_newSize.width))
+	}
+
+	func remove_all()
+	{
+		self.subject.onNext([])
 	}
 }
