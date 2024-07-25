@@ -14,11 +14,17 @@ class Comments_collectionView_cell: UICollectionViewCell
 	var name_label: UILabel = {
 		let name_label = UILabel()
 
+		name_label.font = UIFont(name: "SeoulHangangM", size: 12)
+		name_label.textColor = UIColor.gray
+
 		return name_label
 	}()
 
 	var time_label: UILabel = {
 		let time_label = UILabel()
+
+		time_label.font = UIFont(name: "SeoulHangangM", size: 12)
+		time_label.textColor = UIColor.gray
 
 		return time_label
 	}()
@@ -50,20 +56,36 @@ class Comments_collectionView_cell: UICollectionViewCell
 		return up_button
 	}()
 
+	private var border_view: UIView = {
+		let border_view = UIView()
+
+		border_view.backgroundColor = UIColor.gray
+
+		return border_view
+	}()
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 
 		self.backgroundColor = UIColor(named: "NATURAL")
+		addSubview(name_label)
+		addSubview(time_label)
+		addSubview(report_button)
+		addSubview(comment_label)
+		addSubview(up_button)
+		addSubview(border_view)
 
 		name_label.snp.makeConstraints { make in
-			make.top.left.equalTo(self).inset(-10)
-			make.height.equalTo(15)
+			make.top.left.equalTo(self).inset(10)
+			make.height.equalTo(20)
 			make.width.equalTo(40)
 		}
 
 		time_label.snp.makeConstraints { make in
-			make.top.equalTo(self).inset(-10)
-			make.left.equalTo(name_label.snp.right).inset(10)
+			make.top.equalTo(self).inset(10)
+			make.left.equalTo(name_label.snp.right).inset(-10)
+			make.right.equalTo(self)
+			make.height.equalTo(20)
 		}
 
 		report_button.snp.makeConstraints { make in
@@ -74,14 +96,21 @@ class Comments_collectionView_cell: UICollectionViewCell
 		comment_label.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.equalTo(self).inset(10)
-			make.right.equalTo(report_button.snp.left)
+			make.width.equalTo(screen_width - 20)
 			make.height.equalTo(25)
 		}
 
 		up_button.snp.makeConstraints { make in
 			make.top.equalTo(comment_label.snp.bottom).inset(-10)
-			make.left.bottom.equalTo(self)
+			make.left.equalTo(self)
+			make.bottom.equalTo(border_view.snp.top)
 			make.width.equalTo(50)
+		}
+
+		border_view.snp.makeConstraints { make in
+			make.left.bottom.equalTo(self)
+			make.width.equalTo(screen_width)
+			make.height.equalTo(1)
 		}
 	}
 
