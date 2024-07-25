@@ -121,8 +121,8 @@ final class Main_ViewController: UIViewController {
 		let choice_view_height = item.choice.filter { $0 == "|" as Character }.count * 30
 
 		var height =
-		(self.calculateHeight(for: item.name, width: screen_width - 20)) +
-		(self.calculateHeight(for: item.post, width: screen_width - 20)) +
+		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
+		calculate_height(text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
 		screen_height * 0.2 + 20 +
 		CGFloat(choice_view_height) + 100
 
@@ -132,18 +132,6 @@ final class Main_ViewController: UIViewController {
 		}
 
 		cell_height_array.append(height)
-	}
-
-	private func calculateHeight(for text: String, width: CGFloat) -> CGFloat 
-	{
-		let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: .greatestFiniteMagnitude))
-
-		label.font = UIFont(name: "GillSans-SemiBold", size: 15)
-		label.numberOfLines = 0
-		label.text = text
-		label.sizeToFit()
-
-		return label.frame.height
 	}
 }
 

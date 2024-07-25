@@ -14,6 +14,18 @@ let screen_height = UIScreen.main.bounds.size.height
 let head_height: CGFloat = screen_height * 0.05
 let top_inset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
 
+func calculate_height(text: String, font: UIFont, width: CGFloat) -> CGFloat
+{
+	let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: .greatestFiniteMagnitude))
+
+	label.font = font
+	label.numberOfLines = 0
+	label.text = text
+	label.sizeToFit()
+
+	return label.frame.height
+}
+
 func get_time_now() -> String
 {
 	let date = Date()
