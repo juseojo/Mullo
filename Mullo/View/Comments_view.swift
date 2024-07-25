@@ -82,17 +82,17 @@ final class Comments_view: UIView
 		return headder_divider_view
 	}()
 
-	var comment_textview: UITextView = {
-		let comment_textview = UITextView()
+	var comment_textView: UITextView = {
+		let comment_textView = UITextView()
 		let placeholderLabel = UILabel()
 
-		comment_textview.layer.borderColor = UIColor.lightGray.cgColor
-		comment_textview.layer.borderWidth = 1.0
-		comment_textview.layer.masksToBounds = true
-		comment_textview.layer.cornerRadius = 5.0
-		comment_textview.font = UIFont(name: "SeoulHangangM", size: 15)
+		comment_textView.layer.borderColor = UIColor.lightGray.cgColor
+		comment_textView.layer.borderWidth = 1.0
+		comment_textView.layer.masksToBounds = true
+		comment_textView.layer.cornerRadius = 5.0
+		comment_textView.font = UIFont(name: "SeoulHangangM", size: 15)
 
-		return comment_textview
+		return comment_textView
 	}()
 
 	let placeholder_label: UILabel = {
@@ -106,7 +106,7 @@ final class Comments_view: UIView
 		return placeholder_label
 	}()
 
-	private var comment_add_button: UIButton = {
+	var comment_add_button: UIButton = {
 		let comment_add_button = UIButton()
 
 		comment_add_button.setImage(
@@ -145,8 +145,8 @@ final class Comments_view: UIView
 		headder_view.addSubview(recentSort_button)
 		headder_view.addSubview(close_button)
 		addSubview(headder_divider_view)
-		addSubview(comment_textview)
-		comment_textview.addSubview(placeholder_label)
+		addSubview(comment_textView)
+		comment_textView.addSubview(placeholder_label)
 		addSubview(comment_add_button)
 		addSubview(commentAdd_divier_view)
 		addSubview(comments_collectionView)
@@ -198,7 +198,7 @@ final class Comments_view: UIView
 			make.height.equalTo(1)
 		}
 
-		comment_textview.snp.makeConstraints { make in
+		comment_textView.snp.makeConstraints { make in
 			make.top.equalTo(headder_divider_view.snp.bottom).inset(-10)
 			make.left.equalTo(self).inset(15)
 			make.right.equalTo(comment_add_button.snp.left).inset(-10)
@@ -206,20 +206,20 @@ final class Comments_view: UIView
 		}
 
 		placeholder_label.snp.makeConstraints { make in
-			make.centerY.equalTo(comment_textview)
-			make.left.equalTo(comment_textview).inset(5)
-			make.right.equalTo(comment_textview)
+			make.centerY.equalTo(comment_textView)
+			make.left.equalTo(comment_textView).inset(5)
+			make.right.equalTo(comment_textView)
 		}
 
 		comment_add_button.snp.makeConstraints { make in
-			make.top.equalTo(comment_textview.snp.top)
+			make.top.equalTo(comment_textView.snp.top)
 			make.right.equalTo(self).inset(10)
-			make.bottom.equalTo(comment_textview.snp.bottom)
+			make.bottom.equalTo(comment_textView.snp.bottom)
 			make.width.equalTo(30)
 		}
 
 		commentAdd_divier_view.snp.makeConstraints { make in
-			make.top.equalTo(comment_textview.snp.bottom).inset(-10)
+			make.top.equalTo(comment_textView.snp.bottom).inset(-10)
 			make.left.right.equalTo(self)
 			make.height.equalTo(1)
 		}
