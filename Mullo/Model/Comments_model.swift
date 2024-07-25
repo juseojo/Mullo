@@ -12,9 +12,9 @@ struct Comments_cell_data: Codable{
 	var name: String
 	var time: String
 	var comment: String
-	var up_count: String
+	var up_count: Int
 
-	init(post_num: Int, name: String, time: String, comment: String, up_count: String) {
+	init(post_num: Int, name: String, time: String, comment: String, up_count: Int) {
 		self.post_num = post_num
 		self.name = name
 		self.time = time
