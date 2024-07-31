@@ -132,7 +132,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		return border_view
 	}()
 
-	private var touched_button_background_view: UIView = {
+	var touched_button_background_view: UIView = {
 		let touched_button_background_view = UIView()
 
 		touched_button_background_view.backgroundColor = UIColor.lightGray
@@ -140,42 +140,10 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		return touched_button_background_view
 	}()
 
-	private func choice_button_touch(touched_button: UIButton) {
-
-		var num = 0
-
-		for button in buttons
-		{
-			if button.superview == nil
-			{
-				return
-			}
-			button.isEnabled = false
-
-			if button == touched_button
-			{
-				selecting_buttons(isSelected: true, index: num)
-			}
-			else
-			{
-				selecting_buttons(isSelected: false, index: num)
-			}
-			num += 1
-		}
-	}
-
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 
 		self.buttons = [first_button, second_button, third_button, fourth_button]
-
-		for button in buttons
-		{
-			button.rx.tap
-				.bind { [weak self] in
-					self?.choice_button_touch(touched_button: button)
-				}.disposed(by: disposeBag)
-		}
 
 		image_collectionView.rx.setDelegate(self).disposed(by: disposeBag)
 		items.observe(on: MainScheduler.instance)
@@ -280,82 +248,6 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 			if (!subview.isKind(of: UIButton.self))
 			{
 				subview.removeFromSuperview()
-			}
-		}
-	}
-
-	func selecting_buttons(isSelected: Bool, index: Int)
-	{
-		var total_count = 0
-
-		for vote_count in choice_button_vote_count
-		{
-			total_count += Int(vote_count) ?? 0
-		}
-
-		if isSelected
-		{
-			//save selected inform
-			let realm = try! Realm()
-			let mullo_DB = realm.objects(Mullo_DB.self).first
-			if (mullo_DB == nil)
-			{
-				try! realm.write{
-					let new_mullo_DB = Mullo_DB()
-					realm.add(new_mullo_DB)
-				}
-				print("mullo db create")
-			}
-			let selected_post = Selected_post()
-			try! realm.write{
-				selected_post.post_num = self.post_num
-				selected_post.selected_choice = index
-				mullo_DB!.selected_posts.append(selected_post)
-			}
-
-			let touched_button_count = (Int(choice_button_vote_count[index]) ?? 0) + 1
-
-			choice_view.addSubview(touched_button_background_view)
-			touched_button_background_view.snp.makeConstraints { make in
-				make.top.left.bottom.equalTo(buttons[index])
-				make.width.equalTo((Double(touched_button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
-			}
-			choice_view.bringSubviewToFront(buttons[index])
-
-			touched_button_background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-			touched_button_background_view.layer.borderWidth = 1.0
-			touched_button_background_view.clipsToBounds = true
-
-			let percent_label = UILabel()
-
-			choice_view.addSubview(percent_label)
-			percent_label.text = String(round((Double(touched_button_count) / Double(total_count + 1)) * 100)) + " %"
-			percent_label.snp.makeConstraints { make in
-				make.top.bottom.right.equalTo(buttons[index])
-			}
-		}
-		else
-		{
-			let background_view = UIView()
-			let button_count = (Int(choice_button_vote_count[index]) ?? 0)
-
-			background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-			background_view.layer.borderWidth = 1.0
-			background_view.clipsToBounds = true
-
-			choice_view.addSubview(background_view)
-			choice_view.bringSubviewToFront(buttons[index])
-			background_view.snp.makeConstraints { make in
-				make.top.left.bottom.equalTo(buttons[index])
-				make.width.equalTo((Double(button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
-			}
-
-			let percent_label = UILabel()
-
-			choice_view.addSubview(percent_label)
-			percent_label.text = String(round((Double(button_count) / Double(total_count + 1)) * 100)) + " %"
-			percent_label.snp.makeConstraints { make in
-				make.top.bottom.right.equalTo(buttons[index])
 			}
 		}
 	}
