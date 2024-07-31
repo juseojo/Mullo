@@ -14,6 +14,27 @@ let screen_height = UIScreen.main.bounds.size.height
 let head_height: CGFloat = screen_height * 0.05
 let top_inset = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
 
+class AlertHelper {
+	static func showAlert(
+		title: String, message: String, button_title: String, handler: ((UIAlertAction) -> Void)?) 
+	{
+		guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+				  let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+				  var top_viewController = window.rootViewController else {
+			return
+		}
+
+		while let presented_viewController = top_viewController.presentedViewController {
+			top_viewController = presented_viewController
+		}
+
+		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+		alert.addAction(UIAlertAction(title: button_title, style: .default, handler: handler))
+
+		top_viewController.present(alert, animated: true, completion: nil)
+	}
+}
+
 func calculate_height(text: String, font: UIFont, width: CGFloat) -> CGFloat
 {
 	let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: .greatestFiniteMagnitude))
