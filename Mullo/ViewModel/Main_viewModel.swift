@@ -144,11 +144,34 @@ final class Main_viewModel
 
 			if button == touched_button {
 				selecting_buttons(isSelected: true, index: num, cell: cell)
+				// vote to server
+				let parameters = ["choice_num" : num,
+								  "post_num" : cell.post_num]
+				vote_to_server(parameters: parameters)
 			}
 			else {
 				selecting_buttons(isSelected: false, index: num, cell: cell)
 			}
 			num += 1
+		}
+	}
+
+	final func vote_to_server(parameters: Parameters)
+	{
+		AF.request(
+			"https://\(host)/vote_choice",
+			method: .post,
+			parameters: parameters,
+			encoding: URLEncoding.httpBody)
+		.validate(statusCode: 200..<300)
+		.validate(contentType: ["application/json"])
+		.responseDecodable(of: [String: String].self) { response in
+			switch response.result {
+			case .success:
+				print("vote success")
+			case .failure(let error):
+				print("Error: \(error)")
+			}
 		}
 	}
 
@@ -199,7 +222,8 @@ final class Main_viewModel
 			cell.choice_view.addSubview(percent_label)
 			percent_label.text = String(round((Double(touched_button_count) / Double(total_count + 1)) * 100)) + " %"
 			percent_label.snp.makeConstraints { make in
-				make.top.bottom.right.equalTo(cell.buttons[index])
+				make.top.bottom.equalTo(cell.buttons[index])
+				make.right.equalTo(cell.buttons[index]).inset(5)
 			}
 		}
 		else
@@ -223,7 +247,8 @@ final class Main_viewModel
 			cell.choice_view.addSubview(percent_label)
 			percent_label.text = String(round((Double(button_count) / Double(total_count + 1)) * 100)) + " %"
 			percent_label.snp.makeConstraints { make in
-				make.top.bottom.right.equalTo(cell.buttons[index])
+				make.top.bottom.equalTo(cell.buttons[index])
+				make.right.equalTo(cell.buttons[index]).inset(5)
 			}
 		}
 	}
