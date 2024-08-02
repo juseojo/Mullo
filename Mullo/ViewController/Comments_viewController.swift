@@ -17,6 +17,7 @@ final class Comments_viewController: UIViewController
 	var cell_height_array = [CGFloat]()
 	var completion_handler: (() -> Void)?
 	var post_num = -1
+	var isLoadingData = false
 
 	override func viewDidLoad() {
 
@@ -152,29 +153,27 @@ extension Comments_viewController: UICollectionViewDelegateFlowLayout {
 	}
 
 	//for infinity scroll
-	/*
 	func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 
-		let post_num = collectionView.numberOfItems(inSection: 0)
+		let comments_num = collectionView.numberOfItems(inSection: 0)
 
-		if indexPath.row == post_num - 1 && !isLoadingData && post_num % 7 == 0
+		if indexPath.row == comments_num - 1 && !isLoadingData && comments_num % 10 == 0
 		{
 			isLoadingData = true
-			main_viewModel.get_data(index: (post_num) / 7) { isSuccess in
+			comments_viewModel.get_comments(
+				index: comments_num / 10, post_num: post_num, isSortByPopular: true) { isSuccess in
 				if isSuccess == false
 				{
 					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 						self.isLoadingData = false
 					}
 				}
-				else
-				{
+				else {
 					self.isLoadingData = false
 				}
 			}
 		}
 	}
-	 */
 }
 
 extension Comments_viewController: UITextViewDelegate {
