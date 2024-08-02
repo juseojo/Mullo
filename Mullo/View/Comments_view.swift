@@ -37,7 +37,7 @@ final class Comments_view: UIView
 		return comment_label
 	}()
 
-	private var popularSort_button: UIButton = {
+	var popularSort_button: UIButton = {
 		let popularSort_button = UIButton()
 
 		popularSort_button.setTitle("인기순", for: .normal)
@@ -50,7 +50,7 @@ final class Comments_view: UIView
 		return popularSort_button
 	}()
 
-	private var recentSort_button: UIButton = {
+	var recentSort_button: UIButton = {
 		let recentSort_button = UIButton()
 
 		recentSort_button.setTitle("최신순", for: .normal)
