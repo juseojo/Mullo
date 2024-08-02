@@ -98,7 +98,6 @@ final class Main_ViewController: UIViewController {
 					// comments button rx binding
 					cell.comments_button.rx.tap
 						.bind{
-
 							let comments_vc = Comments_viewController()
 							comments_vc.modalPresentationStyle = .overCurrentContext
 							comments_vc.post_num = item.post_num
@@ -111,14 +110,14 @@ final class Main_ViewController: UIViewController {
 									self.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0)
 								}
 							}
-						}.disposed(by: self.disposeBag)
+						}.disposed(by: cell.disposeBag)
 				}
 				.disposed(by: self.disposeBag)
 	}
 
 	private func save_cell_height(item: Post_cell_data)
 	{
-		let choice_view_height = item.choice.filter { $0 == "|" as Character }.count * 30
+		let choice_view_height = item.choice.filter { $0 == "|" as Character }.count * 35
 
 		var height =
 		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +

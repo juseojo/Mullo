@@ -13,14 +13,15 @@ import RealmSwift
 
 final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 	static let identifier = "post"
-	private let disposeBag = DisposeBag()
+	var disposeBag = DisposeBag()
+	var image_disposeBag = DisposeBag()
 	let subject = BehaviorSubject<[String]>(value: [])
 	var items: Observable<[String]> {
 		return subject.compactMap { $0 }
 	}
 	var choice_button_vote_count = [String]()
 	var buttons = [UIButton]()
-	var post_num = 0
+	var post_num = -1
 
 	var name_label: UILabel = {
 		let name_label = UILabel()
@@ -77,7 +78,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 		first_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
 		first_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-		first_button.layer.borderWidth = 1
+		first_button.layer.borderWidth = 1.5
 
 		return first_button
 	}()
@@ -87,7 +88,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 		second_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
 		second_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-		second_button.layer.borderWidth = 1
+		second_button.layer.borderWidth = 1.5
 
 		return second_button
 	}()
@@ -97,7 +98,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 		third_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
 		third_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-		third_button.layer.borderWidth = 1
+		third_button.layer.borderWidth = 1.5
 
 		return third_button
 	}()
@@ -107,7 +108,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 		fourth_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
 		fourth_button.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-		fourth_button.layer.borderWidth = 1
+		fourth_button.layer.borderWidth = 1.5
 
 		return fourth_button
 	}()
@@ -151,7 +152,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 				cellIdentifier: Image_collectionView_cell.identifier,
 				cellType: Image_collectionView_cell.self)) { row, item, cell in
 					cell.image_view.kf.setImage(with: URL(string: item))
-		   }.disposed(by: self.disposeBag)
+		   }.disposed(by: self.image_disposeBag)
 
 		self.backgroundColor = UIColor(named: "NATURAL")
 
@@ -195,13 +196,13 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 		first_button.snp.makeConstraints { make in
 			make.top.left.right.equalTo(choice_view)
-			make.height.equalTo(20)
+			make.height.equalTo(25)
 		}
 
 		second_button.snp.makeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
 			make.left.right.bottom.equalTo(choice_view)
-			make.height.equalTo(20)
+			make.height.equalTo(25)
 		}
 
 		comments_button.snp.makeConstraints { make in
@@ -235,11 +236,13 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		fourth_button.removeFromSuperview()
 		touched_button_background_view.snp.removeConstraints()
 		touched_button_background_view.removeFromSuperview()
+		post_num = -1
+		disposeBag = DisposeBag()
 
 		second_button.snp.remakeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
 			make.left.right.bottom.equalTo(choice_view)
-			make.height.equalTo(20)
+			make.height.equalTo(25)
 		}
 		self.subject.onNext([])
 
@@ -260,14 +263,14 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		second_button.snp.remakeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(choice_view)
-			make.height.equalTo(20)
+			make.height.equalTo(25)
 		}
 
 		//new button layout
 		third_button.snp.makeConstraints { make in
 			make.top.equalTo(second_button.snp.bottom).inset(-10)
 			make.left.right.bottom.equalTo(choice_view)
-			make.height.equalTo(20)
+			make.height.equalTo(25)
 		}
 
 		third_button.setTitle(button_text, for: .normal)
@@ -281,14 +284,14 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		third_button.snp.remakeConstraints { make in
 			make.top.equalTo(second_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(choice_view)
-			make.height.equalTo(20)
+			make.height.equalTo(25)
 		}
 
 		//new button layout
 		fourth_button.snp.makeConstraints { make in
 			make.top.equalTo(third_button.snp.bottom).inset(-10)
 			make.left.right.bottom.equalTo(choice_view)
-			make.height.equalTo(20)
+			make.height.equalTo(25)
 		}
 
 		fourth_button.setTitle(button_text, for: .normal)

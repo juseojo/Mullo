@@ -18,6 +18,7 @@ final class Comments_viewController: UIViewController
 	var completion_handler: (() -> Void)?
 	var post_num = -1
 	var isLoadingData = false
+	var isPopularSort = true
 
 	override func viewDidLoad() {
 
@@ -43,7 +44,7 @@ final class Comments_viewController: UIViewController
 			}).disposed(by: self.disposeBag)
 		
 		// Get first comment data
-		self.comments_viewModel.get_comments(index: 0, post_num: post_num, isSortByPopular: true) { isSuccess in
+		self.comments_viewModel.get_comments(index: 0, post_num: post_num, isSortByPopular: isPopularSort) { isSuccess in
 			if isSuccess == false {
 				// Have to add error control
 			}
@@ -109,6 +110,7 @@ final class Comments_viewController: UIViewController
 					if isSuccess == false {
 						// Have to add error control
 					}
+					self!.isPopularSort = true
 				}
 			}.disposed(by: disposeBag)
 
@@ -120,6 +122,7 @@ final class Comments_viewController: UIViewController
 					if isSuccess == false {
 						// Have to add error control
 					}
+					self!.isPopularSort = false
 				}
 			}.disposed(by: disposeBag)
 
@@ -161,7 +164,7 @@ extension Comments_viewController: UICollectionViewDelegateFlowLayout {
 		{
 			isLoadingData = true
 			comments_viewModel.get_comments(
-				index: comments_num / 10, post_num: post_num, isSortByPopular: true) { isSuccess in
+				index: comments_num / 10, post_num: post_num, isSortByPopular: isPopularSort) { isSuccess in
 				if isSuccess == false
 				{
 					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
