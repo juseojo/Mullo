@@ -19,7 +19,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 	var items: Observable<[String]> {
 		return subject.compactMap { $0 }
 	}
-	var choice_button_vote_count = [String]()
+	var choice_button_vote_count = [Int]()
 	var buttons = [UIButton]()
 	var post_num = -1
 
@@ -137,6 +137,9 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		let touched_button_background_view = UIView()
 
 		touched_button_background_view.backgroundColor = UIColor.lightGray
+		touched_button_background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+		touched_button_background_view.layer.borderWidth = 1.5
+		touched_button_background_view.clipsToBounds = true
 
 		return touched_button_background_view
 	}()
@@ -226,11 +229,18 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 
 		time_label.text = nil
 		name_label.text = nil
+
 		for button in buttons
 		{
 			button.isEnabled = true
 			button.setTitle(nil, for: .normal)
 		}
+
+		buttons.removeAll()
+		first_button.titleLabel?.text = nil
+		second_button.titleLabel?.text = nil
+		third_button.titleLabel?.text = nil
+		fourth_button.titleLabel?.text = nil
 
 		third_button.removeFromSuperview()
 		fourth_button.removeFromSuperview()
@@ -238,6 +248,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 		touched_button_background_view.removeFromSuperview()
 		post_num = -1
 		disposeBag = DisposeBag()
+		choice_button_vote_count.removeAll()
 
 		second_button.snp.remakeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
