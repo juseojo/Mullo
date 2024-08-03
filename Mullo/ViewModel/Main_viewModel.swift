@@ -14,7 +14,6 @@ import RealmSwift
 
 final class Main_viewModel
 {
-	private let disposeBag = DisposeBag()
 	private let subject = BehaviorSubject<[Post_cell_data]>(value: [])
 	var items: Observable<[Post_cell_data]> {
 		return subject.compactMap { $0 }
@@ -58,8 +57,9 @@ final class Main_viewModel
 		cell.name_label.text = item.name
 		cell.time_label.text = item.time
 		cell.post_textView.text = item.post
-		cell.choice_button_vote_count = item.choice_count.substr(seperater: "|" as Character)
+		cell.choice_button_vote_count = item.choice_count.substr(seperater: "|" as Character).map{ Int($0)! }
 		cell.post_num = Int(item.post_num)
+		cell.buttons = [cell.first_button, cell.second_button, cell.third_button, cell.fourth_button]
 
 		// choice data parsing
 		let buttons_text = item.choice.substr(seperater: "|" as Character)
@@ -115,7 +115,7 @@ final class Main_viewModel
 			{
 				guard (button.superview != nil) else { return }
 				button.isEnabled = false
-				selecting_buttons(isSelected: (num == wasSelected?.selected_choice), index: num, cell: cell)
+				selecting_buttons(isSelected: (num == wasSelected?.selected_choice), index: num, cell: cell, total_count: cell.choice_button_vote_count.reduce(0) { return $0 + $1 })
 				num += 1
 			}
 		}
@@ -123,10 +123,11 @@ final class Main_viewModel
 		// tap event - choice buttons
 		for button in cell.buttons
 		{
+			guard (button.superview != nil) else { return }
 			button.rx.tap
 				.bind { [weak self] in
 					self?.choice_button_touch(touched_button: button, cell: cell)
-				}.disposed(by: disposeBag)
+				}.disposed(by: cell.disposeBag)
 		}
 	}
 
@@ -134,25 +135,55 @@ final class Main_viewModel
 	private func choice_button_touch(touched_button: UIButton, cell: Post_collectionView_cell) {
 
 		var num = 0
+		var selected_button_num = -1
+		var total_vote_count = 0
 
+		// Find selected button num for saveing and send to server
 		for button in cell.buttons
 		{
 			if button.superview == nil {
-				return
+				continue
 			}
 			button.isEnabled = false
 
 			if button == touched_button {
-				selecting_buttons(isSelected: true, index: num, cell: cell)
+				cell.choice_button_vote_count[num] = cell.choice_button_vote_count[num] + 1
+				selected_button_num = num
+
+				// Save selected button inform at realm
+				let realm = try! Realm()
+				let mullo_DB = realm.objects(Mullo_DB.self).first
+
+				if (mullo_DB == nil)
+				{
+					try! realm.write{
+						let new_mullo_DB = Mullo_DB()
+						realm.add(new_mullo_DB)
+					}
+					print("mullo db create")
+				}
+				let selected_post = Selected_post()
+				try! realm.write{
+					selected_post.post_num = cell.post_num
+					selected_post.selected_choice = num
+					mullo_DB!.selected_posts.append(selected_post)
+				}
+
 				// vote to server
 				let parameters = ["choice_num" : num,
 								  "post_num" : cell.post_num]
 				vote_to_server(parameters: parameters)
 			}
-			else {
-				selecting_buttons(isSelected: false, index: num, cell: cell)
-			}
+			total_vote_count += cell.choice_button_vote_count[num]
 			num += 1
+		}
+
+		// Add layout for buttons
+		for i in 0...(num - 1)
+		{
+			i == selected_button_num ? 
+			selecting_buttons(isSelected: true, index: i, cell: cell, total_count: total_vote_count):
+			selecting_buttons(isSelected: false, index: i, cell: cell, total_count: total_vote_count)
 		}
 	}
 
@@ -175,52 +206,24 @@ final class Main_viewModel
 		}
 	}
 
-	func selecting_buttons(isSelected: Bool, index: Int, cell: Post_collectionView_cell)
+	// Change layout - selecting buttons
+	func selecting_buttons(isSelected: Bool, index: Int, cell: Post_collectionView_cell, total_count: Int)
 	{
-		var total_count = 0
-
-		for vote_count in cell.choice_button_vote_count
-		{
-			total_count += Int(vote_count) ?? 0
-		}
-
 		if isSelected
 		{
-			//save selected inform
-			let realm = try! Realm()
-			let mullo_DB = realm.objects(Mullo_DB.self).first
-			if (mullo_DB == nil)
-			{
-				try! realm.write{
-					let new_mullo_DB = Mullo_DB()
-					realm.add(new_mullo_DB)
-				}
-				print("mullo db create")
-			}
-			let selected_post = Selected_post()
-			try! realm.write{
-				selected_post.post_num = cell.post_num
-				selected_post.selected_choice = index
-				mullo_DB!.selected_posts.append(selected_post)
-			}
-
-			let touched_button_count = (Int(cell.choice_button_vote_count[index]) ?? 0) + 1
+			let touched_button_count = cell.choice_button_vote_count[index]
 
 			cell.choice_view.addSubview(cell.touched_button_background_view)
 			cell.touched_button_background_view.snp.makeConstraints { make in
 				make.top.left.bottom.equalTo(cell.buttons[index])
-				make.width.equalTo((Double(touched_button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
+				make.width.equalTo((Double(touched_button_count) / Double(total_count)) * (Double(screen_width) - 20))
 			}
 			cell.choice_view.bringSubviewToFront(cell.buttons[index])
-
-			cell.touched_button_background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-			cell.touched_button_background_view.layer.borderWidth = 1.0
-			cell.touched_button_background_view.clipsToBounds = true
 
 			let percent_label = UILabel()
 
 			cell.choice_view.addSubview(percent_label)
-			percent_label.text = String(round((Double(touched_button_count) / Double(total_count + 1)) * 100)) + " %"
+			percent_label.text = String(round((Double(touched_button_count) / Double(total_count)) * 100)) + " %"
 			percent_label.snp.makeConstraints { make in
 				make.top.bottom.equalTo(cell.buttons[index])
 				make.right.equalTo(cell.buttons[index]).inset(5)
@@ -229,23 +232,24 @@ final class Main_viewModel
 		else
 		{
 			let background_view = UIView()
-			let button_count = (Int(cell.choice_button_vote_count[index]) ?? 0)
+			let button_count = cell.choice_button_vote_count[index]
 
 			background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-			background_view.layer.borderWidth = 1.0
+			background_view.layer.borderWidth = 1.5
 			background_view.clipsToBounds = true
 
 			cell.choice_view.addSubview(background_view)
 			cell.choice_view.bringSubviewToFront(cell.buttons[index])
+			print("\(cell.post_num) : \(Double(button_count)) / \(Double(total_count))")
 			background_view.snp.makeConstraints { make in
 				make.top.left.bottom.equalTo(cell.buttons[index])
-				make.width.equalTo((Double(button_count) / Double(total_count + 1)) * (Double(screen_width) - 20))
+				make.width.equalTo((Double(button_count) / Double(total_count)) * (Double(screen_width) - 20))
 			}
 
 			let percent_label = UILabel()
 
 			cell.choice_view.addSubview(percent_label)
-			percent_label.text = String(round((Double(button_count) / Double(total_count + 1)) * 100)) + " %"
+			percent_label.text = String(round((Double(button_count) / Double(total_count)) * 100)) + " %"
 			percent_label.snp.makeConstraints { make in
 				make.top.bottom.equalTo(cell.buttons[index])
 				make.right.equalTo(cell.buttons[index]).inset(5)
