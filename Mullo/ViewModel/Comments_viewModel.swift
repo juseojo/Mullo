@@ -139,7 +139,7 @@ final class Comments_viewModel {
 		// tab event - up button
 		cell.up_button.rx.tap
 			.bind{ [weak self] in
-				if wasSelected != nil
+				if wasSelected != nil || cell.up_button.isSelected
 				{
 					AlertHelper.showAlert(title: "알림", message: "이미 누른 좋아요입니다.", button_title: "확인", handler: nil)
 				}
@@ -157,7 +157,7 @@ final class Comments_viewModel {
 					let parameters = [ "comment_num" : cell.comment_num ]
 					self!.count_up_comment(parameters: parameters)
 				}
-			}.disposed(by: disposeBag)
+			}.disposed(by: cell.cell_disposeBag)
 	}
 
 	func remove_all()
