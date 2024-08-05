@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import RxSwift
 
 class Comments_collectionView_cell: UICollectionViewCell
 {
 	static let identifier = "comments"
 
 	var comment_num: Int = -1
+	var cell_disposeBag = DisposeBag()
 
 	var name_label: UILabel = {
 		let name_label = UILabel()
@@ -135,6 +137,7 @@ class Comments_collectionView_cell: UICollectionViewCell
 		up_button.isSelected = false
 		up_button.titleLabel?.text = nil
 		comment_num = -1
+		cell_disposeBag = DisposeBag()
 	}
 
 	final func nameLabel_width_setting(width: Int)
