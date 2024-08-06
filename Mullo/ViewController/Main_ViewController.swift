@@ -45,6 +45,11 @@ final class Main_ViewController: UIViewController {
 				self.write_button_touch()
 			}.disposed(by: disposeBag)
 
+		main_view.inform_button.rx.tap
+			.bind{
+				self.inform_button_touch()
+			}.disposed(by: disposeBag)
+
 		//for refresh
 		let refresh_controll : UIRefreshControl = UIRefreshControl()
 		refresh_controll.addTarget(self, action: #selector(self.refresh_posts), for: .valueChanged)
@@ -54,7 +59,7 @@ final class Main_ViewController: UIViewController {
 		bind_collectionView()
 		main_viewModel.get_data(index: 0) { isSuccess in
 			if isSuccess {
-				print("get_post_success")
+				print("get_My_post_success")
 			}
 			else {
 				// have to error controll
@@ -63,13 +68,14 @@ final class Main_ViewController: UIViewController {
 
 		//dynamic cell height
 		main_viewModel.items
-			.subscribe(onNext: { cell_dataSet in
+			.subscribe(onNext: { [weak self] cell_dataSet in
 				if (cell_dataSet.isEmpty == false) {
-					self.cell_height_array.removeAll()
+					self!.cell_height_array.removeAll()
 					for cell_data in cell_dataSet {
-						self.save_cell_height(item: cell_data)
+						self!.cell_height_array.append(self!.main_viewModel.calculate_cell_height(item: cell_data))
 					}
-					self.main_view.post_collectionView.reloadData()
+					// Reload posts, when VM get data
+					self!.main_view.post_collectionView.reloadData()
 				}
 			}).disposed(by: self.disposeBag)
 	}
@@ -77,6 +83,13 @@ final class Main_ViewController: UIViewController {
 	func write_button_touch()
 	{
 		let vc = Write_post_viewController()
+
+		self.navigationController?.pushViewController(vc, animated: true)
+	}
+
+	func inform_button_touch()
+	{
+		let vc = Inform_viewController()
 
 		self.navigationController?.pushViewController(vc, animated: true)
 	}
@@ -125,24 +138,6 @@ final class Main_ViewController: UIViewController {
 						}.disposed(by: cell.disposeBag)
 				}
 				.disposed(by: self.disposeBag)
-	}
-
-	private func save_cell_height(item: Post_cell_data)
-	{
-		let choice_view_height = item.choice.filter { $0 == "|" as Character }.count * 35
-
-		var height =
-		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
-		calculate_height(text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
-		screen_height * 0.2 + 20 +
-		CGFloat(choice_view_height) + 100
-
-		if item.pictures == ""
-		{
-			height = height - screen_height * 0.2
-		}
-
-		cell_height_array.append(height)
 	}
 }
 

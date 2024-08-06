@@ -12,14 +12,14 @@ import RxSwift
 import SnapKit
 import RealmSwift
 
-final class Main_viewModel
+class Main_viewModel
 {
-	private let subject = BehaviorSubject<[Post_cell_data]>(value: [])
+	let subject = BehaviorSubject<[Post_cell_data]>(value: [])
 	var items: Observable<[Post_cell_data]> {
 		return subject.compactMap { $0 }
 	}
 
-	final func get_data(index: Int, complete_handler: @escaping (Bool) -> Void) {
+	func get_data(index: Int, complete_handler: @escaping (Bool) -> Void) {
 		AF.request(
 			"https://\(host)/get_post?offset=\(index)",
 			method: .get,
@@ -46,9 +46,25 @@ final class Main_viewModel
 			case .failure(let error):
 				complete_handler(false)
 				print("Error: \(error)")
-				self.subject.onError(error)
 			}
 		}
+	}
+
+	final func calculate_cell_height(item: Post_cell_data) -> CGFloat
+	{
+		let choice_view_height = item.choice.filter { $0 == "|" as Character }.count * 35
+
+		var height =
+		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
+		calculate_height(text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
+		screen_height * 0.2 + 20 +
+		CGFloat(choice_view_height) + 100
+
+		if item.pictures == "" {
+			height = height - screen_height * 0.2
+		}
+
+		return height
 	}
 
 	final func cell_setting(cell: Post_collectionView_cell, item: Post_cell_data)
@@ -207,7 +223,7 @@ final class Main_viewModel
 	}
 
 	// Change layout - selecting buttons
-	func selecting_buttons(isSelected: Bool, index: Int, cell: Post_collectionView_cell, total_count: Int)
+	final func selecting_buttons(isSelected: Bool, index: Int, cell: Post_collectionView_cell, total_count: Int)
 	{
 		if isSelected
 		{
@@ -240,7 +256,6 @@ final class Main_viewModel
 
 			cell.choice_view.addSubview(background_view)
 			cell.choice_view.bringSubviewToFront(cell.buttons[index])
-			print("\(cell.post_num) : \(Double(button_count)) / \(Double(total_count))")
 			background_view.snp.makeConstraints { make in
 				make.top.left.bottom.equalTo(cell.buttons[index])
 				make.width.equalTo((Double(button_count) / Double(total_count)) * (Double(screen_width) - 20))
@@ -257,7 +272,7 @@ final class Main_viewModel
 		}
 	}
 
-	func remove_all()
+	final func remove_all()
 	{
 		self.subject.onNext([])
 	}
