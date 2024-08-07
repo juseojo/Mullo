@@ -10,6 +10,8 @@ import UIKit
 import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
+import RxKakaoSDKCommon
+import KakaoSDKAuth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,15 +19,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 		FirebaseApp.configure()
+		RxKakaoSDK.initSDK(appKey: kakao_native_app_key)
 
 		return true
 	}
 
 	func application(_ app: UIApplication, open url: URL,  options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 		//for google login
-	  return GIDSignIn.sharedInstance.handle(url)
+
+		if AuthApi.isKakaoTalkLoginUrl(url) {
+			return AuthController.rx.handleOpenUrl(url: url)
+		}
+
+		if GIDSignIn.sharedInstance.handle(url) {
+			return true
+		}
+
+		return false
 	}
 	// MARK: UISceneSession Lifecycle
+
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
 		// Called when a new scene session is being created.
