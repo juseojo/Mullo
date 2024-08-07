@@ -11,7 +11,7 @@ import Kingfisher
 import RxSwift
 import RealmSwift
 
-final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
+class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 	static let identifier = "post"
 	var disposeBag = DisposeBag()
 	var image_disposeBag = DisposeBag()
@@ -235,13 +235,7 @@ final class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegat
 			button.isEnabled = true
 			button.setTitle(nil, for: .normal)
 		}
-
 		buttons.removeAll()
-		first_button.titleLabel?.text = nil
-		second_button.titleLabel?.text = nil
-		third_button.titleLabel?.text = nil
-		fourth_button.titleLabel?.text = nil
-
 		third_button.removeFromSuperview()
 		fourth_button.removeFromSuperview()
 		touched_button_background_view.snp.removeConstraints()
