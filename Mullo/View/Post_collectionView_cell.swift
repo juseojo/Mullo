@@ -36,8 +36,20 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 
 		time_label.font = UIFont(name: "GillSans-SemiBold", size: 10)
 		time_label.textColor = UIColor.gray
+		time_label.textAlignment = .left
 
 		return time_label
+	}()
+
+	var report_button: UIButton = {
+		let report_button = UIButton()
+
+		report_button.setImage(
+			UIImage(systemName: "flag", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .bold, scale: .large)),
+			for: .normal)
+		report_button.tintColor = UIColor(named: "REVERSE_SYS")
+
+		return report_button
 	}()
 
 	var post_textView: UITextView = {
@@ -161,6 +173,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 
 		self.addSubview(name_label)
 		self.addSubview(time_label)
+		self.addSubview(report_button)
 		self.addSubview(post_textView)
 		self.addSubview(image_collectionView)
 		self.addSubview(choice_view)
@@ -171,30 +184,39 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		self.addSubview(border_view)
 
 		name_label.snp.makeConstraints { make in
-			make.top.equalTo(self).inset(10)
-			make.left.equalTo(self).inset(12)
+			make.top.left.equalTo(self).inset(10)
+			make.right.equalTo(time_label.snp.left).inset(-15)
 			make.height.equalTo(20)
 		}
 
 		time_label.snp.makeConstraints { make in
 			make.top.equalTo(self).inset(10)
-			make.left.equalTo(name_label.snp.right).inset(-20)
+			make.left.equalTo(name_label.snp.right).inset(-15)
+			make.width.equalTo(100)
 			make.height.equalTo(name_label)
+		}
+
+		report_button.snp.makeConstraints { make in
+			make.top.right.equalTo(self).inset(10)
+			make.width.height.equalTo(25)
 		}
 
 		post_textView.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
+			make.bottom.equalTo(image_collectionView.snp.top)
 		}
 
 		image_collectionView.snp.makeConstraints { make in
 			make.top.equalTo(post_textView.snp.bottom)
 			make.left.right.equalTo(self).inset(10)
+			make.bottom.equalTo(choice_view.snp.top)
 		}
 
 		choice_view.snp.makeConstraints { make in
 			make.top.equalTo(image_collectionView.snp.bottom)
 			make.left.right.equalTo(self).inset(10)
+			make.bottom.equalTo(comments_button.snp.top).inset(-20)
 		}
 
 		first_button.snp.makeConstraints { make in
@@ -209,10 +231,9 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		}
 
 		comments_button.snp.makeConstraints { make in
-			make.top.equalTo(choice_view.snp.bottom)
-			make.right.equalTo(self).inset(10)
-			make.bottom.equalTo(border_view.snp.top)
-			make.height.equalTo(50)
+			make.right.equalTo(self)
+			make.bottom.equalTo(border_view.snp.top).inset(-5)
+			make.width.height.equalTo(40)
 		}
 
 		border_view.snp.makeConstraints { make in

@@ -23,6 +23,9 @@ class MyPost_collectionView_cell: Post_collectionView_cell {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 
+		report_button.isHidden = true
+		report_button.isEnabled = false
+
 		addSubview(delete_button)
 		delete_button.snp.makeConstraints { make in
 			make.top.right.equalTo(self).inset(10)

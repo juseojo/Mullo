@@ -129,7 +129,7 @@ class Main_viewModel
 
 			for button in cell.buttons
 			{
-				guard (button.superview != nil) else { return }
+				guard (button.superview != nil) else { continue }
 				button.isEnabled = false
 				selecting_buttons(isSelected: (num == wasSelected?.selected_choice), index: num, cell: cell, total_count: cell.choice_button_vote_count.reduce(0) { return $0 + $1 })
 				num += 1
@@ -139,12 +139,47 @@ class Main_viewModel
 		// tap event - choice buttons
 		for button in cell.buttons
 		{
-			guard (button.superview != nil) else { return }
+			guard (button.superview != nil) else { continue }
 			button.rx.tap
 				.bind { [weak self] in
 					self?.choice_button_touch(touched_button: button, cell: cell)
 				}.disposed(by: cell.disposeBag)
 		}
+
+		// tap event - report button
+		cell.report_button.rx.tap.bind { [weak self] in
+			let alert = UIAlertController(
+				title: "신고", message: "신고 항목을 선택해주세요.", preferredStyle: .actionSheet)
+			let sexual_action = UIAlertAction(title: "성적인 콘텐츠", style: .default) { _ in
+				self!.report_to_server(type: 0, content: cell.post_textView.text, name: cell.name_label.text!)
+			}
+			let violent_action = UIAlertAction(title: "폭력적 또는 혐오스러운 콘텐츠", style: .default) { _ in
+				self!.report_to_server(type: 1, content: cell.post_textView.text, name: cell.name_label.text!)
+			}
+			let bother_action = UIAlertAction(title: "괴롭힘", style: .default) { _ in
+				self!.report_to_server(type: 2, content: cell.post_textView.text, name: cell.name_label.text!)
+			}
+			let noxious_action = UIAlertAction(title: "유해한 콘텐츠", style: .default) { _ in
+				self!.report_to_server(type: 3, content: cell.post_textView.text, name: cell.name_label.text!)
+			}
+			let terror_action = UIAlertAction(title: "테러 조장", style: .default) { _ in
+				self!.report_to_server(type: 4, content: cell.post_textView.text, name: cell.name_label.text!)
+			}
+			let advertisement_action = UIAlertAction(title: "도배 및 광고", style: .default) { _ in
+				self!.report_to_server(type: 5, content: cell.post_textView.text, name: cell.name_label.text!)
+			}
+			let cancel_action = UIAlertAction(title: "취소하기", style: .cancel)
+
+			alert.addAction(sexual_action)
+			alert.addAction(violent_action)
+			alert.addAction(bother_action)
+			alert.addAction(noxious_action)
+			alert.addAction(terror_action)
+			alert.addAction(advertisement_action)
+			alert.addAction(cancel_action)
+
+			AlertHelper.showAlert(alert: alert)
+		}.disposed(by: cell.disposeBag)
 	}
 
 	
@@ -216,6 +251,27 @@ class Main_viewModel
 			switch response.result {
 			case .success:
 				print("vote success")
+			case .failure(let error):
+				print("Error: \(error)")
+			}
+		}
+	}
+
+	private func report_to_server(type: Int, content: String, name: String)
+	{
+		let parameters = [ "type" : type, "content" : content, "name" : name ] as [String : Any]
+
+		AF.request(
+			"https://\(host)/report",
+			method: .post,
+			parameters: parameters,
+			encoding: URLEncoding.httpBody)
+		.validate(statusCode: 200..<300)
+		.validate(contentType: ["application/json"])
+		.responseDecodable(of: [String: String].self) { response in
+			switch response.result {
+			case .success:
+				print("report success")
 			case .failure(let error):
 				print("Error: \(error)")
 			}
