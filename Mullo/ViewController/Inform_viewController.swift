@@ -46,6 +46,11 @@ final class Inform_viewController: UIViewController
 				}
 			}).disposed(by: self.disposeBag)
 
+		// tap event - back button
+		inform_view.back_button.rx.tap.bind{
+			self.navigationController?.popViewController(animated:true)
+		}.disposed(by: disposeBag)
+
 		bind_collectionView()
 		inform_viewModel.get_data(index: 0) { isSuccess in
 			if isSuccess {
@@ -57,7 +62,7 @@ final class Inform_viewController: UIViewController
 		}
 	}
 
-	func bind_collectionView()
+	final func bind_collectionView()
 	{
 		inform_viewModel.items
 			.observe(on: MainScheduler.instance)
@@ -65,6 +70,7 @@ final class Inform_viewController: UIViewController
 				cellIdentifier: MyPost_collectionView_cell.identifier, cellType: MyPost_collectionView_cell.self)) { row, item, cell in
 					// cell setting
 					self.inform_viewModel.cell_setting(cell: cell as! Post_collectionView_cell, item: item)
+					
 					// comments button rx binding
 					cell.comments_button.rx.tap
 						.bind{
@@ -80,6 +86,33 @@ final class Inform_viewController: UIViewController
 									self.inform_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0)
 								}
 							}
+						}.disposed(by: cell.disposeBag)
+
+					// delete button rx binding
+					cell.delete_button.rx.tap
+						.bind{ [weak self] in
+							let alert = UIAlertController(
+								title: "경고", message: "정말로 게시글을 삭제하겠습니까?", preferredStyle: .alert)
+							let yes_action = UIAlertAction(title: "예", style: .destructive) { _ in
+								self!.inform_viewModel.delete_post(post_num: item.post_num)
+								self!.inform_viewModel.remove_all()
+								DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+									self!.inform_viewModel.get_data(index: 0) { isSuccess in
+										if isSuccess {
+											print("get_My_post_success")
+											self!.inform_view.myPost_collectionView.reloadData()
+										}
+										else {
+											// have to error controll
+										}
+									}
+								}
+							}
+							let no_action = UIAlertAction(title: "아니오", style: .cancel)
+
+							alert.addAction(yes_action)
+							alert.addAction(no_action)
+							self!.present(alert, animated: true)
 						}.disposed(by: cell.disposeBag)
 				}
 				.disposed(by: self.disposeBag)
