@@ -22,7 +22,8 @@ final class Write_post_view: UIView {
 	var back_button: UIButton = {
 		let back_button = UIButton()
 
-		back_button.setImage(UIImage(systemName: "arrow.backward"), for: .normal)
+		back_button.setImage(
+			UIImage(systemName: "arrow.backward")?.resized(to: CGSize(width: 40, height: 30)), for: .normal)
 		back_button.tintColor = UIColor(named: "REVERSE_SYS")
 
 		return back_button
