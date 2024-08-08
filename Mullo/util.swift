@@ -33,6 +33,33 @@ class AlertHelper {
 
 		top_viewController.present(alert, animated: true, completion: nil)
 	}
+
+	static func showAlert(alert: UIAlertController)
+	{
+		guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+				  let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+				  var top_viewController = window.rootViewController else {
+			return
+		}
+
+		while let presented_viewController = top_viewController.presentedViewController {
+			top_viewController = presented_viewController
+		}
+
+		top_viewController.present(alert, animated: true, completion: nil)
+	}
+	static func showAlert(
+		viewController: UIViewController?,
+		title: String,
+		message: String,
+		button_title: String,
+		handler: ((UIAlertAction) -> Void)?)
+	{
+		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+		let action = UIAlertAction(title: button_title, style: .default, handler: handler)
+		alert.addAction(action)
+		viewController?.present(alert, animated: true)
+	}
 }
 
 func calculate_height(text: String, font: UIFont, width: CGFloat) -> CGFloat
@@ -71,26 +98,13 @@ func isServer_ok(vc: UIViewController)
 			return
 		case .failure(let error):
 			print("Error: \(error)")
-			show_alert(viewController: vc,
+			AlertHelper.showAlert(viewController: vc,
 					   title: "알림",
 					   message: "서버 점검중입니다.",
 					   button_title: "확인",
 					   handler: { _ in isServer_ok(vc: vc) })
 		}
 	}
-}
-
-func show_alert(
-	viewController: UIViewController?,
-	title: String,
-	message: String,
-	button_title: String,
-	handler: ((UIAlertAction) -> Void)?)
-{
-	let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-	let action = UIAlertAction(title: button_title, style: .default, handler: handler)
-	alert.addAction(action)
-	viewController?.present(alert, animated: true)
 }
 
 extension UIImage {

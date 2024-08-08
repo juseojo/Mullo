@@ -86,29 +86,29 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 		//0.exception
 		if self.write_post_view.post_text_view.text.isEmpty
 		{
-			show_alert(viewController: self, title: "알림", message: "내용이 비어있습니다.", button_title: "확인", handler: nil)
+			AlertHelper.showAlert(viewController: self, title: "알림", message: "내용이 비어있습니다.", button_title: "확인", handler: nil)
 			return
 		}
 		else if self.write_post_view.first_choice_textField.hasText == false
 		{
-			show_alert(viewController: self, title: "알림", message: "첫번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
+			AlertHelper.showAlert(viewController: self, title: "알림", message: "첫번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
 			return
 		}
 		else if self.write_post_view.second_choice_textField.hasText == false
 		{
-			show_alert(viewController: self, title: "알림", message: "두번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
+			AlertHelper.showAlert(viewController: self, title: "알림", message: "두번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
 			return
 		}
 		else if (self.write_post_view.third_choice_textField.superview != nil) &&
 					(self.write_post_view.third_choice_textField.hasText == false)
 		{
-			show_alert(viewController: self, title: "알림", message: "세번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
+			AlertHelper.showAlert(viewController: self, title: "알림", message: "세번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
 			return
 		}
 		else if (self.write_post_view.fourth_choice_textField.superview != nil) &&
 					(self.write_post_view.fourth_choice_textField.hasText == false)
 		{
-			show_alert(viewController: self, title: "알림", message: "네번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
+			AlertHelper.showAlert(viewController: self, title: "알림", message: "네번째 선택지가 비어있습니다.", button_title: "확인", handler: nil)
 			return
 		}
 

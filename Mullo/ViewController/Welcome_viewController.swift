@@ -91,7 +91,6 @@ final class Welcome_viewController: UIViewController {
 					// If server don't have name, show name view
 					// If server have name, move to main view
 					self?.email_address = mail
-					print(self?.email_address)
 					self?.name_check()
 				}
 			}).disposed(by: self!.disposeBag)
@@ -107,7 +106,6 @@ final class Welcome_viewController: UIViewController {
 					// If server don't have name, show name view
 					// If server have name, move to main view
 					self?.email_address = mail
-					print(self?.email_address)
 					self?.name_check()
 				}
 			}).disposed(by: self!.disposeBag)
@@ -141,7 +139,7 @@ final class Welcome_viewController: UIViewController {
 			// Exception
 			if welcome_view.get_email().hasSpecial_characters()
 			{
-				show_alert(
+				AlertHelper.showAlert(
 					viewController: self,
 					title: "실패",
 					message: "허용되지 않은 특수문자가 이메일에 들어가있습니다.",
@@ -152,7 +150,7 @@ final class Welcome_viewController: UIViewController {
 			}
 			else if welcome_view.get_password().hasSpecial_characters()
 			{
-				show_alert(
+				AlertHelper.showAlert(
 					viewController: self,
 					title: "실패",
 					message: "허용되지 않은 특수문자가 비밀번호에 들어가있습니다.",
@@ -171,7 +169,7 @@ final class Welcome_viewController: UIViewController {
 				}
 				else
 				{
-					show_alert(
+					AlertHelper.showAlert(
 						viewController: self,
 						title: "로그인",
 						message: "로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 확인해주세요.",
@@ -185,7 +183,7 @@ final class Welcome_viewController: UIViewController {
 			// Exception
 			if welcome_view.name_view.name_textField.text?.count ?? 0 > 10
 			{
-				show_alert(viewController: self,
+				AlertHelper.showAlert(viewController: self,
 						   title: "실패",
 						   message: "닉네은 10글자 이하 입니다.",
 						   button_title: "확인",
@@ -195,7 +193,7 @@ final class Welcome_viewController: UIViewController {
 			}
 			else if (welcome_view.name_view.name_textField.text ?? "").hasSpecial_characters()
 			{
-				show_alert(viewController: self,
+				AlertHelper.showAlert(viewController: self,
 						   title: "실패",
 						   message: "허용되지않은 특수문자가 포함되어 있습니다.",
 						   button_title: "확인",
@@ -228,11 +226,11 @@ final class Welcome_viewController: UIViewController {
 				}
 				else if result == "overlap_name"
 				{
-					show_alert(viewController: self, title: "알림", message: "중복된 닉네임입니다.", button_title: "확인", handler: nil)
+					AlertHelper.showAlert(viewController: self, title: "알림", message: "중복된 닉네임입니다.", button_title: "확인", handler: nil)
 				}
 				else if result == "overlap_email"
 				{
-					show_alert(viewController: self, title: "알림", message: "이미 가입한 계정입니다.", button_title: "확인", handler: { action in self.change_to_mainView()})
+					AlertHelper.showAlert(viewController: self, title: "알림", message: "이미 가입한 계정입니다.", button_title: "확인", handler: { action in self.change_to_mainView()})
 					self.welcome_viewModel.get_name(email: self.email_address).subscribe(onNext: { name in
 
 						UserDefaults.standard.setValue(name, forKey: "name")
@@ -271,7 +269,7 @@ final class Welcome_viewController: UIViewController {
 					}
 					else
 					{
-						show_alert(viewController: self,
+						AlertHelper.showAlert(viewController: self,
 								   title: "알림",
 								   message: "회원 가입에 실패하였습니다.\n 정보를 다시 확인하여 주세요.",
 								   button_title: "확인",
@@ -285,7 +283,7 @@ final class Welcome_viewController: UIViewController {
 			// Exception
 			if welcome_view.name_view.name_textField.text?.count ?? 0 > 10
 			{
-				show_alert(viewController: self,
+				AlertHelper.showAlert(viewController: self,
 						   title: "실패",
 						   message: "닉네은 10글자 이하 입니다.",
 						   button_title: "확인",
@@ -295,7 +293,7 @@ final class Welcome_viewController: UIViewController {
 			}
 			else if (welcome_view.name_view.name_textField.text ?? "").hasSpecial_characters()
 			{
-				show_alert(viewController: self,
+				AlertHelper.showAlert(viewController: self,
 						   title: "실패",
 						   message: "허용되지않은 특수문자가 포함되어 있습니다.",
 						   button_title: "확인",
@@ -327,11 +325,11 @@ final class Welcome_viewController: UIViewController {
 				}
 				else if result == "overlap_name"
 				{
-					show_alert(viewController: self, title: "알림", message: "중복된 닉네임입니다.", button_title: "확인", handler: nil)
+					AlertHelper.showAlert(viewController: self, title: "알림", message: "중복된 닉네임입니다.", button_title: "확인", handler: nil)
 				}
 				else if result == "overlap_email"
 				{
-					show_alert(viewController: self, title: "알림", message: "이미 가입된 계정입니다.", button_title: "확인", handler: nil)
+					AlertHelper.showAlert(viewController: self, title: "알림", message: "이미 가입된 계정입니다.", button_title: "확인", handler: nil)
 					self.welcome_viewModel.get_name(email: self.email_address) .subscribe(onNext: { name in
 
 						UserDefaults.standard.setValue(name, forKey: "name")
@@ -350,49 +348,49 @@ final class Welcome_viewController: UIViewController {
 	{
 		if welcome_view.register_view.email_textField.text == ""
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self, title: "실패", message: "이메일을 입력해주세요", button_title: "확인", handler: nil)
 
 			return false
 		}
 		else if welcome_view.register_view.password_textField.text == ""
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self, title: "실패", message: "비밀 번호를 입력해주세요", button_title: "확인", handler: nil)
 
 			return false
 		}
 		else if (welcome_view.register_view.password_textField.text ?? "").count < 8
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self, title: "실패", message: "비밀 번호는 8자 이상입니다.", button_title: "확인", handler: nil)
 
 			return false
 		}
 		else if welcome_view.register_view.password_confirm_textField.text != welcome_view.register_view.password_textField.text
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self, title: "실패", message: "비밀 번호를 다시 확인하여 주세요.", button_title: "확인", handler: nil)
 
 			return false
 		}
 		else if welcome_view.register_view.email_textField.text?.count ?? 0 > 320
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self, title: "실패", message: "너무 긴 이메일 입니다.", button_title: "확인", handler: nil)
 
 			return false
 		}
 		else if welcome_view.get_email().hasSpecial_characters()
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self, title: "실패", message: "허용되지 않은 특수문자가 이메일에 들어가있습니다.", button_title: "확인", handler: nil)
 
 			return false
 		}
 		else if welcome_view.get_password().hasSpecial_characters()
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self, title: "실패", message: "허용되지 않은 특수문자가 비밀 번호에 들어가있습니다.", button_title: "확인", handler: nil)
 
 			return false
@@ -502,7 +500,7 @@ final class Welcome_viewController: UIViewController {
 		// Exception
 		if email_address == ""
 		{
-			show_alert(
+			AlertHelper.showAlert(
 				viewController: self,
 				title: "오류",
 				message: "로그인에 실패하였습니다.\n다시 시도해주세요.",
@@ -523,7 +521,7 @@ final class Welcome_viewController: UIViewController {
 			}
 			else if name == "|error" // Case : error
 			{
-				show_alert(
+				AlertHelper.showAlert(
 					viewController: self,
 					title: "오류",
 					message: "로그인에 실패하였습니다.\n다시 시도해주세요.",
@@ -568,7 +566,7 @@ extension Welcome_viewController: ASAuthorizationControllerDelegate {
 						}
 						else if hasName == "null"
 						{
-							show_alert(
+							AlertHelper.showAlert(
 								viewController: self,
 								title: "오류",
 								message: "로그인에 실패하였습니다. 다시 시도해주세요.\n계속 실패시 mullo.help@gmail.com 으로 문의주세요.",
