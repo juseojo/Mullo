@@ -9,7 +9,7 @@ import UIKit
 
 final class Comments_view: UIView
 {
-	private var headder_view: UIView = {
+	var headder_view: UIView = {
 		let headder_view = UIView()
 
 		headder_view.backgroundColor = UIColor(named: "NATURAL")
@@ -17,10 +17,10 @@ final class Comments_view: UIView
 		return headder_view
 	}()
 
-	private var grabBar_view: UIView = {
+	var grabBar_view: UIView = {
 		let grabBar_view = UIView()
 		
-		grabBar_view.backgroundColor = UIColor.gray
+		grabBar_view.backgroundColor = UIColor.lightGray
 		grabBar_view.layer.masksToBounds = true
 		grabBar_view.layer.cornerRadius = 3.0
 
@@ -160,12 +160,12 @@ final class Comments_view: UIView
 		grabBar_view.snp.makeConstraints { make in
 			make.centerX.equalTo(self.snp.centerX)
 			make.top.equalTo(headder_view).inset(5)
-			make.width.equalTo(40)
+			make.width.equalTo(80)
 			make.height.equalTo(5)
 		}
 
 		comment_label.snp.makeConstraints { make in
-			make.top.equalTo(grabBar_view.snp.bottom).inset(-10)
+			make.top.equalTo(grabBar_view.snp.bottom).inset(-15)
 			make.left.equalTo(self).inset(15)
 			make.height.equalTo(30)
 			make.width.equalTo(40)
