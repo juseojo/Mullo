@@ -44,12 +44,13 @@ final class Comments_viewController: UIViewController
 			}).disposed(by: self.disposeBag)
 		
 		// Get first comment data
-		self.comments_viewModel.get_comments(index: 0, post_num: post_num, isSortByPopular: isPopularSort) { isSuccess in
-			if isSuccess == false {
-				// Have to add error control
-			}
-		}
+		self.comments_viewModel.get_comments(index: 0, post_num: post_num, isSortByPopular: isPopularSort)
 
+		// comments view up and down gesture
+		let pan_gesture = UIPanGestureRecognizer(target: self, action: #selector(handle_panGesture(_:)))
+		self.comments_view.headder_view.addGestureRecognizer(pan_gesture)
+
+		// basic layout
 		view.addSubview(comments_view)
 		comments_view.snp.makeConstraints { make in
 			make.top.bottom.left.right.equalTo(view)
@@ -58,6 +59,46 @@ final class Comments_viewController: UIViewController
 
 	override func viewWillDisappear(_ animated: Bool) {
 		completion_handler!()
+	}
+
+	@objc private func handle_panGesture(_ gesture: UIPanGestureRecognizer) {
+		let translation = gesture.translation(in: self.comments_view.grabBar_view)
+		let velocity = gesture.velocity(in: self.comments_view.grabBar_view)
+		var initialY = self.comments_view.grabBar_view.frame.origin.y
+
+		switch gesture.state {
+		case .began:
+			initialY = self.comments_view.grabBar_view.frame.origin.y
+		case .changed:
+			let newY = initialY + translation.y
+			self.comments_view.headder_view.snp.updateConstraints { make in
+				make.top.equalTo(self.comments_view).inset(screen_height * 0.3 + newY)
+			}
+			self.view.layoutIfNeeded()
+		case .ended, .cancelled:
+			if velocity.y < 0 || initialY + translation.y < 100 // up or little down gesture
+			{
+				self.comments_view.headder_view.snp.updateConstraints { make in
+					make.top.equalTo(self.comments_view).inset(screen_height * 0.3)
+				}
+				UIView.animate(withDuration: 0.5) {
+					self.view.layoutIfNeeded()
+				}
+			}
+			else // down gesture
+			{
+				self.comments_view.headder_view.snp.updateConstraints { make in
+					make.top.equalTo(self.comments_view).inset(screen_height * 1)
+				}
+				UIView.animate(withDuration: 1.5) {
+					self.view.layoutIfNeeded()
+				}
+				self.dismiss(animated: true)
+			}
+			break
+		default:
+			break
+		}
 	}
 
 	final func rx_binding()
@@ -90,12 +131,8 @@ final class Comments_viewController: UIViewController
 				self!.comments_viewModel.add_comment(parameters: parameters)
 				self!.comments_viewModel.remove_all()
 
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
-				{
-					self!.comments_viewModel.get_comments(
-						index: 0, post_num: self!.post_num, isSortByPopular: false) { _ in
-							// Have to add error control
-						}
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+					self!.comments_viewModel.get_comments(index: 0, post_num: self!.post_num, isSortByPopular: false)
 				}
 				self!.comments_view.comment_textView.text = ""
 				self!.view.endEditing(true)
@@ -106,24 +143,16 @@ final class Comments_viewController: UIViewController
 		comments_view.popularSort_button.rx.tap
 			.bind { [weak self] in
 				self!.comments_viewModel.remove_all()
-				self!.comments_viewModel.get_comments(index: 0, post_num: self!.post_num, isSortByPopular: true) { isSuccess in
-					if isSuccess == false {
-						// Have to add error control
-					}
-					self!.isPopularSort = true
-				}
+				self!.comments_viewModel.get_comments(index: 0, post_num: self!.post_num, isSortByPopular: true)
+				self!.isPopularSort = true
 			}.disposed(by: disposeBag)
 
 		// recentSort_button binding
 		comments_view.recentSort_button.rx.tap
 			.bind { [weak self] in
 				self!.comments_viewModel.remove_all()
-				self!.comments_viewModel.get_comments(index: 0, post_num: self!.post_num, isSortByPopular: false) { isSuccess in
-					if isSuccess == false {
-						// Have to add error control
-					}
-					self!.isPopularSort = false
-				}
+				self!.comments_viewModel.get_comments(index: 0, post_num: self!.post_num, isSortByPopular: false)
+				self!.isPopularSort = false
 			}.disposed(by: disposeBag)
 
 	}
@@ -163,18 +192,8 @@ extension Comments_viewController: UICollectionViewDelegateFlowLayout {
 		if indexPath.row == comments_num - 1 && !isLoadingData && comments_num % 10 == 0
 		{
 			isLoadingData = true
-			comments_viewModel.get_comments(
-				index: comments_num / 10, post_num: post_num, isSortByPopular: isPopularSort) { isSuccess in
-				if isSuccess == false
-				{
-					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-						self.isLoadingData = false
-					}
-				}
-				else {
-					self.isLoadingData = false
-				}
-			}
+			comments_viewModel.get_comments(index: comments_num / 10, post_num: post_num, isSortByPopular: isPopularSort)
+			self.isLoadingData = false
 		}
 	}
 }
