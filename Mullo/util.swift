@@ -74,11 +74,41 @@ func calculate_height(text: String, font: UIFont, width: CGFloat) -> CGFloat
 	return label.frame.height
 }
 
+func time_diff(past_date: String) -> String
+{
+	let date_formatter = DateFormatter()
+
+	date_formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+	date_formatter.locale = Locale(identifier: "ko_KR")
+	date_formatter.timeZone = TimeZone(abbreviation: "KST")
+
+	let post_time = date_formatter.date(from: past_date)
+	let now_date = Date()
+	let diff = Int(now_date.timeIntervalSince(post_time!))/60
+	var result_str = ""
+
+	switch diff
+	{
+	case ...1:
+		result_str = "몇초 전"
+	case ...60:
+		result_str = "\(diff)분 전"
+	case ...3600:
+		result_str = "\(diff/60)시간 전"
+	default:
+		result_str = "\(diff/3600)일 전"
+	}
+
+	return result_str
+}
+
 func get_time_now() -> String
 {
 	let date = Date()
 	let dateFormatter = DateFormatter()
+	
 	dateFormatter.locale = Locale(identifier: "ko_KR")
+	dateFormatter.timeZone = TimeZone(abbreviation: "KST")
 	dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
 	return dateFormatter.string(from: date)

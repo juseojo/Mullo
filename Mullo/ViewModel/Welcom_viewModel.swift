@@ -97,7 +97,6 @@ final class Welcome_viewModel {
 			return Disposables.create()
 		}
 	}
-
 	
 	final func change_name(name: String, identifier: String)
 	{
@@ -208,6 +207,8 @@ final class Welcome_viewModel {
 			else
 			{
 				print("Firebase clientID not found.")
+				AlertHelper.showAlert(
+					title: "오류", message: "Firebase 오류 입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 				observer.onNext("")
 
 				return Disposables.create()
@@ -223,12 +224,16 @@ final class Welcome_viewModel {
 				guard error == nil, let result = result else {
 					print("---Google Sign-In fail---\n\(error?.localizedDescription ?? "Unknown error")")
 					observer.onNext("")
+					AlertHelper.showAlert(
+						title: "오류", message: "구글 로그인 실패입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 
 					return
 				}
 
 				guard let idToken = result.user.idToken?.tokenString else {
 					print("---Google Sign-In token retrieval fail---")
+					AlertHelper.showAlert(
+						title: "오류", message: "구글 로그인 실패입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 					observer.onNext("")
 
 					return
@@ -244,7 +249,8 @@ final class Welcome_viewModel {
 					if let error = error {
 						print("---Google Sign-In authentication fail---\n\(error.localizedDescription)")
 						observer.onNext("")
-
+						AlertHelper.showAlert(
+							title: "오류", message: "구글 인증 실패입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 						return
 					}
 					print("google signin success")

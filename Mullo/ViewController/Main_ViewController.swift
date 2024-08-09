@@ -57,14 +57,7 @@ final class Main_ViewController: UIViewController {
 
 		//binding and get data
 		bind_collectionView()
-		main_viewModel.get_data(index: 0) { isSuccess in
-			if isSuccess {
-				print("get_My_post_success")
-			}
-			else {
-				// have to error controll
-			}
-		}
+		main_viewModel.get_data(index: 0)
 
 		//dynamic cell height
 		main_viewModel.items
@@ -94,20 +87,11 @@ final class Main_ViewController: UIViewController {
 		self.navigationController?.pushViewController(vc, animated: true)
 	}
 
-	@objc func refresh_posts(){
-
+	@objc func refresh_posts()
+	{
 		main_viewModel.remove_all()
-		main_viewModel.get_data(index: 0) { isSuccess in
-			print("get_post_success")
-			if isSuccess == false {
-				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-					self.isLoadingData = false
-				}
-			}
-			else {
-				self.isLoadingData = false
-			}
-		}
+		main_viewModel.get_data(index: 0)
+		self.isLoadingData = false
 		main_view.post_collectionView.refreshControl!.endRefreshing()
 		main_view.post_collectionView.reloadData()
 	}
@@ -124,6 +108,7 @@ final class Main_ViewController: UIViewController {
 					cell.comments_button.rx.tap
 						.bind{
 							let comments_vc = Comments_viewController()
+
 							comments_vc.modalPresentationStyle = .overCurrentContext
 							comments_vc.post_num = item.post_num
 							self.present(comments_vc, animated: true, completion: nil)
@@ -161,18 +146,8 @@ extension Main_ViewController: UICollectionViewDelegateFlowLayout {
 		if indexPath.row == post_num - 1 && !isLoadingData && post_num % 7 == 0
 		{
 			isLoadingData = true
-			main_viewModel.get_data(index: (post_num) / 7) { isSuccess in
-				if isSuccess == false
-				{
-					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-						self.isLoadingData = false
-					}
-				}
-				else
-				{
-					self.isLoadingData = false
-				}
-			}
+			main_viewModel.get_data(index: (post_num) / 7)
+			self.isLoadingData = false
 		}
 	}
 }

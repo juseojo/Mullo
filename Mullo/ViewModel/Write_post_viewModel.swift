@@ -48,10 +48,10 @@ final class Write_post_viewModel
 			case .failure(let error):
 				print("Error: \(error)")
 				complete_handler(false)
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 			}
 		}
-
-		print("test")
 	}
 
 	func upload_image(image: UIImage) async throws -> String {
@@ -95,6 +95,8 @@ final class Write_post_viewModel
 
 			if let error = task.error {
 				print("Error: \(error.localizedDescription)")
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 			}
 
 			if task.result != nil

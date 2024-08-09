@@ -51,15 +51,11 @@ final class Inform_viewController: UIViewController
 			self.navigationController?.popViewController(animated:true)
 		}.disposed(by: disposeBag)
 
+		// Rx bind collection view
 		bind_collectionView()
-		inform_viewModel.get_data(index: 0) { isSuccess in
-			if isSuccess {
-				print("get_My_post_success")
-			}
-			else {
-				// have to error controll
-			}
-		}
+
+		// Get first data
+		inform_viewModel.get_data(index: 0)
 	}
 
 	final func bind_collectionView()
@@ -97,15 +93,8 @@ final class Inform_viewController: UIViewController
 								self!.inform_viewModel.delete_post(post_num: item.post_num)
 								self!.inform_viewModel.remove_all()
 								DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-									self!.inform_viewModel.get_data(index: 0) { isSuccess in
-										if isSuccess {
-											print("get_My_post_success")
-											self!.inform_view.myPost_collectionView.reloadData()
-										}
-										else {
-											// have to error controll
-										}
-									}
+									self!.inform_viewModel.get_data(index: 0)
+									self!.inform_view.myPost_collectionView.reloadData()
 								}
 							}
 							let no_action = UIAlertAction(title: "아니오", style: .cancel)
@@ -139,17 +128,8 @@ extension Inform_viewController: UICollectionViewDelegateFlowLayout {
 		if indexPath.row == post_num - 1 && !isLoadingData && post_num % 7 == 0
 		{
 			isLoadingData = true
-			inform_viewModel.get_data(index: (post_num) / 7) { isSuccess in
-				if isSuccess == false
-				{
-					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-						self.isLoadingData = false
-					}
-				}
-				else {
-					self.isLoadingData = false
-				}
-			}
+			inform_viewModel.get_data(index: (post_num) / 7)
+			self.isLoadingData = false
 		}
 	}
 }

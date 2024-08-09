@@ -25,11 +25,13 @@ final class Inform_viewModel: Main_viewModel {
 				print("delete success")
 			case .failure(let error):
 				print("Error: \(error)")
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 			}
 		}
 	}
 
-	override func get_data(index: Int, complete_handler: @escaping (Bool) -> Void) {
+	override func get_data(index: Int) {
 		AF.request(
 			"https://\(host)/get_my_post?offset=\(index)&name=\("주서조")", // have to change
 			method: .get,
@@ -43,18 +45,21 @@ final class Inform_viewModel: Main_viewModel {
 					let data = try response.result.get()
 					if data.isEmpty
 					{
-						complete_handler(false)
+						AlertHelper.showAlert(
+							title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 						return
 					}
 					var post_dataSet = try self.subject.value()
 					post_dataSet.append(contentsOf: data)
 					self.subject.onNext(post_dataSet)
-					complete_handler(true)
 				} catch {
 					print("-- Error at getting current images --\n \(error)")
+					AlertHelper.showAlert(
+						title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 				}
 			case .failure(let error):
-				complete_handler(false)
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 				print("Error: \(error)")
 			}
 		}

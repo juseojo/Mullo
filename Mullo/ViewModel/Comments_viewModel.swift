@@ -32,6 +32,8 @@ final class Comments_viewModel {
 				print("up_count success")
 			case .failure(let error):
 				print("Error: \(error)")
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 			}
 		}
 	}
@@ -51,11 +53,13 @@ final class Comments_viewModel {
 				print("posting success")
 			case .failure(let error):
 				print("Error: \(error)")
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 			}
 		}
 	}
 
-	final func get_comments(index: Int, post_num: Int, isSortByPopular: Bool, complete_handler: @escaping (Bool) -> Void)
+	final func get_comments(index: Int, post_num: Int, isSortByPopular: Bool)
 	{
 		var url_text: String
 
@@ -78,20 +82,23 @@ final class Comments_viewModel {
 					let data = try response.result.get()
 					if data.isEmpty
 					{
-						complete_handler(false)
+						print("comment empty")
 						return
 					}
 					var comments_dataSet = try self.subject.value()
 					comments_dataSet.append(contentsOf: data)
 					self.subject.onNext(comments_dataSet)
-					complete_handler(true)
+
 				} catch {
 					print("-- Error at getting comments --\n \(error)")
+					AlertHelper.showAlert(
+						title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 				}
 			case .failure(let error):
-				complete_handler(false)
+
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 				print("Error: \(error)")
-				//self.subject.onError(error)
 			}
 		}
 	}
@@ -102,7 +109,7 @@ final class Comments_viewModel {
 		cell.comment_num = item.comment_num
 		cell.comment_label.text = item.comment
 		cell.name_label.text = item.name
-		cell.time_label.text = item.time
+		cell.time_label.text = time_diff(past_date: item.time)
 		cell.up_button.setTitle(" " + String(item.up_count), for: .normal)
 
 		// make dynamic height

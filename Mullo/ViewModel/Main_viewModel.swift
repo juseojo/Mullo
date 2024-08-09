@@ -19,7 +19,7 @@ class Main_viewModel
 		return subject.compactMap { $0 }
 	}
 
-	func get_data(index: Int, complete_handler: @escaping (Bool) -> Void) {
+	func get_data(index: Int) {
 		AF.request(
 			"https://\(host)/get_post?offset=\(index)",
 			method: .get,
@@ -33,18 +33,21 @@ class Main_viewModel
 					let data = try response.result.get()
 					if data.isEmpty
 					{
-						complete_handler(false)
+						print("post empty")
 						return
 					}
 					var post_dataSet = try self.subject.value()
 					post_dataSet.append(contentsOf: data)
 					self.subject.onNext(post_dataSet)
-					complete_handler(true)
+
 				} catch {
-					print("-- Error at getting current images --\n \(error)")
+					print("-- Error at getting get data --\n \(error)")
+					AlertHelper.showAlert(
+						title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 				}
 			case .failure(let error):
-				complete_handler(false)
+				AlertHelper.showAlert(
+					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
 				print("Error: \(error)")
 			}
 		}
@@ -71,7 +74,7 @@ class Main_viewModel
 	{
 		// data setting ( item to cell )
 		cell.name_label.text = item.name
-		cell.time_label.text = item.time
+		cell.time_label.text = time_diff(past_date: item.time)
 		cell.post_textView.text = item.post
 		cell.choice_button_vote_count = item.choice_count.substr(seperater: "|" as Character).map{ Int($0)! }
 		cell.post_num = Int(item.post_num)

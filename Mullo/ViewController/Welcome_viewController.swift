@@ -239,6 +239,8 @@ final class Welcome_viewController: UIViewController {
 				else
 				{
 					print("error")
+					AlertHelper.showAlert(
+						title: "오류", message: "가입 에러입니다. 계속 문제시 다른 방법을 이용해주세요..", button_title: "확인", handler: nil)
 					print(result)
 				}
 			}).disposed(by: disposeBag)
