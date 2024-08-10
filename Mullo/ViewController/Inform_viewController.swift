@@ -47,8 +47,13 @@ final class Inform_viewController: UIViewController
 			}).disposed(by: self.disposeBag)
 
 		// tap event - back button
-		inform_view.back_button.rx.tap.bind{
+		inform_view.back_button.rx.tap.bind {
 			self.navigationController?.popViewController(animated:true)
+		}.disposed(by: disposeBag)
+
+		// tap event - setting button
+		inform_view.setting_button.rx.tap.bind {
+			self.present(Setting_viewController(), animated: true)
 		}.disposed(by: disposeBag)
 
 		// Rx bind collection view

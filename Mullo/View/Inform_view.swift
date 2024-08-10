@@ -40,12 +40,14 @@ final class Inform_view: UIView {
 	var name_label: UILabel = {
 		let name_label = UILabel()
 
+		name_label.text = "닉네임 : \(UserDefaults.standard.string(forKey: "name") ?? "none")"
 		name_label.font = UIFont(name: "Urbanist-Bold", size: 20)
 		name_label.tintColor = UIColor(named: "REVERSE_SYS")
 
 		return name_label
 	}()
 
+	/*
 	var name_change_button: UIButton = {
 		let name_change_button = UIButton()
 
@@ -57,7 +59,7 @@ final class Inform_view: UIView {
 
 		return name_change_button
 	}()
-
+	 */
 	private let border_view: UIView = {
 		let border_view = UIView()
 
@@ -103,7 +105,7 @@ final class Inform_view: UIView {
 		addSubview(setting_button)
 		addSubview(inform_label)
 		addSubview(name_label)
-		addSubview(name_change_button)
+		//addSubview(name_change_button)
 		addSubview(border_view)
 		addSubview(myPost_label)
 		addSubview(myPost_collectionView)
@@ -135,14 +137,15 @@ final class Inform_view: UIView {
 			make.height.equalTo(25)
 		}
 
+		/*
 		name_change_button.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
 			make.height.equalTo(30)
 		}
-
+		*/
 		border_view.snp.makeConstraints { make in
-			make.top.equalTo(name_change_button.snp.bottom).inset(-20)
+			make.top.equalTo(name_label.snp.bottom).inset(-20)
 			make.left.right.equalTo(self).inset(20)
 			make.height.equalTo(1)
 		}
