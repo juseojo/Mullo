@@ -175,7 +175,8 @@ final class Write_post_view: UIView {
 		let posting_button = UIButton()
 
 		posting_button.setTitle("게시하기", for: .normal)
-		posting_button.titleLabel?.textColor = UIColor.black
+		posting_button.titleLabel?.font = UIFont(name: "Urbanist-SemiBold", size: 15)
+		posting_button.setTitleColor(.black, for: .normal)
 		posting_button.backgroundColor = UIColor.gray
 		posting_button.layer.cornerRadius = 5.0
 		posting_button.clipsToBounds = true
