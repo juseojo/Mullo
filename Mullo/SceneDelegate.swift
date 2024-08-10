@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		window = UIWindow(windowScene: windowScene)
-		if UserDefaults.standard.bool(forKey: "wasLoggedIn")
+		if UserDefaults.standard.string(forKey: "name") != nil
 		{
 			let main_vc = Main_ViewController()
 			let navigation = UINavigationController(rootViewController: main_vc)
