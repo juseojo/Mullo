@@ -33,7 +33,7 @@ final class Inform_viewModel: Main_viewModel {
 
 	override func get_data(index: Int) {
 		AF.request(
-			"https://\(host)/get_my_post?offset=\(index)&name=\("주서조")", // have to change
+			"https://\(host)/get_my_post?offset=\(index)&name=\(UserDefaults.standard.string(forKey: "name") ?? "none")",
 			method: .get,
 			encoding: URLEncoding.queryString)
 				.validate(statusCode: 200..<300)
