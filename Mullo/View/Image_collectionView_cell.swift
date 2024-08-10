@@ -39,4 +39,7 @@ final class Image_collectionView_cell: UICollectionViewCell {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+	override func prepareForReuse() {
+		self.image_view.image = nil
+	}
 }

@@ -184,39 +184,41 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		self.addSubview(border_view)
 
 		name_label.snp.makeConstraints { make in
-			make.top.left.equalTo(self).inset(10)
+			make.top.equalTo(self)
+			make.left.equalTo(self).inset(10)
 			make.right.equalTo(time_label.snp.left).inset(-15)
 			make.height.equalTo(20)
 		}
 
 		time_label.snp.makeConstraints { make in
-			make.top.equalTo(self).inset(10)
+			make.top.equalTo(self)
 			make.left.equalTo(name_label.snp.right).inset(-15)
 			make.width.equalTo(100)
 			make.height.equalTo(name_label)
 		}
 
 		report_button.snp.makeConstraints { make in
-			make.top.right.equalTo(self).inset(10)
+			make.top.equalTo(self)
+			make.right.equalTo(self).inset(10)
 			make.width.height.equalTo(25)
 		}
 
 		post_textView.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
-			make.bottom.equalTo(image_collectionView.snp.top)
+			make.height.equalTo(50)
 		}
 
 		image_collectionView.snp.makeConstraints { make in
-			make.top.equalTo(post_textView.snp.bottom)
+			make.top.equalTo(post_textView.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
-			make.bottom.equalTo(choice_view.snp.top)
+			make.height.equalTo(screen_height * 0.2)
 		}
 
 		choice_view.snp.makeConstraints { make in
-			make.top.equalTo(image_collectionView.snp.bottom)
+			make.top.equalTo(image_collectionView.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
-			make.bottom.equalTo(comments_button.snp.top).inset(-20)
+			make.bottom.equalTo(comments_button.snp.top)
 		}
 
 		first_button.snp.makeConstraints { make in
@@ -226,7 +228,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 
 		second_button.snp.makeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
-			make.left.right.bottom.equalTo(choice_view)
+			make.left.right.equalTo(choice_view)
 			make.height.equalTo(25)
 		}
 
@@ -265,12 +267,15 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		disposeBag = DisposeBag()
 		choice_button_vote_count.removeAll()
 
+		image_collectionView.snp.updateConstraints { make in
+			make.height.equalTo(screen_height * 0.2)
+		}
 		second_button.snp.remakeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
-			make.left.right.bottom.equalTo(choice_view)
+			make.left.right.equalTo(choice_view)
 			make.height.equalTo(25)
 		}
-		self.subject.onNext([])
+		//self.subject.onNext([])
 
 		for subview in choice_view.subviews
 		{
@@ -295,7 +300,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		//new button layout
 		third_button.snp.makeConstraints { make in
 			make.top.equalTo(second_button.snp.bottom).inset(-10)
-			make.left.right.bottom.equalTo(choice_view)
+			make.left.right.equalTo(choice_view)
 			make.height.equalTo(25)
 		}
 
@@ -316,7 +321,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		//new button layout
 		fourth_button.snp.makeConstraints { make in
 			make.top.equalTo(third_button.snp.bottom).inset(-10)
-			make.left.right.bottom.equalTo(choice_view)
+			make.left.right.equalTo(choice_view)
 			make.height.equalTo(25)
 		}
 

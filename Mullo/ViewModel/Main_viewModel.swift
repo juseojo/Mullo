@@ -102,9 +102,21 @@ class Main_viewModel
 		let images_url = item.pictures.substr(seperater: "|" as Character)
 
 		// image add
-		if (images_url[0] != "")
-		{
+		if (images_url[0] != "") {
 			cell.subject.onNext(images_url)
+		}
+		else {
+			cell.image_collectionView.snp.updateConstraints { make in
+				make.height.equalTo(0)
+			}
+		}
+
+		// post text layout
+		let textView_height = calculate_height(
+			text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_height - 20)
+
+		cell.post_textView.snp.updateConstraints { make in
+			make.height.equalTo(textView_height)
 		}
 
 		// realm for selected post
@@ -184,7 +196,6 @@ class Main_viewModel
 			AlertHelper.showAlert(alert: alert)
 		}.disposed(by: cell.disposeBag)
 	}
-
 	
 	private func choice_button_touch(touched_button: UIButton, cell: Post_collectionView_cell) {
 
@@ -288,20 +299,23 @@ class Main_viewModel
 		{
 			let touched_button_count = cell.choice_button_vote_count[index]
 
-			cell.choice_view.addSubview(cell.touched_button_background_view)
-			cell.touched_button_background_view.snp.makeConstraints { make in
-				make.top.left.bottom.equalTo(cell.buttons[index])
-				make.width.equalTo((Double(touched_button_count) / Double(total_count)) * (Double(screen_width) - 20))
-			}
-			cell.choice_view.bringSubviewToFront(cell.buttons[index])
+			DispatchQueue.main.async {
+				cell.choice_view.addSubview(cell.touched_button_background_view)
+				cell.touched_button_background_view.snp.makeConstraints { make in
+					make.top.left.bottom.equalTo(cell.buttons[index])
+					make.width.equalTo((Double(touched_button_count) / Double(total_count)) * (Double(screen_width) - 20))
+				}
+				cell.choice_view.bringSubviewToFront(cell.buttons[index])
 
-			let percent_label = UILabel()
+				let percent_label = UILabel()
 
-			cell.choice_view.addSubview(percent_label)
-			percent_label.text = String(round((Double(touched_button_count) / Double(total_count)) * 100)) + " %"
-			percent_label.snp.makeConstraints { make in
-				make.top.bottom.equalTo(cell.buttons[index])
-				make.right.equalTo(cell.buttons[index]).inset(5)
+				cell.choice_view.addSubview(percent_label)
+				percent_label.text = String(round((Double(touched_button_count) / Double(total_count)) * 100)) + " %"
+				percent_label.snp.makeConstraints { make in
+					make.top.bottom.equalTo(cell.buttons[index])
+					make.right.equalTo(cell.buttons[index]).inset(5)
+				}
+
 			}
 		}
 		else
@@ -309,24 +323,26 @@ class Main_viewModel
 			let background_view = UIView()
 			let button_count = cell.choice_button_vote_count[index]
 
-			background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
-			background_view.layer.borderWidth = 1.5
-			background_view.clipsToBounds = true
+			DispatchQueue.main.async {
+				background_view.layer.borderColor = UIColor(named: "REVERSE_SYS")?.cgColor
+				background_view.layer.borderWidth = 1.5
+				background_view.clipsToBounds = true
 
-			cell.choice_view.addSubview(background_view)
-			cell.choice_view.bringSubviewToFront(cell.buttons[index])
-			background_view.snp.makeConstraints { make in
-				make.top.left.bottom.equalTo(cell.buttons[index])
-				make.width.equalTo((Double(button_count) / Double(total_count)) * (Double(screen_width) - 20))
-			}
+				cell.choice_view.addSubview(background_view)
+				cell.choice_view.bringSubviewToFront(cell.buttons[index])
+				background_view.snp.makeConstraints { make in
+					make.top.left.bottom.equalTo(cell.buttons[index])
+					make.width.equalTo((Double(button_count) / Double(total_count)) * (Double(screen_width) - 20))
+				}
 
-			let percent_label = UILabel()
+				let percent_label = UILabel()
 
-			cell.choice_view.addSubview(percent_label)
-			percent_label.text = String(round((Double(button_count) / Double(total_count)) * 100)) + " %"
-			percent_label.snp.makeConstraints { make in
-				make.top.bottom.equalTo(cell.buttons[index])
-				make.right.equalTo(cell.buttons[index]).inset(5)
+				cell.choice_view.addSubview(percent_label)
+				percent_label.text = String(round((Double(button_count) / Double(total_count)) * 100)) + " %"
+				percent_label.snp.makeConstraints { make in
+					make.top.bottom.equalTo(cell.buttons[index])
+					make.right.equalTo(cell.buttons[index]).inset(5)
+				}
 			}
 		}
 	}
