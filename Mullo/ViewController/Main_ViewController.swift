@@ -67,8 +67,6 @@ final class Main_ViewController: UIViewController {
 					for cell_data in cell_dataSet {
 						self!.cell_height_array.append(self!.main_viewModel.calculate_cell_height(item: cell_data))
 					}
-					// Reload posts, when VM get data
-					self!.main_view.post_collectionView.reloadData()
 				}
 			}).disposed(by: self.disposeBag)
 	}

@@ -60,11 +60,10 @@ class Main_viewModel
 		var height =
 		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
 		calculate_height(text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
-		screen_height * 0.2 + 20 +
-		CGFloat(choice_view_height) + 100
+		CGFloat(choice_view_height) + screen_height * 0.3 + 120
 
 		if item.pictures == "" {
-			height = height - screen_height * 0.2
+			height = height - screen_height * 0.3
 		}
 
 		return height
@@ -98,6 +97,14 @@ class Main_viewModel
 			cell.add_fourth_button(button_text: buttons_text[3])
 		}
 
+		// post text layout
+		let textView_height = calculate_height(
+			text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_height - 20)
+
+		cell.post_textView.snp.updateConstraints { make in
+			make.height.equalTo(textView_height)
+		}
+
 		// images data parsing
 		let images_url = item.pictures.substr(seperater: "|" as Character)
 
@@ -106,17 +113,12 @@ class Main_viewModel
 			cell.subject.onNext(images_url)
 		}
 		else {
-			cell.image_collectionView.snp.updateConstraints { make in
-				make.height.equalTo(0)
+			cell.choice_view.snp.remakeConstraints { make in
+				make.top.equalTo(cell.post_textView.snp.bottom).inset(-10)
+				make.left.right.equalTo(cell).inset(10)
+				make.bottom.equalTo(cell.comments_button.snp.top)
 			}
-		}
-
-		// post text layout
-		let textView_height = calculate_height(
-			text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_height - 20)
-
-		cell.post_textView.snp.updateConstraints { make in
-			make.height.equalTo(textView_height)
+			cell.image_collectionView.removeFromSuperview()
 		}
 
 		// realm for selected post
@@ -200,8 +202,6 @@ class Main_viewModel
 	private func choice_button_touch(touched_button: UIButton, cell: Post_collectionView_cell) {
 
 		var num = 0
-		var selected_button_num = -1
-		var total_vote_count = 0
 
 		// Find selected button num for saveing and send to server
 		for button in cell.buttons
@@ -213,7 +213,6 @@ class Main_viewModel
 
 			if button == touched_button {
 				cell.choice_button_vote_count[num] = cell.choice_button_vote_count[num] + 1
-				selected_button_num = num
 
 				// Save selected button inform at realm
 				let realm = try! Realm()
@@ -239,17 +238,32 @@ class Main_viewModel
 								  "post_num" : cell.post_num]
 				vote_to_server(parameters: parameters)
 			}
-			total_vote_count += cell.choice_button_vote_count[num]
 			num += 1
 		}
 
-		// Add layout for buttons
-		for i in 0...(num - 1)
+		// Make now vote count str
+		var vote_str = ""
+		for vote in cell.choice_button_vote_count
 		{
-			i == selected_button_num ? 
-			selecting_buttons(isSelected: true, index: i, cell: cell, total_count: total_vote_count):
-			selecting_buttons(isSelected: false, index: i, cell: cell, total_count: total_vote_count)
+			vote_str += String(vote) + "|"
 		}
+
+		vote_str.removeLast()
+
+		// Apply new vote count
+		let update_observable = subject.map { postCellData_array in
+			postCellData_array.map { postCellData in
+				var mutable_postCellData = postCellData
+				if mutable_postCellData.post_num == cell.post_num {
+					mutable_postCellData.choice_count = vote_str
+				}
+				return mutable_postCellData
+			}
+		}
+
+		update_observable.observe(on: MainScheduler.instance).subscribe(onNext: { updatedData in
+			self.subject.onNext(updatedData)
+		}).dispose()
 	}
 
 	final func vote_to_server(parameters: Parameters)
