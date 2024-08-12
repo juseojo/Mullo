@@ -68,7 +68,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 
 		flowLayout.scrollDirection = .horizontal
 		flowLayout.minimumLineSpacing = 50
-		flowLayout.itemSize = CGSize(width: 130, height: screen_height * 0.2 - 20)
+		flowLayout.itemSize = CGSize(width: screen_height * 0.2 - 12, height: screen_height * 0.3 - 20)
 		flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 		flowLayout.minimumLineSpacing = 10
 
@@ -212,7 +212,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		image_collectionView.snp.makeConstraints { make in
 			make.top.equalTo(post_textView.snp.bottom).inset(-10)
 			make.left.right.equalTo(self).inset(10)
-			make.height.equalTo(screen_height * 0.2)
+			make.height.equalTo(screen_height * 0.3).priority(1000)
 		}
 
 		choice_view.snp.makeConstraints { make in
@@ -267,15 +267,28 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		disposeBag = DisposeBag()
 		choice_button_vote_count.removeAll()
 
-		image_collectionView.snp.updateConstraints { make in
-			make.height.equalTo(screen_height * 0.2)
+		if !self.subviews.contains(image_collectionView) {
+			self.addSubview(image_collectionView)
+
+			image_collectionView.snp.remakeConstraints { make in
+				make.top.equalTo(post_textView.snp.bottom).inset(-10)
+				make.left.right.equalTo(self).inset(10)
+				make.height.equalTo(screen_height * 0.3).priority(.medium)
+			}
+
+			choice_view.snp.remakeConstraints { make in
+				make.top.equalTo(image_collectionView.snp.bottom).inset(-10)
+				make.left.right.equalTo(self).inset(10)
+				make.bottom.equalTo(comments_button.snp.top)
+			}
 		}
+
 		second_button.snp.remakeConstraints { make in
 			make.top.equalTo(first_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(choice_view)
 			make.height.equalTo(25)
 		}
-		//self.subject.onNext([])
+		self.subject.onNext([])
 
 		for subview in choice_view.subviews
 		{
