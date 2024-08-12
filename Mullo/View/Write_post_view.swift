@@ -175,8 +175,8 @@ final class Write_post_view: UIView {
 		let posting_button = UIButton()
 
 		posting_button.setTitle("게시하기", for: .normal)
-		posting_button.titleLabel?.font = UIFont(name: "Urbanist-SemiBold", size: 15)
-		posting_button.setTitleColor(.black, for: .normal)
+		posting_button.titleLabel?.font = UIFont(name: "Urbanist-SemiBold", size: 20)
+		posting_button.setTitleColor(.white, for: .normal)
 		posting_button.backgroundColor = UIColor.gray
 		posting_button.layer.cornerRadius = 5.0
 		posting_button.clipsToBounds = true
@@ -270,7 +270,7 @@ final class Write_post_view: UIView {
 		}
 
 		posting_button.snp.makeConstraints { make in
-			make.top.equalTo(choice_plus_button.snp.bottom).inset(-50)
+			make.top.equalTo(choice_plus_button.snp.bottom).inset(-70)
 			make.left.right.equalTo(scroll_view).inset(50)
 			make.bottom.equalTo(scroll_view)
 		}

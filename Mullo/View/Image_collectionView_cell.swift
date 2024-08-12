@@ -33,8 +33,8 @@ final class Image_collectionView_cell: UICollectionViewCell {
 
 		image_view.snp.makeConstraints { make in
 			make.top.left.equalTo(self)
-			make.height.equalTo(screen_height * 0.3 - 20)
-			make.width.equalTo(screen_height * 0.2 - 12)
+			make.height.equalTo(screen_height * 0.25 - 20)
+			make.width.equalTo(130)
 		}
 	}
 
