@@ -10,15 +10,15 @@ import SnapKit
 
 class Setting_view: UIView {
 
-	var close_button: UIButton = {
-		let close_button = UIButton()
+	var back_button: UIButton = {
+		let back_button = UIButton()
 
-		close_button.setImage(
-			UIImage(systemName: "xmark")?.resized(to: CGSize(width: 30, height: 30)), for: .normal)
-		close_button.tintColor = UIColor(named: "REVERSE_SYS")
-		close_button.contentMode = .scaleAspectFit
+		back_button.setImage(
+			UIImage(systemName: "arrow.backward")?.resized(to: CGSize(width: 40, height: 30)), for: .normal)
+		back_button.tintColor = UIColor(named: "REVERSE_SYS")
+		back_button.contentMode = .scaleAspectFit
 		
-		return close_button
+		return back_button
 	}()
 
 	var setting_label: UILabel = {
@@ -44,7 +44,7 @@ class Setting_view: UIView {
 
 		question_button.layer.borderColor = UIColor(named: "REVERSE_SYS")!.cgColor
 		question_button.layer.borderWidth = 1.0
-		question_button.setTitle("문의하기", for: .normal)
+		question_button.setTitle("건의하기", for: .normal)
 		question_button.titleLabel?.font = UIFont(name: "Urbanist-SemiBold", size: 20)
 		question_button.setTitleColor(UIColor(named: "REVERSE_SYS"), for: .normal)
 		question_button.layer.cornerRadius = 5.0
@@ -96,7 +96,7 @@ class Setting_view: UIView {
 
 		self.backgroundColor = UIColor(named: "NATURAL")
 
-		addSubview(close_button)
+		addSubview(back_button)
 		addSubview(setting_label)
 		addSubview(border_view)
 		addSubview(question_button)
@@ -104,20 +104,22 @@ class Setting_view: UIView {
 		addSubview(logout_button)
 		addSubview(deleteID_button)
 
-		close_button.snp.makeConstraints { make in
-			make.top.left.equalTo(self).inset(10)
-			make.width.height.equalTo(30)
+		back_button.snp.makeConstraints { make in
+			make.top.equalTo(self).inset(top_inset)
+			make.left.equalTo(self).inset(10)
+			make.height.equalTo(30)
+			make.width.equalTo(60)
 		}
 
 		setting_label.snp.makeConstraints { make in
-			make.top.equalTo(self).inset(10)
-			make.left.equalTo(close_button.snp.right).inset(-10)
+			make.top.equalTo(self).inset(top_inset)
+			make.left.equalTo(back_button.snp.right).inset(-10)
 			make.right.equalTo(self)
 			make.height.equalTo(30)
 		}
 
 		border_view.snp.makeConstraints { make in
-			make.top.equalTo(close_button.snp.bottom).inset(-10)
+			make.top.equalTo(back_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(self)
 			make.height.equalTo(1)
 		}

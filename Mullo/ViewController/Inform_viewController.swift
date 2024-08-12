@@ -53,7 +53,9 @@ final class Inform_viewController: UIViewController
 
 		// tap event - setting button
 		inform_view.setting_button.rx.tap.bind {
-			self.present(Setting_viewController(), animated: true)
+			let vc = Setting_viewController()
+
+			self.navigationController?.pushViewController(vc, animated: true)
 		}.disposed(by: disposeBag)
 
 		// Rx bind collection view
