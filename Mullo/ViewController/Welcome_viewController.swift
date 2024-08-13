@@ -161,11 +161,11 @@ final class Welcome_viewController: UIViewController {
 			}
 			// Login
 			welcome_viewModel.login(email: welcome_view.get_email(), password: welcome_view.get_password())
-				.subscribe(onNext: { isSuccess in
+				.subscribe(onNext: { [weak self] isSuccess in
 
 				if isSuccess
 				{
-					self.name_check()
+					self!.name_check()
 				}
 				else
 				{
@@ -216,13 +216,13 @@ final class Welcome_viewController: UIViewController {
 
 			// Register name to mullo server
 			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "")
-				.subscribe(onNext: { result in
+				.subscribe(onNext: { [weak self] result in
 				if result == "success"
 				{
-					UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
+					UserDefaults.standard.setValue(self!.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
 					print("finaly login success")
 					// Change VC ( current VC -> Main VC )
-					self.change_to_mainView()
+					self!.change_to_mainView()
 				}
 				else if result == "overlap_name"
 				{
@@ -230,11 +230,11 @@ final class Welcome_viewController: UIViewController {
 				}
 				else if result == "overlap_email"
 				{
-					AlertHelper.showAlert(viewController: self, title: "알림", message: "이미 가입한 계정입니다.", button_title: "확인", handler: { action in self.change_to_mainView()})
-					self.welcome_viewModel.get_name(email: self.email_address).subscribe(onNext: { name in
+					AlertHelper.showAlert(viewController: self, title: "알림", message: "이미 가입한 계정입니다.", button_title: "확인", handler: { action in self!.change_to_mainView()})
+					self!.welcome_viewModel.get_name(email: self!.email_address).subscribe(onNext: { name in
 
 						UserDefaults.standard.setValue(name, forKey: "name")
-					}).disposed(by: self.disposeBag)
+					}).disposed(by: self!.disposeBag)
 				}
 				else
 				{
@@ -260,14 +260,14 @@ final class Welcome_viewController: UIViewController {
 			if register_exec()
 			{
 				welcome_viewModel.register(email: welcome_view.get_email(), password: welcome_view.get_password())
-					.subscribe(onNext: { isSuccess in
-					
+					.subscribe(onNext: { [weak self] isSuccess in
+
 					if isSuccess
 					{
-						self.button_touch_count = 2
-						self.email_address = self.welcome_view.get_email()
+						self!.button_touch_count = 2
+						self!.email_address = self!.welcome_view.get_email()
 						// Change view ( current view -> name_view )
-						self.change_to_nameView()
+						self!.change_to_nameView()
 					}
 					else
 					{
@@ -317,13 +317,13 @@ final class Welcome_viewController: UIViewController {
 
 			// Register name to mullo server
 			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "")
-				.subscribe(onNext: { result in
+				.subscribe(onNext: { [weak self] result in
 
 				if result == "success"
 				{
-					UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
+					UserDefaults.standard.setValue(self!.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
 					// Change VC ( current VC -> Main VC )
-					self.change_to_mainView()
+					self!.change_to_mainView()
 				}
 				else if result == "overlap_name"
 				{
@@ -332,10 +332,10 @@ final class Welcome_viewController: UIViewController {
 				else if result == "overlap_email"
 				{
 					AlertHelper.showAlert(viewController: self, title: "알림", message: "이미 가입된 계정입니다.", button_title: "확인", handler: nil)
-					self.welcome_viewModel.get_name(email: self.email_address) .subscribe(onNext: { name in
+					self!.welcome_viewModel.get_name(email: self!.email_address) .subscribe(onNext: { name in
 
 						UserDefaults.standard.setValue(name, forKey: "name")
-					}).disposed(by: self.disposeBag)
+					}).disposed(by: self!.disposeBag)
 				}
 				else
 				{
@@ -554,13 +554,7 @@ extension Welcome_viewController: ASAuthorizationControllerDelegate {
 
 				welcome_viewModel.hasName(identifier: credential.user)
 					.subscribe(onNext: { [weak self] hasName in
-						if hasName == "true"
-						{
-							self!.button_touch_count = 2
-							// Change VC ( current VC -> main VC )
-							self!.change_to_mainView()
-						}
-						else if hasName == "false"
+						if hasName == "false"
 						{
 							self!.button_touch_count = 2
 							// Change VC ( current VC -> name VC )
@@ -574,6 +568,14 @@ extension Welcome_viewController: ASAuthorizationControllerDelegate {
 								message: "로그인에 실패하였습니다. 다시 시도해주세요.\n계속 실패시 mullo.help@gmail.com 으로 문의주세요.",
 								button_title: "확인",
 								handler: nil)
+						}
+						else
+						{
+							print("")
+							self!.button_touch_count = 2
+							UserDefaults.standard.set(hasName, forKey: "name")
+							// Change VC ( current VC -> main VC )
+							self!.change_to_mainView()
 						}
 					}).disposed(by: disposeBag)
 			}

@@ -41,13 +41,13 @@ final class Main_ViewController: UIViewController {
 
 		//button event set
 		main_view.write_button.rx.tap
-			.bind{
-				self.write_button_touch()
+			.bind{ [weak self] in
+				self!.write_button_touch()
 			}.disposed(by: disposeBag)
 
 		main_view.inform_button.rx.tap
-			.bind{
-				self.inform_button_touch()
+			.bind{ [weak self] in
+				self!.inform_button_touch()
 			}.disposed(by: disposeBag)
 
 		//for refresh
@@ -99,9 +99,10 @@ final class Main_ViewController: UIViewController {
 		main_viewModel.items
 			.observe(on: MainScheduler.instance)
 			.bind(to: main_view.post_collectionView.rx.items(
-				cellIdentifier: Post_collectionView_cell.identifier, cellType: Post_collectionView_cell.self)) { row, item, cell in
+				cellIdentifier: Post_collectionView_cell.identifier,
+				cellType: Post_collectionView_cell.self)) { [weak self] row, item, cell in
 					// cell setting
-					self.main_viewModel.cell_setting(cell: cell, item: item)
+					self!.main_viewModel.cell_setting(cell: cell, item: item)
 					// comments button rx binding
 					cell.comments_button.rx.tap
 						.bind{
@@ -109,13 +110,13 @@ final class Main_ViewController: UIViewController {
 
 							comments_vc.modalPresentationStyle = .overCurrentContext
 							comments_vc.post_num = item.post_num
-							self.present(comments_vc, animated: true, completion: nil)
+							self!.present(comments_vc, animated: true, completion: nil)
 							UIView.animate(withDuration: 0.3) {
-								self.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+								self!.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
 							}
 							comments_vc.completion_handler = {
 								UIView.animate(withDuration: 0.3) {
-									self.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0)
+									self!.main_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0)
 								}
 							}
 						}.disposed(by: cell.disposeBag)

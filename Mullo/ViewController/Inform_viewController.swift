@@ -47,15 +47,15 @@ final class Inform_viewController: UIViewController
 			}).disposed(by: self.disposeBag)
 
 		// tap event - back button
-		inform_view.back_button.rx.tap.bind {
-			self.navigationController?.popViewController(animated:true)
+		inform_view.back_button.rx.tap.bind { [weak self] in
+			self!.navigationController?.popViewController(animated:true)
 		}.disposed(by: disposeBag)
 
 		// tap event - setting button
-		inform_view.setting_button.rx.tap.bind {
+		inform_view.setting_button.rx.tap.bind { [weak self] in
 			let vc = Setting_viewController()
 
-			self.navigationController?.pushViewController(vc, animated: true)
+			self!.navigationController?.pushViewController(vc, animated: true)
 		}.disposed(by: disposeBag)
 
 		// Rx bind collection view
@@ -70,23 +70,24 @@ final class Inform_viewController: UIViewController
 		inform_viewModel.items
 			.observe(on: MainScheduler.instance)
 			.bind(to: inform_view.myPost_collectionView.rx.items(
-				cellIdentifier: MyPost_collectionView_cell.identifier, cellType: MyPost_collectionView_cell.self)) { row, item, cell in
+				cellIdentifier: MyPost_collectionView_cell.identifier,
+				cellType: MyPost_collectionView_cell.self)) { [weak self] row, item, cell in
 					// cell setting
-					self.inform_viewModel.cell_setting(cell: cell as! Post_collectionView_cell, item: item)
-					
+					self!.inform_viewModel.cell_setting(cell: cell as! Post_collectionView_cell, item: item)
+
 					// comments button rx binding
 					cell.comments_button.rx.tap
 						.bind{
 							let comments_vc = Comments_viewController()
 							comments_vc.modalPresentationStyle = .overCurrentContext
 							comments_vc.post_num = item.post_num
-							self.present(comments_vc, animated: true, completion: nil)
+							self!.present(comments_vc, animated: true, completion: nil)
 							UIView.animate(withDuration: 0.3) {
-								self.inform_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+								self!.inform_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
 							}
 							comments_vc.completion_handler = {
 								UIView.animate(withDuration: 0.3) {
-									self.inform_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0)
+									self!.inform_view.color_view.backgroundColor = UIColor.black.withAlphaComponent(0)
 								}
 							}
 						}.disposed(by: cell.disposeBag)

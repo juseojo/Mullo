@@ -141,19 +141,15 @@ final class Welcome_viewModel {
 					do {
 						let data = try response.result.get()
 
-						if data["result"]! == "true"
-						{
-							observer.onNext("true")
-						}
-						else if data["result"] == "false"
-						{
+						if data["result"] == "false" {
 							observer.onNext("false")
 						}
-						else if data["result"] == "null"
-						{
+						else if data["result"] == "null" {
 							observer.onNext("null")
 						}
-
+						else {
+							observer.onNext(data["result"] ?? "None")
+						}
 					} catch {
 						print("-- Error at get_name --\n \(error)")
 						observer.onNext("null")
@@ -264,7 +260,7 @@ final class Welcome_viewModel {
 
 	final func kakao_login() -> Observable<String>
 	{
-		return Observable.create { observer in
+		return Observable.create { [weak self] observer in
 
 			if (UserApi.isKakaoTalkLoginAvailable()) {
 				UserApi.shared.rx.loginWithKakaoTalk()
@@ -279,13 +275,13 @@ final class Welcome_viewModel {
 							}, onFailure: {error in
 								print(error)
 							})
-							.disposed(by: self.disposeBag)
+							.disposed(by: self!.disposeBag)
 
 						_ = oauthToken
 					}, onError: {error in
 						print(error)
 						observer.onError(error)
-					}).disposed(by: self.disposeBag)
+					}).disposed(by: self!.disposeBag)
 			}
 			else
 			{
