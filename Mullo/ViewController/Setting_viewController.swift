@@ -28,8 +28,8 @@ final class Setting_viewController: UIViewController
 		}
 
 		// tap event - back button
-		setting_view.back_button.rx.tap.bind {
-			self.navigationController?.popViewController(animated:true)
+		setting_view.back_button.rx.tap.bind { [weak self] in
+			self!.navigationController?.popViewController(animated:true)
 		}.disposed(by: disposeBag)
 
 		// tap event - question button
@@ -40,6 +40,11 @@ final class Setting_viewController: UIViewController
 		// tap event - right button
 		setting_view.right_button.rx.tap.bind { [weak self] in
 			self!.right_button_touch()
+		}.disposed(by: disposeBag)
+
+		// tap event - logout button
+		setting_view.logout_button.rx.tap.bind { [weak self] in
+			self!.logout_button_touch()
 		}.disposed(by: disposeBag)
 	}
 
@@ -53,7 +58,6 @@ final class Setting_viewController: UIViewController
 		let cancel_action = UIAlertAction(title: "취소", style: .cancel, handler: nil)
 
 		alert.addTextField()
-
 		alert.addAction(send_action)
 		alert.addAction(cancel_action)
 
@@ -63,6 +67,21 @@ final class Setting_viewController: UIViewController
 	private func right_button_touch()
 	{
 		let vc = Right_viewController()
-		self.present(vc, animated: false)
+		self.present(vc, animated: true)
+	}
+
+	private func logout_button_touch()
+	{
+		let logout_alert = UIAlertController(title: "로그아웃", message: "정말 로그아웃 하시겠습니까?", preferredStyle: .alert)
+		let logout_action = UIAlertAction(title: "예", style: .default, handler: { [weak self] _ in
+			UserDefaults.standard.set(nil, forKey: "name")
+			self!.navigationController?.setViewControllers([Welcome_viewController(),], animated: true)
+		})
+		let cancel_action = UIAlertAction(title: "아니요", style: .cancel, handler: nil)
+
+		logout_alert.addAction(logout_action)
+		logout_alert.addAction(cancel_action)
+
+		self.present(logout_alert, animated: true)
 	}
 }
