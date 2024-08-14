@@ -46,6 +46,11 @@ final class Setting_viewController: UIViewController
 		setting_view.logout_button.rx.tap.bind { [weak self] in
 			self!.logout_button_touch()
 		}.disposed(by: disposeBag)
+
+		// tap event - deleteID button
+		setting_view.deleteID_button.rx.tap.bind { [weak self] in
+			self!.deleteID_button_touch()
+		}.disposed(by: disposeBag)
 	}
 
 	private func question_button_touch()
@@ -83,5 +88,34 @@ final class Setting_viewController: UIViewController
 		logout_alert.addAction(cancel_action)
 
 		self.present(logout_alert, animated: true)
+	}
+
+	private func deleteID_button_touch()
+	{
+		let deleteID_alert = UIAlertController(title: "계정 탈퇴", message: "정말 탈퇴 하시겠습니까?", preferredStyle: .alert)
+		let deleteID_action = UIAlertAction(title: "예", style: .default, handler: { [weak self] _ in
+			self!.setting_viewModel.isAppleID() { [weak self] isApple_user in
+				if isApple_user == "true" {
+					self!.setting_viewModel.revoke_appleID()
+					self!.setting_viewModel.delete_DB()
+					self!.navigationController?.setViewControllers([Welcome_viewController(),], animated: true)
+				}
+				else if isApple_user == "false" {
+					print("no apple user")
+					self!.setting_viewModel.delete_DB()
+					self!.navigationController?.setViewControllers([Welcome_viewController(),], animated: true)
+				}
+				else {
+					AlertHelper.showAlert(
+						title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
+				}
+			}
+		})
+		let cancel_action = UIAlertAction(title: "아니요", style: .cancel, handler: nil)
+
+		deleteID_alert.addAction(deleteID_action)
+		deleteID_alert.addAction(cancel_action)
+
+		self.present(deleteID_alert, animated: true)
 	}
 }

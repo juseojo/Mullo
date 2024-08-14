@@ -215,7 +215,7 @@ final class Welcome_viewController: UIViewController {
 			}
 
 			// Register name to mullo server
-			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "")
+			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "", auth_code: "")
 				.subscribe(onNext: { [weak self] result in
 				if result == "success"
 				{
@@ -316,7 +316,7 @@ final class Welcome_viewController: UIViewController {
 			}
 
 			// Register name to mullo server
-			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "")
+			welcome_viewModel.register_name(name: welcome_view.name_view.name_textField.text ?? "", email: email_address, identifier: "", auth_code: "")
 				.subscribe(onNext: { [weak self] result in
 
 				if result == "success"
@@ -562,16 +562,27 @@ extension Welcome_viewController: ASAuthorizationControllerDelegate {
 						}
 						else if hasName == "null"
 						{
-							AlertHelper.showAlert(
-								viewController: self,
-								title: "오류",
-								message: "로그인에 실패하였습니다. 다시 시도해주세요.\n계속 실패시 mullo.help@gmail.com 으로 문의주세요.",
-								button_title: "확인",
-								handler: nil)
+							self!.welcome_viewModel.register_name(
+								name: "none+",
+								email: "",
+								identifier: credential.user,
+								auth_code: String(data: credential.authorizationCode!, encoding: .utf8)!)
+								.subscribe(onNext: { [weak self] result in
+									if result == "success"
+									{
+										self!.button_touch_count = 2
+										// Change VC ( current VC -> name VC )
+										self!.change_to_nameView()
+									}
+									else
+									{
+										print("error")
+										print(result)
+									}
+								}).disposed(by: self!.disposeBag)
 						}
 						else
 						{
-							print("")
 							self!.button_touch_count = 2
 							UserDefaults.standard.set(hasName, forKey: "name")
 							// Change VC ( current VC -> main VC )
@@ -581,9 +592,14 @@ extension Welcome_viewController: ASAuthorizationControllerDelegate {
 			}
 			else // Case : First apple login
 			{
-				self.email_address = credential.email ?? ""
-				self.apple_login_identifier = credential.user
-				welcome_viewModel.register_name(name: "none+", email: email_address, identifier: credential.user)
+				email_address = credential.email ?? ""
+				apple_login_identifier = credential.user
+
+				welcome_viewModel.register_name(
+					name: "none+",
+					email: email_address,
+					identifier: credential.user,
+					auth_code: String(data: credential.authorizationCode!, encoding: .utf8)!)
 					.subscribe(onNext: { [weak self] result in
 						if result == "success"
 						{
@@ -602,7 +618,13 @@ extension Welcome_viewController: ASAuthorizationControllerDelegate {
 
 		// 실패 후 동작
 		func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-			print("error")
+			print("apple login error")
+			AlertHelper.showAlert(
+				viewController: self,
+				title: "오류",
+				message: "로그인에 실패하였습니다.\n다시 시도해주세요.",
+				button_title: "확인",
+				handler: nil)
 		}
 	}
 }
