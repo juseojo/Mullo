@@ -24,7 +24,12 @@ final class Write_post_viewModel
 	{
 		do {
 			var current_images = try subject.value()
-			current_images.insert(image, at: 0)
+			if current_images.count == 0 {
+				current_images.insert(image, at: 0)
+			}
+			else {
+				current_images.insert(image, at: current_images.count - 1)
+			}
 			subject.onNext(current_images)
 		} catch {
 			print("Error getting current images: \(error)")

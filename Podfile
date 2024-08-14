@@ -6,12 +6,19 @@ target 'Mullo' do
   use_frameworks!
   
   pod 'SnapKit'
-  pod 'KakaoSDKUser'
-  pod 'KakaoSDKAuth'
-  pod 'KakaoSDKTalk'
+  pod 'RxKakaoSDKUser'
+  pod 'RxKakaoSDKAuth'
+  pod 'RxKakaoSDKCommon'
   pod 'Alamofire'
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'AWSS3'
+  pod 'Kingfisher'
+  pod 'RealmSwift'
+  pod 'GoogleSignIn'
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+
   # Pods for Mullo
 
   target 'MulloTests' do

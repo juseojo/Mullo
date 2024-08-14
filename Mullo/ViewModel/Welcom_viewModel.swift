@@ -67,13 +67,14 @@ final class Welcome_viewModel {
 		}
 	}
 
-	final func register_name(name: String, email: String, identifier: String) -> Observable<String>
+	final func register_name(name: String, email: String, identifier: String, auth_code: String) -> Observable<String>
 	{
 		return Observable.create { observer in
 
 			AF.request(
 				"https://\(host)/register",
-				method: .post, parameters: ["name" : name, "email" : email, "identifier" : identifier],
+				method: .post,
+				parameters: ["name" : name, "email" : email, "identifier" : identifier, "auth_code" : auth_code],
 				encoding: URLEncoding.httpBody)
 			.validate(statusCode: 200..<300)
 			.validate(contentType: ["application/json"])

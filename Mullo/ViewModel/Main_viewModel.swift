@@ -31,15 +31,14 @@ class Main_viewModel
 			case .success:	
 				do {
 					let data = try response.result.get()
-					if data.isEmpty
-					{
+					if data.isEmpty {
 						print("post empty")
 						return
 					}
 					var post_dataSet = try self.subject.value()
+
 					post_dataSet.append(contentsOf: data)
 					self.subject.onNext(post_dataSet)
-
 				} catch {
 					print("-- Error at getting get data --\n \(error)")
 					AlertHelper.showAlert(

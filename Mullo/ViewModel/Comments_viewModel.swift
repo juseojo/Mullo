@@ -38,7 +38,7 @@ final class Comments_viewModel {
 		}
 	}
 
-	final func add_comment(parameters: Parameters)
+	final func add_comment(parameters: Parameters, completed_handler: @escaping () -> (Void))
 	{
 		AF.request(
 			"https://\(host)/add_comment",
@@ -51,10 +51,12 @@ final class Comments_viewModel {
 			switch response.result {
 			case .success:
 				print("posting success")
+				completed_handler()
 			case .failure(let error):
 				print("Error: \(error)")
 				AlertHelper.showAlert(
 					title: "오류", message: "서버 오류입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
+				completed_handler()
 			}
 		}
 	}
