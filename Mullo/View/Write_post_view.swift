@@ -23,7 +23,8 @@ final class Write_post_view: UIView {
 		let back_button = UIButton()
 
 		back_button.setImage(
-			UIImage(systemName: "arrow.backward")?.resized(to: CGSize(width: 40, height: 30)), for: .normal)
+			UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .bold, scale: .large)),
+			for: .normal)
 		back_button.tintColor = UIColor(named: "REVERSE_SYS")
 
 		return back_button
@@ -65,8 +66,7 @@ final class Write_post_view: UIView {
 		let flowLayout = UICollectionViewFlowLayout()
 
 		flowLayout.scrollDirection = .horizontal
-		flowLayout.minimumLineSpacing = 50
-		flowLayout.itemSize = CGSize(width: 130, height: screen_height * 0.25 - 20)
+		flowLayout.itemSize = CGSize(width: screen_height * 0.2 - 12, height: screen_height * 0.3 - 20)
 		flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 		flowLayout.minimumLineSpacing = 10
 
@@ -107,6 +107,7 @@ final class Write_post_view: UIView {
 		first_choice_textField.clipsToBounds = true
 		first_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
 		first_choice_textField.textColor = UIColor.black
+		first_choice_textField.addLeftPadding()
 
 		return first_choice_textField
 	}()
@@ -121,6 +122,7 @@ final class Write_post_view: UIView {
 		second_choice_textField.clipsToBounds = true
 		second_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
 		second_choice_textField.textColor = UIColor.black
+		second_choice_textField.addLeftPadding()
 
 		return second_choice_textField
 	}()
@@ -135,6 +137,7 @@ final class Write_post_view: UIView {
 		third_choice_textField.clipsToBounds = true
 		third_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
 		third_choice_textField.textColor = UIColor.black
+		third_choice_textField.addLeftPadding()
 
 		return third_choice_textField
 	}()
@@ -149,6 +152,7 @@ final class Write_post_view: UIView {
 		fourth_choice_textField.clipsToBounds = true
 		fourth_choice_textField.font = UIFont(name: "SeoulHangangM", size: 15)
 		fourth_choice_textField.textColor = UIColor.black
+		fourth_choice_textField.addLeftPadding()
 
 		return fourth_choice_textField
 	}()
@@ -231,7 +235,7 @@ final class Write_post_view: UIView {
 		image_collectionView.snp.makeConstraints { make in
 			make.top.equalTo(image_label.snp.bottom).inset(-10)
 			make.left.right.equalTo(scroll_view).inset(20)
-			make.height.equalTo(screen_height * 0.25)
+			make.height.equalTo(screen_height * 0.3)
 		}
 
 		choice_label.snp.makeConstraints { make in

@@ -56,7 +56,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		let post_textView = UITextView()
 
 		post_textView.textColor = UIColor(named: "REVERSE_SYS")
-		post_textView.font = UIFont(name: "GillSans-SemiBold", size: 15)
+		post_textView.font = UIFont(name: "SeoulHangangM", size: 15)
 		post_textView.isEditable = false
 		post_textView.isScrollEnabled = false
 
@@ -67,7 +67,6 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		let flowLayout = UICollectionViewFlowLayout()
 
 		flowLayout.scrollDirection = .horizontal
-		flowLayout.minimumLineSpacing = 50
 		flowLayout.itemSize = CGSize(width: screen_height * 0.2 - 12, height: screen_height * 0.3 - 20)
 		flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 		flowLayout.minimumLineSpacing = 10

@@ -33,7 +33,7 @@ final class Main_View: UIView {
 		let write_button = UIButton()
 		let button_image = UIImage(
 			systemName: "square.and.pencil",
-			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.5, weight: .bold, scale: .large))
+			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.6, weight: .bold, scale: .large))
 		write_button.setImage(button_image, for: .normal)
 		write_button.tintColor = UIColor(named: "REVERSE_SYS")
 
@@ -44,7 +44,7 @@ final class Main_View: UIView {
 		let inform_button = UIButton()
 		let button_image = UIImage(
 			systemName: "person",
-			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.5, weight: .bold, scale: .large))
+			withConfiguration: UIImage.SymbolConfiguration(pointSize: head_height * 0.6, weight: .bold, scale: .large))
 
 		inform_button.setImage(button_image, for: .normal)
 		inform_button.tintColor = UIColor(named: "REVERSE_SYS")
@@ -94,7 +94,7 @@ final class Main_View: UIView {
 
 		inform_button.snp.makeConstraints { make in
 			make.top.bottom.equalTo(header_view)
-			make.right.equalTo(header_view).inset(10)
+			make.right.equalTo(header_view).inset(20)
 		}
 
 		write_button.snp.makeConstraints { make in
