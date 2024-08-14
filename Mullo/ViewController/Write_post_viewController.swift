@@ -112,6 +112,8 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 			return
 		}
 
+		self.write_post_view.posting_button.isEnabled = false
+
 		Task {
 			//1. image send to image server
 			var images_url = ""
@@ -168,6 +170,7 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 				{
 					self.navigationController?.popViewController(animated:true)
 				}
+				self.write_post_view.posting_button.isEnabled = true
 			}
 		}
 	}

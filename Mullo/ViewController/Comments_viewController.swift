@@ -128,7 +128,15 @@ final class Comments_viewController: UIViewController
 					"time" : get_time_now(),
 					"comment" : self!.comments_view.comment_textView.text
 				]
-				self!.comments_viewModel.add_comment(parameters: parameters)
+
+				if self!.comments_view.comment_textView.text == "" {
+					AlertHelper.showAlert(viewController: self!, title: "알림", message: "메세지가 비었습니다.", button_title: "확인", handler: nil)
+					return
+				}
+				self?.comments_view.comment_add_button.isEnabled = false
+				self!.comments_viewModel.add_comment(parameters: parameters) {
+					self?.comments_view.comment_add_button.isEnabled = true
+				}
 				self!.comments_viewModel.remove_all()
 
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
