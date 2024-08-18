@@ -216,6 +216,16 @@ final class Welcome_viewController: UIViewController {
 
 				return
 			}
+			else if welcome_view.name_view.name_textField.text ?? "" == ""
+			{
+				AlertHelper.showAlert(viewController: self,
+						   title: "실패",
+						   message: "닉네임을 입력해주세요.",
+						   button_title: "확인",
+						   handler: nil)
+
+				return
+			}
 
 			// Case : Apple login
 			if apple_login_identifier != nil
@@ -327,6 +337,16 @@ final class Welcome_viewController: UIViewController {
 				AlertHelper.showAlert(viewController: self,
 						   title: "실패",
 						   message: "허용되지않은 특수문자가 포함되어 있습니다.",
+						   button_title: "확인",
+						   handler: nil)
+
+				return
+			}
+			else if welcome_view.name_view.name_textField.text ?? "" == ""
+			{
+				AlertHelper.showAlert(viewController: self,
+						   title: "실패",
+						   message: "닉네임을 입력해주세요.",
 						   button_title: "확인",
 						   handler: nil)
 
