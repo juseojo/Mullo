@@ -184,6 +184,7 @@ class Login_view: UIView {
 		email_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
 		email_textField.layer.cornerRadius = 8
 		email_textField.clipsToBounds = true
+		email_textField.textColor = UIColor.black
 
 		return email_textField
 	}()
@@ -205,6 +206,7 @@ class Login_view: UIView {
 		password_textField.clipsToBounds = true
 		password_textField.isSecureTextEntry = true
 		password_textField.textContentType = .password
+		password_textField.textColor = UIColor.black
 
 		return password_textField
 	}()
@@ -267,10 +269,11 @@ class Login_view: UIView {
 
 	var apple_login_button: UIButton = {
 		let apple_login_button = UIButton()
+		let apple_login_image = UIImage(
+			systemName: "applelogo",
+			withConfiguration: UIImage.SymbolConfiguration(pointSize: 100, weight: .bold, scale: .large))
 
-		let largeConfig = UIImage.SymbolConfiguration(pointSize: 100, weight: .bold, scale: .large)
-
-		apple_login_button.setImage(UIImage(systemName: "apple.logo", withConfiguration: largeConfig), for: .normal)
+		apple_login_button.setImage(apple_login_image, for: .normal)
 		apple_login_button.tintColor = UIColor(named: "REVERSE_SYS")
 		apple_login_button.imageView?.contentMode = .scaleAspectFit
 		apple_login_button.layer.borderWidth = 1.0
@@ -370,6 +373,7 @@ class Register_view: UIView {
 		email_textField.layer.borderColor = UIColor(named: "STROKE")?.cgColor
 		email_textField.layer.cornerRadius = 8
 		email_textField.clipsToBounds = true
+		email_textField.textColor = UIColor.black
 
 		return email_textField
 	}()
@@ -391,6 +395,7 @@ class Register_view: UIView {
 		password_textField.clipsToBounds = true
 		password_textField.isSecureTextEntry = true
 		password_textField.textContentType = .password
+		password_textField.textColor = UIColor.black
 
 		return password_textField
 	}()
@@ -412,6 +417,7 @@ class Register_view: UIView {
 		password_confirm_textField.clipsToBounds = true
 		password_confirm_textField.isSecureTextEntry = true
 		password_confirm_textField.textContentType = .password
+		password_confirm_textField.textColor = UIColor.black
 
 		return password_confirm_textField
 	}()
@@ -464,10 +470,11 @@ class Register_view: UIView {
 
 	var apple_login_button: UIButton = {
 		let apple_login_button = UIButton()
+		let apple_login_image = UIImage(
+			systemName: "applelogo",
+			withConfiguration: UIImage.SymbolConfiguration(pointSize: 100, weight: .bold, scale: .large))
 
-		let largeConfig = UIImage.SymbolConfiguration(pointSize: 100, weight: .bold, scale: .large)
-
-		apple_login_button.setImage(UIImage(systemName: "apple.logo", withConfiguration: largeConfig), for: .normal)
+		apple_login_button.setImage(apple_login_image, for: .normal)
 		apple_login_button.tintColor = UIColor(named: "REVERSE_SYS")
 		apple_login_button.imageView?.contentMode = .scaleAspectFit
 		apple_login_button.layer.borderWidth = 1.0

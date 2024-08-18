@@ -23,7 +23,9 @@ final class Inform_view: UIView {
 	var setting_button: UIButton = {
 		let setting_button = UIButton()
 
-		setting_button.setImage(UIImage(systemName: "gearshape")?.resized(to: CGSize(width: 30, height: 30)), for: .normal)
+		setting_button.setImage(
+			UIImage(systemName: "gearshape", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large)),
+			for: .normal)
 		setting_button.tintColor = UIColor(named: "REVERSE_SYS")
 
 		return setting_button

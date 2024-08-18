@@ -18,7 +18,7 @@ class Comments_collectionView_cell: UICollectionViewCell
 	var name_label: UILabel = {
 		let name_label = UILabel()
 
-		name_label.font = UIFont(name: "SeoulHangangM", size: 12)
+		name_label.font = UIFont(name: "GillSans-SemiBold", size: 12)
 		name_label.textColor = UIColor.gray
 
 		return name_label
@@ -49,6 +49,7 @@ class Comments_collectionView_cell: UICollectionViewCell
 
 		comment_label.font = UIFont(name: "SeoulHangangM", size: 15)
 		comment_label.tintColor = UIColor(named: "REVERSE_SYS")
+		comment_label.backgroundColor = UIColor(named: "NATURAL")
 		comment_label.numberOfLines = 0
 		
 		return comment_label
@@ -103,11 +104,6 @@ class Comments_collectionView_cell: UICollectionViewCell
 			make.height.equalTo(20)
 		}
 
-		report_button.snp.makeConstraints { make in
-			make.bottom.right.equalTo(self).inset(5)
-			make.width.height.equalTo(25)
-		}
-
 		comment_label.snp.makeConstraints { make in
 			make.top.equalTo(name_label.snp.bottom).inset(-10)
 			make.left.equalTo(self).inset(10)
@@ -116,7 +112,7 @@ class Comments_collectionView_cell: UICollectionViewCell
 		}
 
 		up_button.snp.makeConstraints { make in
-			make.top.equalTo(comment_label.snp.bottom).inset(-10)
+			make.top.equalTo(comment_label.snp.bottom).inset(-20)
 			make.left.equalTo(self).inset(5)
 			make.height.equalTo(25)
 			make.width.equalTo(100)
@@ -126,6 +122,11 @@ class Comments_collectionView_cell: UICollectionViewCell
 			make.top.equalTo(up_button.snp.bottom).inset(-10)
 			make.left.right.equalTo(self)
 			make.height.equalTo(1)
+		}
+
+		report_button.snp.makeConstraints { make in
+			make.bottom.right.equalTo(border_view).inset(10)
+			make.width.height.equalTo(25)
 		}
 	}
 
@@ -140,14 +141,14 @@ class Comments_collectionView_cell: UICollectionViewCell
 		cell_disposeBag = DisposeBag()
 	}
 
-	final func nameLabel_width_setting(width: Int)
+	final func nameLabel_width_setting(width: CGFloat)
 	{
 		name_label.snp.updateConstraints { make in
 			make.width.equalTo(width)
 		}
 	}
 
-	final func commentLabel_height_setting(height: Int)
+	final func commentLabel_height_setting(height: CGFloat)
 	{
 		comment_label.snp.updateConstraints { make in
 			make.height.equalTo(height)

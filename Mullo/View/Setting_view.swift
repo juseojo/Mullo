@@ -14,7 +14,8 @@ class Setting_view: UIView {
 		let back_button = UIButton()
 
 		back_button.setImage(
-			UIImage(systemName: "arrow.backward")?.resized(to: CGSize(width: 40, height: 30)), for: .normal)
+			UIImage(systemName: "arrow.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .bold, scale: .large)),
+			for: .normal)
 		back_button.tintColor = UIColor(named: "REVERSE_SYS")
 		back_button.contentMode = .scaleAspectFit
 		

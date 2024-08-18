@@ -114,14 +114,15 @@ final class Comments_viewModel {
 		cell.time_label.text = time_diff(past_date: item.time)
 		cell.up_button.setTitle(" " + String(item.up_count), for: .normal)
 
+		cell.comment_label.setLineSpacing(spacing: 5.0)
 		// make dynamic height
 		let nameLabel_newSize = cell.name_label.sizeThatFits(
 			CGSize(width: screen_width, height: screen_height))
-		let commentLabel_newSize = cell.comment_label.sizeThatFits(
-			CGSize(width: screen_width, height: screen_height))
+		let commentLabel_newHeight = calculate_height(
+			text: item.comment, font: cell.comment_label.font, width: screen_width - 20, line_space: 5.0)
 
-		cell.nameLabel_width_setting(width: Int(nameLabel_newSize.width))
-		cell.commentLabel_height_setting(height: Int(commentLabel_newSize.height) + 20)
+		cell.nameLabel_width_setting(width: nameLabel_newSize.width)
+		cell.commentLabel_height_setting(height: commentLabel_newHeight)
 
 		// realm for selected up button
 		let realm = try! Realm()

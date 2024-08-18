@@ -168,14 +168,11 @@ final class Comments_viewController: UIViewController
 	final func save_cell_height(item: Comments_cell_data)
 	{
 		let height = calculate_height(
-			text: item.comment, font: UIFont(name: "SeoulHangangM", size: 15)!, width: screen_width - 20) + 95
+			text: item.comment, font: UIFont(name: "SeoulHangangM", size: 15)!, width: screen_width - 20, line_space: 5.0) +
+		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20, line_space: 0) +
+		70
 
 		cell_height_array.append(height)
-	}
-
-	final func bind_collectionView()
-	{
-
 	}
 }
 

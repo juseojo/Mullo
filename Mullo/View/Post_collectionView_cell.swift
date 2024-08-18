@@ -56,6 +56,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		let post_textView = UITextView()
 
 		post_textView.textColor = UIColor(named: "REVERSE_SYS")
+		post_textView.backgroundColor = UIColor(named: "NATURAL")
 		post_textView.font = UIFont(name: "SeoulHangangM", size: 15)
 		post_textView.isEditable = false
 		post_textView.isScrollEnabled = false
@@ -74,6 +75,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		let image_collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
 		image_collectionView.register(
 			Image_collectionView_cell.self, forCellWithReuseIdentifier: Image_collectionView_cell.identifier)
+		image_collectionView.backgroundColor = UIColor(named: "NATURAL")
 
 		return image_collectionView
 	}()
@@ -184,7 +186,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 
 		name_label.snp.makeConstraints { make in
 			make.top.equalTo(self)
-			make.left.equalTo(self).inset(10)
+			make.left.equalTo(self).inset(20)
 			make.right.equalTo(time_label.snp.left).inset(-15)
 			make.height.equalTo(20)
 		}

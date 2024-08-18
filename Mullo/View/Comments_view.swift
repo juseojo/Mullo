@@ -67,7 +67,8 @@ final class Comments_view: UIView
 		let close_button = UIButton()
 
 		close_button.setImage(
-			UIImage(systemName: "xmark")?.resized(to: CGSize(width: 30, height: 30)), for: .normal)
+			UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .medium, scale: .large)),
+			for: .normal)
 		close_button.tintColor = UIColor(named: "REVERSE_SYS")
 		close_button.contentMode = .scaleAspectFit
 
@@ -110,7 +111,8 @@ final class Comments_view: UIView
 		let comment_add_button = UIButton()
 
 		comment_add_button.setImage(
-			UIImage(systemName: "paperplane")?.resized(to: CGSize(width: 30, height: 30)), for: .normal)
+			UIImage(systemName: "paperplane", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .medium, scale: .large)),
+			for: .normal)
 		comment_add_button.tintColor = UIColor(named: "REVERSE_SYS")
 		comment_add_button.imageView!.contentMode = .scaleAspectFit
 

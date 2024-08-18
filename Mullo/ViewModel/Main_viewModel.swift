@@ -57,12 +57,12 @@ class Main_viewModel
 		let choice_view_height = item.choice.filter { $0 == "|" as Character }.count * 35
 
 		var height =
-		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
-		calculate_height(text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20) +
-		CGFloat(choice_view_height) + screen_height * 0.3 + 120
+		calculate_height(text: item.name, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_width - 20, line_space: 0) +
+		calculate_height(text: item.post, font: UIFont(name: "SeoulHangangM", size: 15)!, width: screen_width - 20, line_space: 10.0) +
+		CGFloat(choice_view_height) + 170
 
-		if item.pictures == "" {
-			height = height - screen_height * 0.3
+		if item.pictures != "" {
+			height = height + screen_height * 0.3
 		}
 
 		return height
@@ -97,8 +97,9 @@ class Main_viewModel
 		}
 
 		// post text layout
+		cell.post_textView.set_lineSpace(spacing: 10.0)
 		let textView_height = calculate_height(
-			text: item.post, font: UIFont(name: "GillSans-SemiBold", size: 15)!, width: screen_height - 20)
+			text: item.post, font: UIFont(name: "SeoulHangangM", size: 15)!, width: screen_width - 20, line_space: 10.0) + 50
 
 		cell.post_textView.snp.updateConstraints { make in
 			make.height.equalTo(textView_height)

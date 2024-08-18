@@ -62,16 +62,41 @@ class AlertHelper {
 	}
 }
 
-func calculate_height(text: String, font: UIFont, width: CGFloat) -> CGFloat
+func calculate_height(text: String, font: UIFont, width: CGFloat, line_space: CGFloat) -> CGFloat
 {
-	let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: .greatestFiniteMagnitude))
+	let maxSize = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+	let paragraphStyle : NSMutableParagraphStyle = {
+		let paragraphStyle = NSMutableParagraphStyle()
+		
+		paragraphStyle.lineSpacing = line_space
 
-	label.font = font
-	label.numberOfLines = 0
+		return paragraphStyle
+	}()
+	let attributes: [NSAttributedString.Key: Any] = [
+			.font: font,
+			.paragraphStyle: paragraphStyle
+		]
+	let boundingBox = text.boundingRect(
+		with: maxSize,
+		options: .usesLineFragmentOrigin,
+		attributes: attributes,
+		context: nil
+	)
+
+	return ceil(boundingBox.height)
+
+	/*
+	let label = UILabel()
+
+	label.font = UIFont.systemFont(ofSize: 15)
 	label.text = text
-	label.sizeToFit()
+	label.numberOfLines = 0
 
-	return label.frame.height
+	let maxSize = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+	let expectedSize = label.sizeThatFits(maxSize)
+
+	return expectedSize.height
+	 */
 }
 
 func time_diff(past_date: String) -> String
@@ -153,6 +178,33 @@ extension UIImage {
 	}
 }
 
+extension UITextView {
+	func set_lineSpace(spacing: CGFloat) {
+		guard let existingAttributedString = self.attributedText else {
+			return
+		}
+		let mutableAttributedString = NSMutableAttributedString(attributedString: existingAttributedString)
+		let paragraphStyle = NSMutableParagraphStyle()
+
+		paragraphStyle.lineSpacing = spacing
+		mutableAttributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, mutableAttributedString.length))
+		self.attributedText = mutableAttributedString
+	}
+}
+
+extension UILabel {
+	func setLineSpacing(spacing: CGFloat) {
+		guard let text = text else { return }
+		let attributeString = NSMutableAttributedString(string: text)
+		let style = NSMutableParagraphStyle()
+
+		style.lineSpacing = spacing
+		attributeString.addAttribute(.paragraphStyle,
+									 value: style,
+									 range: NSRange(location: 0, length: attributeString.length))
+		attributedText = attributeString
+	}
+}
 extension UITextField {
 	func setPlaceholderColor(_ placeholderColor: UIColor) {
 		attributedPlaceholder = NSAttributedString(
