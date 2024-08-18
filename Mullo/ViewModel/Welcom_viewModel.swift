@@ -98,8 +98,22 @@ final class Welcome_viewModel {
 			return Disposables.create()
 		}
 	}
-	
-	final func change_name(name: String, identifier: String)
+
+	final func find_password(email: String)
+	{
+		Auth.auth().sendPasswordReset(withEmail: email) { error in
+			if error != nil {
+				AlertHelper.showAlert(
+					title: "오류", message: "Firebase mail 오류 입니다. 다시 시도해주세요.", button_title: "확인", handler: nil)
+			}
+			else {
+				AlertHelper.showAlert(
+					title: "알림", message: "위 이메일로 비밀번호 재설정 메일을 보냈습니다.", button_title: "확인", handler: nil)
+			}
+		}
+	}
+
+	final func change_name(name: String, identifier: String, result_handler: @escaping (String) -> ())
 	{
 		AF.request(
 			"https://\(host)/change_name",
@@ -113,15 +127,22 @@ final class Welcome_viewModel {
 				do {
 					let data = try response.result.get()
 
-					if data["result"] == "success"
-					{
-						print("name change success")
+					if data["result"] == "success" {
+						result_handler("success")
+					}
+					else if data["result"] == "overlap_name" {
+						result_handler("overlap_name")
+					}
+					else {
+						result_handler("error")
 					}
 				} catch {
 					print("-- Error at change_name --\n \(error)")
+					result_handler("error")
 				}
 			case .failure(let error):
 				print("Error: \(error)")
+				result_handler("error")
 			}
 		}
 	}

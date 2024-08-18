@@ -18,21 +18,30 @@ final class Welcome_viewController: UIViewController {
 	var disposeBag = DisposeBag()
 	var button_touch_count = 0
 	var apple_login_identifier : String?
-	var email_address = "" {
-		didSet {
-			print("email_address changed to: \(email_address)")
-		}
-	}
+	var email_address = ""
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		// basic setting
 		self.navigationController?.isNavigationBarHidden = true
 		self.view.backgroundColor = UIColor(named: "NATURAL")
+		
+		// delegate
+		welcome_view.name_view.name_textField.delegate = self
+		welcome_view.register_view.email_textField.delegate = self
+		welcome_view.register_view.password_textField.delegate = self
+		welcome_view.register_view.password_confirm_textField.delegate = self
+		welcome_view.login_view.email_textField.delegate = self
+		welcome_view.login_view.password_textField.delegate = self
 
+		// server check
 		isServer_ok(vc: self)
+
+		// binding
 		rx_binding()
 
+		// basic layout
 		view.addSubview(welcome_view)
 		welcome_view.snp.makeConstraints { make in
 			make.top.bottom.left.right.equalTo(view)
@@ -49,6 +58,11 @@ final class Welcome_viewController: UIViewController {
 		// register button binding
 		welcome_view.register_button.rx.tap
 			.bind{ [weak self] in self?.register_button_tap() }
+			.disposed(by: disposeBag)
+
+		// find_password button binding
+		welcome_view.login_view.find_password_button.rx.tap
+			.bind { [weak self] in self!.welcome_viewModel.find_password(email: self!.welcome_view.get_email()) }
 			.disposed(by: disposeBag)
 
 		//google login button binding - login view's button
@@ -165,6 +179,7 @@ final class Welcome_viewController: UIViewController {
 
 				if isSuccess
 				{
+					self!.email_address = self!.welcome_view.get_email()
 					self!.name_check()
 				}
 				else
@@ -206,10 +221,24 @@ final class Welcome_viewController: UIViewController {
 			if apple_login_identifier != nil
 			{
 				welcome_viewModel.change_name(
-					name: welcome_view.name_view.name_textField.text ?? "", identifier: apple_login_identifier!)
-				UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
-				// Change VC ( current VC -> Main VC )
-				self.change_to_mainView()
+					name: welcome_view.name_view.name_textField.text ?? "", identifier: apple_login_identifier!) { result in
+						if result == "success" {
+							print("name change success")
+							UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
+							// Change VC ( current VC -> Main VC )
+							self.change_to_mainView()
+						}
+						else if result == "overlap_name" {
+							AlertHelper.showAlert(
+								viewController: self, title: "실패", message: "중복된 닉네임입니다.", button_title: "확인", handler: nil)
+							self.welcome_view.name_view.name_textField.text = ""
+						}
+						else {
+							AlertHelper.showAlert(
+								viewController: self, title: "오류", message: "서버 오류입니다.", button_title: "확인", handler: nil)
+							self.welcome_view.name_view.name_textField.text = ""
+						}
+					}
 
 				return
 			}
@@ -307,11 +336,25 @@ final class Welcome_viewController: UIViewController {
 			if apple_login_identifier != nil
 			{
 				welcome_viewModel.change_name(
-					name: welcome_view.name_view.name_textField.text ?? "", identifier: apple_login_identifier!)
-				UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
-				// Change VC ( current VC -> Main VC )
-				self.change_to_mainView()
-
+					name: welcome_view.name_view.name_textField.text ?? "", identifier: apple_login_identifier!) { result in
+						if result == "success" {
+							print("name change success")
+							UserDefaults.standard.setValue(self.welcome_view.name_view.name_textField.text ?? "", forKey: "name")
+							// Change VC ( current VC -> Main VC )
+							self.change_to_mainView()
+						}
+						else if result == "overlap_name" {
+							AlertHelper.showAlert(
+								viewController: self, title: "실패", message: "중복된 닉네임입니다.", button_title: "확인", handler: nil)
+							self.welcome_view.name_view.name_textField.text = ""
+						}
+						else {
+							AlertHelper.showAlert(
+								viewController: self, title: "오류", message: "서버 오류입니다.", button_title: "확인", handler: nil)
+							self.welcome_view.name_view.name_textField.text = ""
+						}
+					}
+				
 				return
 			}
 
@@ -626,5 +669,18 @@ extension Welcome_viewController: ASAuthorizationControllerDelegate {
 				button_title: "확인",
 				handler: nil)
 		}
+	}
+}
+
+
+extension Welcome_viewController: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+
+		return true
+	}
+
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+		 self.view.endEditing(true)
 	}
 }
