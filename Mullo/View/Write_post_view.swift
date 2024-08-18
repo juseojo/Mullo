@@ -78,6 +78,7 @@ final class Write_post_view: UIView {
 		image_collectionView.layer.borderWidth = 1.0
 		image_collectionView.layer.cornerRadius = 5.0
 		image_collectionView.clipsToBounds = true
+		image_collectionView.backgroundColor = UIColor(named: "NATURAL")
 
 		return image_collectionView
 	}()

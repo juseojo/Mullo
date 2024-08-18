@@ -11,9 +11,11 @@ import SnapKit
 class MyPost_collectionView_cell: Post_collectionView_cell {
 	var delete_button: UIButton = {
 		let delete_button = UIButton()
+		let delete_button_image = UIImage(
+			systemName: "xmark", 
+			withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .medium, scale: .large))
 
-		delete_button.setImage(
-			UIImage(systemName: "xmark")?.resized(to: CGSize(width: 30, height: 30)), for: .normal)
+		delete_button.setImage(delete_button_image, for: .normal)
 		delete_button.tintColor = UIColor(named: "REVERSE_SYS")
 		delete_button.contentMode = .scaleAspectFit
 

@@ -50,7 +50,7 @@ final class Comments_viewModel {
 		.responseDecodable(of: [String: String].self) { response in
 			switch response.result {
 			case .success:
-				print("posting success")
+				print("add comment success")
 				completed_handler()
 			case .failure(let error):
 				print("Error: \(error)")
