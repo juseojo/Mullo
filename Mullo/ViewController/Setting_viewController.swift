@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RxSwift
+import FirebaseAuth
 
 final class Setting_viewController: UIViewController
 {
@@ -58,7 +59,7 @@ final class Setting_viewController: UIViewController
 		let alert = UIAlertController(title: "건의하기", message: "건의할 내용을 입력해주세요", preferredStyle: .alert)
 		let send_action = UIAlertAction(title: "보내기", style: .default, handler: {_ in 
 			print(alert.textFields!.first!.text!)
-			// have to send it
+			self.setting_viewModel.send_question(question: alert.textFields!.first!.text!)
 		})
 		let cancel_action = UIAlertAction(title: "취소", style: .cancel, handler: nil)
 
@@ -101,7 +102,7 @@ final class Setting_viewController: UIViewController
 					self!.navigationController?.setViewControllers([Welcome_viewController(),], animated: true)
 				}
 				else if isApple_user == "false" {
-					print("no apple user")
+					self!.setting_viewModel.revoke_firebase()
 					self!.setting_viewModel.delete_DB()
 					self!.navigationController?.setViewControllers([Welcome_viewController(),], animated: true)
 				}
