@@ -129,14 +129,19 @@ final class Welcome_viewController: UIViewController {
 		welcome_view.register_view.apple_login_button.rx.tap
 			.bind { [weak self] in
 			self?.button_touch_count = 2
-				self?.welcome_viewModel.apple_login(vc: self!)
+			self?.welcome_viewModel.apple_login(vc: self!)
 		}.disposed(by: disposeBag)
 
 		//apple login button binding - login view's button
 		welcome_view.login_view.apple_login_button.rx.tap
 			.bind { [weak self] in
 			self?.button_touch_count = 2
-				self?.welcome_viewModel.apple_login(vc: self!)
+			self?.welcome_viewModel.apple_login(vc: self!)
+		}.disposed(by: disposeBag)
+
+		welcome_view.name_view.eula_button.rx.tap
+			.bind { [weak self] in
+			self!.present(EULA_ViewController(), animated: true)
 		}.disposed(by: disposeBag)
 	}
 
@@ -475,7 +480,7 @@ final class Welcome_viewController: UIViewController {
 
 			self.welcome_view.name_view.snp.makeConstraints { make in
 				make.top.equalTo(self.welcome_view.welcome_label.snp.bottom).offset(50)
-				make.height.equalTo(85)
+				make.height.equalTo(130)
 				make.left.right.equalTo(self.welcome_view)
 			}
 
