@@ -103,7 +103,8 @@ final class Main_ViewController: UIViewController {
 				cellType: Post_collectionView_cell.self)) { [weak self] row, item, cell in
 					// cell setting
 					self!.main_viewModel.cell_setting(cell: cell, item: item)
-					// comments button rx binding
+					
+					// tap event - comments button
 					cell.comments_button.rx.tap
 						.bind{
 							let comments_vc = Comments_viewController()
@@ -120,6 +121,25 @@ final class Main_ViewController: UIViewController {
 								}
 							}
 						}.disposed(by: cell.disposeBag)
+
+					// tap event - hide button
+					cell.hide_button.rx.tap
+						.bind {
+						let realm = try! Realm()
+						var mullo_DB = realm.objects(Mullo_DB.self).first
+
+						try! realm.write{
+							if cell.hide_button.isSelected {
+								realm.delete((mullo_DB?.hide_posts_num.where {
+									$0.post_num == item.post_num
+								})!)
+							}
+							else {
+								mullo_DB?.hide_posts_num.append(Hidden_post(value: ["post_num" : cell.post_num]))
+							}
+						}
+						self?.main_view.post_collectionView.reloadData()
+					}.disposed(by: cell.disposeBag)
 				}
 				.disposed(by: self.disposeBag)
 	}

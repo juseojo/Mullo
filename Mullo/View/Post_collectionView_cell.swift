@@ -52,6 +52,21 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		return report_button
 	}()
 
+	var hide_button: UIButton = {
+		let hide_button = UIButton()
+
+		hide_button.setImage(
+			UIImage(systemName: "eye.slash", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .bold, scale: .large)),
+			for: .normal)
+
+		hide_button.setImage(
+			UIImage(systemName: "eye", withConfiguration: UIImage.SymbolConfiguration(pointSize: 25, weight: .bold, scale: .large)),
+			for: .selected)
+		hide_button.tintColor = UIColor(named: "REVERSE_SYS")
+
+		return hide_button
+	}()
+
 	var post_textView: UITextView = {
 		let post_textView = UITextView()
 
@@ -178,6 +193,7 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		self.addSubview(post_textView)
 		self.addSubview(image_collectionView)
 		self.addSubview(choice_view)
+		self.addSubview(hide_button)
 		choice_view.addSubview(first_button)
 		choice_view.addSubview(second_button)
 
@@ -201,6 +217,12 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		report_button.snp.makeConstraints { make in
 			make.top.equalTo(self)
 			make.right.equalTo(self).inset(10)
+			make.width.height.equalTo(25)
+		}
+
+		hide_button.snp.makeConstraints { make in
+			make.top.equalTo(self)
+			make.right.equalTo(report_button.snp.left).inset(-10)
 			make.width.height.equalTo(25)
 		}
 
@@ -267,6 +289,10 @@ class Post_collectionView_cell : UICollectionViewCell, UIScrollViewDelegate {
 		post_num = -1
 		disposeBag = DisposeBag()
 		choice_button_vote_count.removeAll()
+		image_collectionView.isHidden = false
+		hide_button.isSelected = false
+		comments_button.isEnabled = true
+		choice_view.isHidden = false
 
 		if !self.subviews.contains(image_collectionView) {
 			self.addSubview(image_collectionView)

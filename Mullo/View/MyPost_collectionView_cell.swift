@@ -27,6 +27,8 @@ class MyPost_collectionView_cell: Post_collectionView_cell {
 
 		report_button.isHidden = true
 		report_button.isEnabled = false
+		hide_button.isHidden = true
+		hide_button.isEnabled = false
 
 		addSubview(delete_button)
 		delete_button.snp.makeConstraints { make in

@@ -121,7 +121,7 @@ class Main_viewModel
 			cell.image_collectionView.removeFromSuperview()
 		}
 
-		// realm for selected post
+		// realm for selected post, hidden post
 		let realm = try! Realm()
 		var mullo_DB = realm.objects(Mullo_DB.self).first
 
@@ -139,6 +139,10 @@ class Main_viewModel
 			$0.post_num == Int(item.post_num)
 		}.first
 
+		let wasHidden = mullo_DB?.hide_posts_num.where {
+			$0.post_num == Int(item.post_num)
+		}.first
+
 		// Case : post was Selected
 		if wasSelected != nil
 		{
@@ -151,6 +155,17 @@ class Main_viewModel
 				selecting_buttons(isSelected: (num == wasSelected?.selected_choice), index: num, cell: cell, total_count: cell.choice_button_vote_count.reduce(0) { return $0 + $1 })
 				num += 1
 			}
+		}
+
+		// Case : post was Hidden
+		if wasHidden != nil
+		{
+			cell.name_label.text = "비공개"
+			cell.post_textView.text = "숨겨진 게시글입니다."
+			cell.image_collectionView.isHidden = true
+			cell.comments_button.isEnabled = false
+			cell.choice_view.isHidden = true
+			cell.hide_button.isSelected = true
 		}
 
 		// tap event - choice buttons
