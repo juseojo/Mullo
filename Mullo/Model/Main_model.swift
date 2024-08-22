@@ -32,6 +32,11 @@ class Selected_post: Object {
 	@Persisted var selected_choice: Int
 }
 
+class Hidden_post: Object {
+	@Persisted var post_num: Int
+}
+
 class Mullo_DB: Object {
 	@Persisted var selected_posts: List<Selected_post>
+	@Persisted var hide_posts_num: List<Hidden_post>
 }

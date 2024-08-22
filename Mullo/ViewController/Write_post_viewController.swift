@@ -51,6 +51,7 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 		// basic setting
 		self.navigationController?.isNavigationBarHidden = true
 		self.view.backgroundColor = UIColor(named: "NATURAL")
+		self.write_post_view.post_text_view.delegate = self
 
 		// rx setting
 		rx_setting()
@@ -257,13 +258,13 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 
 		//image select event
 		write_post_view.image_collectionView.rx.itemSelected
-			.subscribe{ indexPath in
-				if indexPath.row + 1 == self.write_post_view.image_collectionView.numberOfItems(inSection: 0)
+			.subscribe{ [weak self] indexPath in
+				if indexPath.row + 1 == self!.write_post_view.image_collectionView.numberOfItems(inSection: 0)
 				{	//append image
 					switch PHPhotoLibrary.authorizationStatus() {
 					case .authorized:
 						print("User album: pass")
-						self.open_album()
+						self!.open_album()
 					case .denied:
 						print("User album: denied")
 						UIApplication.shared.open(	
@@ -273,10 +274,12 @@ final class Write_post_viewController: UIViewController, UIScrollViewDelegate {
 						PHPhotoLibrary.requestAuthorization(for: .readWrite) { state in
 							if state == .authorized {
 								DispatchQueue.main.async {
-									self.open_album()
+									self!.open_album()
 								}
 							} else {
-								self.dismiss(animated: true, completion: nil)
+								DispatchQueue.main.async {
+									self!.dismiss(animated: true, completion: nil)
+								}
 							}
 						}
 					default:
@@ -360,5 +363,21 @@ extension Write_post_viewController: UITextFieldDelegate {
 			animations: self.write_post_view.layoutIfNeeded)
 
 		return true
+	}
+}
+
+extension Write_post_viewController : UITextViewDelegate {
+	func textViewDidBeginEditing(_ textView: UITextView) {
+		if textView.textColor == .lightGray {
+			textView.text = nil
+			textView.textColor = .black
+		}
+	}
+
+	func textViewDidEndEditing(_ textView: UITextView) {
+		if textView.text.isEmpty {
+			textView.text = "타인에게 불쾌함을 주거나, 부정적인 게시글 작성시 제제될 수 있습니다."
+			textView.textColor = .lightGray
+		}
 	}
 }

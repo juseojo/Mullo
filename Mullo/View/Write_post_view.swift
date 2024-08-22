@@ -48,7 +48,8 @@ final class Write_post_view: UIView {
 		post_text_view.layer.cornerRadius = 5
 		post_text_view.clipsToBounds = true
 		post_text_view.font = UIFont(name: "SeoulHangangM", size: 20)
-		post_text_view.textColor = UIColor.black
+		post_text_view.textColor = UIColor.lightGray
+		post_text_view.text = "타인에게 불쾌함을 주거나, 부정적인 게시글 작성시 제제될 수 있습니다."
 
 		return post_text_view
 	}()
