@@ -118,10 +118,12 @@ func time_diff(past_date: String) -> String
 		result_str = "몇초 전"
 	case ...60:
 		result_str = "\(diff)분 전"
-	case ...3600:
+	case ...1440:
 		result_str = "\(diff/60)시간 전"
+	case ...43200:
+		result_str = "\(diff/1440)일 전"
 	default:
-		result_str = "\(diff/3600)일 전"
+		result_str = "\(diff/43200)달 전"
 	}
 
 	return result_str
