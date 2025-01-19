@@ -34,5 +34,6 @@
 <!--	<h5>2 : 댓글마다 번호를 부여하여 좋아요를 클릭시 realm DB에 해당 번호를 저장하여 좋아요 누른 댓글을 표시한다. 서버에서 댓글 번호를 일정 크기마다 파티클로 나누어 탐색 속도를 높였음.</h5>-->
 <!--</body>-->
 # 어플리케이션 Mullo
-<img src="readme_files/mullo_portfolio.png" alt="포트폴리오 이미지"">
+
+  <img src="readme_files/mullo_portfolio.png" alt="포트폴리오 이미지">
 
